@@ -1,22 +1,21 @@
+
 // =====================================================================
 // UPAZILA EXPRESS - সাইটের সেটিংস
-// এই ফাইলটাই আপনি নিজে বদলাবেন। বাকি ফাইল ধরার দরকার নেই।
 // =====================================================================
 window.UEX_CONFIG = {
-  // ---- Supabase (README-bn.md দেখুন: ধাপ ২) ----
-  // এখানে দুটি তথ্য বসান। না বসালে সাইট "ডেমো মোডে" চলবে (কিছু সেভ হবে না)।
-  SUPABASE_URL: "",       // যেমন: https://abcdxyz.supabase.co
-  SUPABASE_ANON_KEY: "",  // Project Settings > API > anon public key
+  // ---- Supabase Configuration ----
+  SUPABASE_URL: "https://vudyewjywvbmdgsuuolj.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_FvDdQ_djgkM1zHunv5IIZw_jYMG6tOp",
 
   // ---- উপজেলা ----
   UPAZILA_SLUG: "jibannagar",
   UPAZILA_NAME: "জীবননগর",
   DISTRICT_NAME: "চুয়াডাঙ্গা",
 
-  // ---- হটলাইন (আসল নম্বর পেলে এখানে বদলান) ----
-  HOTLINE: "",            // যেমন: "01XXXXXXXXX"। ফাঁকা থাকলে নম্বর দেখানো হবে না।
+  // ---- হটলাইন ----
+  HOTLINE: "",
 
-  // ---- এলাকার তালিকা (আপনার এলাকা অনুযায়ী ঠিক করে নিন) ----
+  // ---- এলাকার তালিকা ----
   AREAS: [
     "জীবননগর বাজার",
     "উথলী",
