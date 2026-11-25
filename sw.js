@@ -1,6 +1,6 @@
 // সাধারণ অফলাইন ক্যাশ: সাইটের ফাইলগুলো মনে রাখে, ডাটাবেসের কল সবসময় নতুন করে করে।
 const CACHE = 'uex-v1';
-const SHELL = ['./', './index.html', './config.js', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png'];
+const SHELL = ['./', './index.html', './config.js', './manifest.webmanifest', './icon-192.png', './icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).then(() => self.skipWaiting()));
