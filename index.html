@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>উপজেলা এক্সপ্রেস</title>
+<meta name="description" content="ডেলিভারি, বাড়ি ভাড়া, মিস্ত্রি, টেকনিশিয়ান ও স্থানীয় দোকান, সব এক জায়গায়।">
+<meta name="theme-color" content="#0f6b4f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@500;700&family=Hind+Siliguri:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#f3f6f4; --surface:#fff; --surface-2:#eaf0ec; --fg:#14231c; --muted:#56695e; --line:#d5dfd8;
+  --accent:#0f6b4f; --accent-fg:#fff; --accent-soft:#d9eee4; --sun:#e8a317;
+  --good:#1b7f4b; --good-bg:#dcf2e5; --bad:#b3261e; --bad-bg:#fbe0dd; --info:#245a9c; --info-bg:#dce9f8;
+  --f-head:'Anek Bangla','Hind Siliguri','Noto Sans Bengali',system-ui,sans-serif;
+  --f-body:'Hind Siliguri','Noto Sans Bengali',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root{
+  --bg:#0e1713; --surface:#16231d; --surface-2:#1d2d26; --fg:#e4efe9; --muted:#9bb0a5; --line:#2a3d34;
+  --accent:#4cc79a; --accent-fg:#06281b; --accent-soft:#1c3a2e; --sun:#f0b955;
+  --good:#6fd79c; --good-bg:#1a3a2a; --bad:#ff8f86; --bad-bg:#431e1b; --info:#8fbdf2; --info-bg:#1b3250; color-scheme:dark}}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.55;
+  padding-bottom:env(safe-area-inset-bottom,0px)}
+h1,h2,h3{font-family:var(--f-head);margin:0;line-height:1.25;text-wrap:balance}
+a{color:var(--accent)}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.wrap{max-width:880px;margin:0 auto;padding-inline:max(16px,env(safe-area-inset-left,0px)) max(16px,env(safe-area-inset-right,0px))}
+
+header.bar{background:var(--accent);color:var(--accent-fg);padding-top:env(safe-area-inset-top,0px);position:sticky;top:0;z-index:5}
+header.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px}
+.brand{display:flex;align-items:center;gap:10px;color:inherit;text-decoration:none}
+.brand i{width:34px;height:34px;border-radius:9px;background:var(--accent-fg);color:var(--accent);display:grid;place-items:center;font:700 18px var(--f-head);font-style:normal}
+.brand b{font:700 17px/1.1 var(--f-head);display:block}
+.brand small{opacity:.85;font-size:12px}
+.call{background:var(--accent-fg);color:var(--accent);border-radius:99px;padding:6px 14px;font-weight:600;text-decoration:none;white-space:nowrap;font-size:14px}
+
+.hero{padding-block:28px 8px}
+.hero h1{font-size:clamp(26px,6vw,38px)}
+.hero p{color:var(--muted);margin:8px 0 0;max-width:52ch}
+
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));padding-block:18px 8px}
+.svc{display:flex;gap:14px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;text-decoration:none;color:inherit;min-width:0}
+.svc:hover{border-color:var(--accent)}
+.svc .ic{flex:none;width:46px;height:46px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center}
+.svc .ic svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.svc h2{font-size:18px}
+.svc p{margin:2px 0 0;color:var(--muted);font-size:14px}
+
+.how{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;margin-block:10px 28px}
+.how h2{font-size:18px;margin-bottom:6px}
+.how p{margin:0;color:var(--muted)}
+
+.back{display:inline-block;margin-block:16px 4px;font-weight:500;text-decoration:none}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-block:8px 28px}
+.card h1{font-size:24px}
+.card .lead{color:var(--muted);margin:6px 0 16px}
+form{display:grid;gap:14px}
+.two{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+label{display:flex;flex-direction:column;gap:5px;font-weight:500;min-width:0}
+label small{font-weight:400;color:var(--muted)}
+input,select,textarea{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;width:100%;min-height:46px}
+textarea{min-height:92px;resize:vertical}
+.hp{position:absolute;left:-9999px;height:0;overflow:hidden}
+.btn{background:var(--accent);color:var(--accent-fg);border:0;border-radius:10px;padding:12px 18px;font-weight:600;cursor:pointer;min-height:48px}
+.btn:disabled{opacity:.6;cursor:wait}
+.msg{border-radius:10px;padding:12px 14px}
+.msg.ok{background:var(--good-bg);color:var(--good)}
+.msg.err{background:var(--bad-bg);color:var(--bad)}
+.msg.demo{background:var(--info-bg);color:var(--info);font-size:14px}
+.ref{font:700 22px var(--f-head);letter-spacing:.03em}
+
+.list{display:grid;gap:10px;margin-block:12px}
+.item{border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:12px 14px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.item b{display:block}
+.item span{color:var(--muted);font-size:14px}
+.price{font:700 18px var(--f-head);white-space:nowrap}
+.sep{height:1px;background:var(--line);margin-block:18px}
+footer{color:var(--muted);font-size:13px;text-align:center;padding-block:10px 36px}
+</style>
+</head>
+<body>
+<header class="bar"><div class="wrap">
+  <a class="brand" href="#home"><i>উ</i><span><b>উপজেলা এক্সপ্রেস</b><small id="loc"></small></span></a>
+  <a class="call" id="callTop" href="#" hidden></a>
+</div></header>
+<main class="wrap" id="app" aria-live="polite"></main>
+<footer class="wrap">© উপজেলা এক্সপ্রেস · ফোনে "Add to Home Screen" করলে অ্যাপের মতো চলবে</footer>
+
+<script src="config.js"></script>
+<script>
+const C=window.UEX_CONFIG;
+const LIVE=!!(C.SUPABASE_URL&&C.SUPABASE_ANON_KEY);
+const IC={
+ delivery:'<svg viewBox="0 0 24 24"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7zM7 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3zM17 19a1.5 1.5 0 100-3 1.5 1.5 0 000 3z"/></svg>',
+ rent:'<svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7M5 10v10h14V10M10 20v-5h4v5"/></svg>',
+ worker:'<svg viewBox="0 0 24 24"><path d="M4 18h16M6 18a6 6 0 0112 0M12 7V4M9 9l-2-2M15 9l2-2"/></svg>',
+ technician:'<svg viewBox="0 0 24 24"><path d="M14 6a4 4 0 005 5l-9 9a2.1 2.1 0 01-3-3l9-9a4 4 0 01-2-2z"/></svg>',
+ shop:'<svg viewBox="0 0 24 24"><path d="M4 9l1-5h14l1 5M4 9v11h16V9M4 9a3 3 0 006 0 3 3 0 006 0 3 3 0 004 0M10 20v-5h4v5"/></svg>',
+ support:'<svg viewBox="0 0 24 24"><path d="M4 13v-1a8 8 0 0116 0v1M4 13h3v5H4zM17 13h3v5h-3zM20 18c0 2-2 3-5 3h-2"/></svg>'
+};
+const SERVICES={
+ delivery:{t:'পিকআপ ও ডেলিভারি',d:'পার্সেল, মালপত্র বা কাগজ এক জায়গা থেকে অন্য জায়গায়',
+  intro:'কোথা থেকে নেবেন আর কোথায় পৌঁছাবেন লিখুন। আমরা রাইডার ঠিক করে ভাড়া জানিয়ে দেব।',
+  f:[{id:'pickup',l:'কোথা থেকে নেবে (ঠিকানা)',r:1},{id:'drop',l:'কোথায় পৌঁছাবে (ঠিকানা)',r:1},{id:'item',l:'কী পাঠাবেন',r:1},
+     {id:'weight',l:'আনুমানিক ওজন',s:['৫ কেজির কম','৫-২০ কেজি','২০ কেজির বেশি']},{id:'cod',l:'টাকা তুলতে হবে? (ক্যাশ অন ডেলিভারি)',s:['না','হ্যাঁ']}]},
+ rent:{t:'বাড়ি ভাড়া',d:'বাসা, ফ্ল্যাট, রুম বা দোকানঘর খুঁজুন বা ভাড়া দিন',
+  intro:'নিচের তালিকা দেখুন। পছন্দ না হলে আপনার প্রয়োজন লিখে জানান, আমরা মালিকের সাথে যোগাযোগ করিয়ে দেব।',
+  f:[{id:'mode',l:'আপনি কী চান',s:['বাড়ি খুঁজছি','বাড়ি ভাড়া দিতে চাই'],r:1},{id:'ptype',l:'ধরন',s:['বাসা','ফ্ল্যাট','রুম','দোকানঘর']},
+     {id:'budget',l:'মাসিক ভাড়া (টাকা)',t:'text'}]},
+ worker:{t:'দিনমজুর ও মিস্ত্রি',d:'রাজমিস্ত্রি, দিনমজুর, রডমিস্ত্রি',
+  intro:'কত জন, কত দিন ও কবে লাগবে জানান। আমরা কাজের লোক ঠিক করে দৈনিক মজুরি জানাব।',
+  f:[{id:'kind',l:'কাজের ধরন',s:['রাজমিস্ত্রি','দিনমজুর','রডমিস্ত্রি','অন্য']  ,r:1},{id:'count',l:'কত জন লাগবে',t:'number',r:1},{id:'days',l:'কত দিন',t:'number',r:1},{id:'when',l:'কবে থেকে',t:'date'}]},
+ technician:{t:'টেকনিশিয়ান',d:'ইলেকট্রিশিয়ান, প্লাম্বার, মোবাইল, ফ্রিজ ও টিভি মেরামত',
+  intro:'কী সমস্যা লিখুন। টেকনিশিয়ান আপনার ঠিকানায় গিয়ে দেখে দাম জানাবেন।',
+  f:[{id:'kind',l:'কোন কাজ',s:['ইলেকট্রিশিয়ান','প্লাম্বার','মোবাইল মেরামত','ফ্রিজ/এসি মেরামত','টিভি মেরামত','অন্য'],r:1},{id:'problem',l:'সমস্যাটা কী',t:'area',r:1}]},
+ shop:{t:'স্থানীয় দোকান',d:'এলাকার দোকান থেকে মুদি, ঔষধ ও অন্যান্য পণ্য',
+  intro:'কী কী লাগবে পরিমাণসহ লিখুন। আমরা দোকান থেকে কিনে আপনার কাছে পৌঁছে দেব।',
+  f:[{id:'shop',l:'কোন দোকান (জানা থাকলে)'},{id:'items',l:'কী কী লাগবে (পরিমাণসহ)',t:'area',r:1}]},
+ support:{t:'অভিযোগ ও সহায়তা',d:'কোনো সমস্যা হলে আমাদের জানান',
+  intro:'কী সমস্যা হয়েছে লিখুন। আমাদের সহায়তা দল ফোন করে সমাধান করবে।',
+  f:[{id:'ref',l:'অর্ডার নম্বর (থাকলে)'},{id:'cat',l:'সমস্যার ধরন',s:['দেরি হয়েছে','বেশি টাকা চেয়েছে','খারাপ ব্যবহার','পণ্য/কাজে সমস্যা','অন্য'],r:1},{id:'what',l:'বিস্তারিত',t:'area',r:1}]}
+};
+const SAMPLE_RENT=[
+ {title:'২ রুম টিনশেড বাসা',area:'জীবননগর বাজার',type:'বাসা',rent:3500},
+ {title:'২য় তলা ফ্ল্যাট, ৩ বেডরুম',area:'উথলী',type:'ফ্ল্যাট',rent:8000},
+ {title:'ব্যাচেলরদের জন্য একক রুম',area:'হাসাদাহ',type:'রুম',rent:1500}
+];
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const BN='০১২৩৪৫৬৭৮৯', bn=n=>String(n).replace(/\d/g,d=>BN[d]);
+const toEn=s=>String(s).replace(/[০-৯]/g,d=>BN.indexOf(d));
+function normPhone(v){let p=toEn(v).replace(/[\s\-+]/g,'');if(p.startsWith('880'))p=p.slice(2);return /^01[3-9]\d{8}$/.test(p)?p:null}
+function refNo(){return 'UEX-'+Math.floor(100000+Math.random()*900000)}
+
+async function send(row){
+  if(!LIVE){await new Promise(r=>setTimeout(r,500));return {ok:true}}
+  const res=await fetch(C.SUPABASE_URL+'/rest/v1/service_requests',{method:'POST',
+    headers:{'apikey':C.SUPABASE_ANON_KEY,'Authorization':'Bearer '+C.SUPABASE_ANON_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify(row)});
+  return {ok:res.ok};
+}
+async function loadRent(){
+  if(!LIVE) return {demo:true,rows:SAMPLE_RENT};
+  try{
+    const r=await fetch(C.SUPABASE_URL+'/rest/v1/rent_listings?select=title,area,type,rent&status=eq.published&order=created_at.desc&limit=20',
+      {headers:{'apikey':C.SUPABASE_ANON_KEY,'Authorization':'Bearer '+C.SUPABASE_ANON_KEY}});
+    if(!r.ok) throw 0; return {demo:false,rows:await r.json()};
+  }catch(e){return {demo:false,rows:[],error:true}}
+}
+
+function home(){
+  $('#app').innerHTML=`
+  <section class="hero"><h1>${esc(C.UPAZILA_NAME)}-এর সব সেবা এক জায়গায়</h1>
+   <p>ডেলিভারি, বাড়ি ভাড়া, মিস্ত্রি, টেকনিশিয়ান আর স্থানীয় দোকান। ফর্ম পূরণ করুন, আমরা ফোন করে নিশ্চিত করব।</p></section>
+  ${!LIVE?'<div class="msg demo">ডেমো মোড: সাইটটি এখনো ডাটাবেসের সাথে যুক্ত হয়নি। জমা দেওয়া তথ্য সেভ হবে না।</div>':''}
+  <nav class="grid" aria-label="সেবা">
+   ${Object.entries(SERVICES).map(([k,s])=>`<a class="svc" href="#${k}"><span class="ic">${IC[k]}</span><span><h2>${s.t}</h2><p>${s.d}</p></span></a>`).join('')}
+  </nav>
+  <section class="how"><h2>কীভাবে কাজ করে</h2><p>সেবা বেছে ফর্ম পূরণ করুন। আমাদের এজেন্ট আপনাকে ফোন করে দাম ও সময় জানিয়ে নিশ্চিত করবেন। অ্যাপ না চালাতে পারলে${C.HOTLINE?' হটলাইনে ('+esc(C.HOTLINE)+') ফোন করুনও':' সরাসরি ফোনেও জানাতে পারবেন'}।</p></section>`;
+}
+
+async function service(k){
+  const s=SERVICES[k]; if(!s){home();return}
+  const field=f=>{
+    const req=f.r?' required':'';
+    const lab=`${f.l}${f.r?'':' <small>(ঐচ্ছিক)</small>'}`;
+    if(f.s) return `<label>${lab}<select name="${f.id}"${req}>${f.r?'<option value="">বেছে নিন</option>':''}${f.s.map(o=>`<option>${o}</option>`).join('')}</select></label>`;
+    if(f.t==='area') return `<label>${lab}<textarea name="${f.id}"${req}></textarea></label>`;
+    return `<label>${lab}<input name="${f.id}" type="${f.t||'text'}"${f.t==='number'?' min="1" inputmode="numeric"':''}${req}></label>`;
+  };
+  $('#app').innerHTML=`<a class="back" href="#home">← সব সেবা</a>
+   <div class="card"><h1>${s.t}</h1><p class="lead">${s.intro}</p>
+   ${k==='rent'?'<div id="rentList"><p class="lead">তালিকা লোড হচ্ছে…</p></div><div class="sep"></div>':''}
+   ${!LIVE?'<div class="msg demo" style="margin-bottom:14px">ডেমো মোড: জমা দেওয়া তথ্য সেভ হবে না।</div>':''}
+   <form id="f" novalidate>
+    <div class="two">
+     <label>আপনার নাম<input name="name" autocomplete="name" required></label>
+     <label>মোবাইল নম্বর<input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="01XXXXXXXXX" required></label>
+    </div>
+    <label>এলাকা<select name="area" required><option value="">বেছে নিন</option>${C.AREAS.map(a=>`<option>${esc(a)}</option>`).join('')}</select></label>
+    ${s.f.map(field).join('')}
+    <label>আরও কিছু জানানোর থাকলে <small>(ঐচ্ছিক)</small><textarea name="notes"></textarea></label>
+    <div class="hp" aria-hidden="true"><label>Website<input name="website" tabindex="-1" autocomplete="off"></label></div>
+    <div id="out"></div>
+    <button class="btn" type="submit">অনুরোধ পাঠান</button>
+   </form></div>`;
+  if(k==='rent') loadRent().then(r=>{
+    const el=$('#rentList'); if(!el) return;
+    el.innerHTML=r.error?'<p class="msg err">তালিকা আনা যায়নি। পরে চেষ্টা করুন।</p>'
+      :!r.rows.length?'<p class="lead">এখন কোনো বিজ্ঞপ্তি নেই। নিচে আপনার প্রয়োজন জানান।</p>'
+      :`${r.demo?'<p class="lead"><small>নমুনা বিজ্ঞপ্তি</small></p>':''}<div class="list">${r.rows.map(x=>`<div class="item"><div><b>${esc(x.title)}</b><span>${esc(x.type)} · ${esc(x.area)}</span></div><div class="price">৳${bn(Number(x.rent).toLocaleString('en-US'))}<span>/মাস</span></div></div>`).join('')}</div>`;
+  });
+  $('#f').addEventListener('submit',async e=>{
+    e.preventDefault();
+    const f=e.target, out=$('#out'), fd=new FormData(f);
+    if(fd.get('website')) return;
+    const phone=normPhone(fd.get('phone')||'');
+    const miss=[...f.elements].find(x=>x.required&&!String(x.value).trim());
+    if(miss){out.innerHTML='<div class="msg err">লাল চিহ্নিত ঘর পূরণ করুন: '+esc(miss.closest('label').firstChild.textContent.trim())+'</div>';miss.focus();return}
+    if(!phone){out.innerHTML='<div class="msg err">সঠিক মোবাইল নম্বর দিন (যেমন 01712345678)।</div>';f.elements.phone.focus();return}
+    const extra={}; s.f.forEach(x=>{const v=String(fd.get(x.id)||'').trim(); if(v) extra[x.id]=v});
+    const row={ref:refNo(),upazila_slug:C.UPAZILA_SLUG,service:k,name:String(fd.get('name')).trim(),phone,area:fd.get('area'),
+      details:String(fd.get('notes')||'').trim()||null,extra};
+    const btn=f.querySelector('button'); btn.disabled=true; btn.textContent='পাঠানো হচ্ছে…'; out.innerHTML='';
+    let r; try{r=await send(row)}catch(err){r={ok:false}}
+    if(r.ok){
+      $('#app').innerHTML=`<div class="card"><h1>অনুরোধ পাওয়া গেছে</h1>
+        <p class="lead">আপনার অনুরোধ নম্বর:</p><p class="ref">${row.ref}</p>
+        <p>আমাদের এজেন্ট শীঘ্রই <b>${bn(phone)}</b> নম্বরে ফোন করবেন। নম্বরটি লিখে রাখুন।</p>
+        ${LIVE?'':'<div class="msg demo">ডেমো মোড: এটি আসলে সেভ হয়নি।</div>'}
+        <p style="margin-top:18px"><a class="btn" style="display:inline-block;text-decoration:none" href="#home">আরেকটি সেবা দেখুন</a></p></div>`;
+      window.scrollTo(0,0);
+    }else{
+      btn.disabled=false; btn.textContent='অনুরোধ পাঠান';
+      out.innerHTML='<div class="msg err">অনুরোধ পাঠানো যায়নি। ইন্টারনেট দেখে আবার চেষ্টা করুন'+(C.HOTLINE?' বা হটলাইনে ফোন করুন':'')+'।</div>';
+    }
+  });
+}
+
+function route(){
+  const h=(location.hash||'#home').slice(1);
+  if(SERVICES[h]) service(h); else home();
+  window.scrollTo(0,0);
+}
+$('#loc').textContent=C.UPAZILA_NAME+', '+C.DISTRICT_NAME;
+if(C.HOTLINE){const a=$('#callTop');a.hidden=false;a.href='tel:'+C.HOTLINE;a.textContent='📞 '+C.HOTLINE}
+window.addEventListener('hashchange',route);
+route();
+if('serviceWorker' in navigator) window.addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body>
+</html>
