@@ -4,192 +4,291 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#e83e75">
+<meta name="theme-color" content="#08734f">
 <title>UPAZILA EXPRESS | জীবননগর</title>
 
-<script src="config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 <style>
 :root{
- --primary:#e83e75;
- --dark:#252b36;
- --bg:#f5f6fa;
- --muted:#697386;
- --green:#08734f;
+  --green:#08734f;
+  --dark:#075b3e;
+  --light:#e9f7f0;
+  --orange:#f59e0b;
+  --bg:#f5f7f6;
+  --text:#202923;
+  --muted:#6b7770;
+  --border:#e5ebe7;
 }
 *{box-sizing:border-box}
 body{
- margin:0;
- font-family:Arial,"Noto Sans Bengali",sans-serif;
- background:var(--bg);
- color:var(--dark)
+  margin:0;
+  font-family:'Hind Siliguri',sans-serif;
+  background:var(--bg);
+  color:var(--text);
 }
+button,input,textarea,select{font-family:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
 header{
- background:white;
- padding:13px 5%;
- display:flex;
- justify-content:space-between;
- align-items:center;
- gap:10px;
- position:sticky;
- top:0;
- z-index:10;
- box-shadow:0 2px 12px #0001
+  background:var(--green);
+  color:white;
+  position:sticky;
+  top:0;
+  z-index:100;
+  box-shadow:0 3px 12px #0002;
 }
-.logo{font-size:20px;font-weight:800;color:var(--primary)}
-.logo small{display:block;font-size:11px;color:var(--muted);font-weight:400}
-button{
- border:0;
- border-radius:9px;
- padding:11px 15px;
- background:var(--primary);
- color:white;
- font-weight:bold;
- cursor:pointer
+.nav{
+  max-width:1200px;
+  margin:auto;
+  padding:12px 18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
 }
-button:disabled{opacity:.5;cursor:not-allowed}
-.secondary{background:#fff0f5;color:var(--primary)}
-.green{background:var(--green)}
-.container{max-width:1100px;margin:auto;padding:18px}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.logo{
+  width:43px;height:43px;
+  border-radius:12px;
+  background:white;
+  color:var(--green);
+  display:grid;
+  place-items:center;
+  font-size:22px;
+}
+.brand h2{margin:0;font-size:21px;line-height:1.1}
+.brand small{font-size:12px;opacity:.85}
+.nav-actions{display:flex;gap:9px;align-items:center}
+.nav-btn{
+  border:1px solid #ffffff55;
+  background:#ffffff18;
+  color:white;
+  border-radius:9px;
+  padding:8px 12px;
+  font-size:14px;
+}
 .hero{
- background:linear-gradient(120deg,#e83e75,#ff8b67);
- color:white;
- padding:30px 22px;
- border-radius:18px;
- margin-bottom:18px
+  background:linear-gradient(120deg,#075b3e,#0b9865);
+  color:white;
+  padding:38px 18px 48px;
 }
-.hero h1{font-size:27px;margin:0 0 9px}
-.hero p{line-height:1.7;margin:0}
-.search{
- width:100%;
- padding:14px;
- border:1px solid #ddd;
- border-radius:10px;
- margin:14px 0;
- font-size:15px
+.hero-inner{max-width:1200px;margin:auto}
+.hero h1{font-size:32px;margin:0 0 8px}
+.hero p{margin:0;opacity:.92;font-size:16px}
+.search-box{
+  margin-top:22px;
+  max-width:600px;
+  display:flex;
+  background:white;
+  border-radius:12px;
+  padding:5px;
+  box-shadow:0 5px 18px #0002;
 }
+.search-box input{
+  border:0;outline:0;flex:1;
+  min-width:0;padding:10px 12px;
+  font-size:15px;color:#222;
+}
+.search-box button{
+  border:0;background:var(--orange);
+  color:#222;padding:0 18px;
+  border-radius:9px;font-weight:700;
+}
+.container{max-width:1200px;margin:auto;padding:22px 18px}
+.section-title{
+  display:flex;justify-content:space-between;
+  align-items:center;gap:10px;
+  margin-bottom:15px;
+}
+.section-title h2{margin:0;font-size:23px}
+.section-title small{color:var(--muted)}
 .categories{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:10px;
- margin:15px 0
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:12px;
+  margin-bottom:28px;
 }
-.category{
- background:white;
- border:1px solid #eee;
- border-radius:13px;
- padding:16px 7px;
- text-align:center;
- cursor:pointer
+.cat{
+  border:1px solid var(--border);
+  background:white;
+  border-radius:13px;
+  padding:15px 7px;
+  text-align:center;
+  transition:.2s;
+  color:var(--text);
 }
-.category .emoji{display:block;font-size:27px;margin-bottom:7px}
-.category strong{font-size:13px}
-nav{display:flex;gap:8px;overflow:auto;padding:10px 0}
-nav button{white-space:nowrap}
-.section{margin:26px 0;scroll-margin-top:85px}
-.section h2{font-size:20px;margin:0 0 13px}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.cat .ico{
+  width:46px;height:46px;
+  margin:0 auto 7px;
+  border-radius:13px;
+  display:grid;place-items:center;
+  background:var(--light);
+  color:var(--green);
+  font-size:21px;
+}
+.cat strong{font-size:14px;display:block}
+.cat.active,.cat:hover{
+  border-color:var(--green);
+  background:#f0faf5;
+  transform:translateY(-2px);
+}
+.filters{
+  display:flex;gap:8px;flex-wrap:wrap;
+  margin:0 0 17px;
+}
+.filter{
+  border:1px solid var(--border);
+  background:white;
+  border-radius:20px;
+  padding:7px 15px;
+  font-size:14px;
+}
+.filter.active{background:var(--green);color:white;border-color:var(--green)}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:17px;
+}
 .card{
- background:white;
- border:1px solid #eee;
- border-radius:13px;
- padding:13px;
- overflow:hidden
+  background:white;border:1px solid var(--border);
+  border-radius:14px;overflow:hidden;
+  box-shadow:0 3px 12px #00000008;
+  display:flex;flex-direction:column;
 }
-.card img{
- width:100%;
- height:145px;
- object-fit:cover;
- border-radius:9px
+.card-img{
+  height:190px;width:100%;
+  object-fit:cover;background:#e9efeb;
 }
 .no-image{
- height:110px;
- background:#f2f2f2;
- border-radius:9px;
- display:grid;
- place-items:center;
- font-size:35px
+  height:150px;background:var(--light);
+  display:grid;place-items:center;
+  color:var(--green);font-size:42px;
 }
-.card h3{font-size:16px;margin:10px 0 5px}
-.card p{font-size:13px;color:var(--muted);line-height:1.6;margin:5px 0}
-.price{font-size:17px;color:var(--primary);font-weight:bold;margin:8px 0}
-.tag{
- display:inline-block;
- background:#fff0f5;
- color:var(--primary);
- padding:4px 9px;
- border-radius:20px;
- font-size:11px
+.card-body{padding:14px;display:flex;flex-direction:column;flex:1}
+.card h3{font-size:18px;margin:0 0 6px;line-height:1.4}
+.description{
+  color:var(--muted);font-size:14px;
+  line-height:1.6;margin:4px 0 10px;
+  white-space:pre-line;
 }
-.empty{
- background:white;
- padding:25px;
- border-radius:12px;
- text-align:center;
- color:var(--muted);
- grid-column:1/-1
+.meta{
+  display:flex;flex-wrap:wrap;gap:8px;
+  color:var(--muted);font-size:13px;
+  margin:4px 0 10px;
 }
-.info{
- background:white;
- border-radius:10px;
- padding:12px;
- margin:12px 0;
- color:var(--muted);
- font-size:13px
+.meta span{display:flex;align-items:center;gap:5px}
+.price{font-size:18px;color:var(--green);font-weight:700;margin:4px 0 12px}
+.card-actions{display:flex;gap:8px;margin-top:auto}
+.action-btn{
+  flex:1;border:0;border-radius:9px;
+  padding:9px 8px;font-size:14px;font-weight:600;
+}
+.primary{background:var(--green);color:white}
+.secondary{background:var(--light);color:var(--green)}
+.empty,.loading{
+  background:white;border:1px dashed #cbd8d0;
+  border-radius:13px;padding:35px 15px;
+  text-align:center;color:var(--muted);
+  grid-column:1/-1;
+}
+.empty i{font-size:35px;color:#9bb8a7;margin-bottom:10px}
+footer{
+  background:#123c2d;color:#e5f5ec;
+  padding:28px 18px;margin-top:35px;
+}
+.footer-inner{
+  max-width:1200px;margin:auto;
+  display:flex;justify-content:space-between;
+  gap:20px;flex-wrap:wrap;
+}
+footer p{margin:5px 0;font-size:14px}
+footer a{color:#fff;text-decoration:underline}
+.float-cart{
+  position:fixed;right:20px;bottom:20px;
+  z-index:120;background:var(--orange);
+  color:#222;border:0;border-radius:50px;
+  padding:13px 19px;font-weight:700;
+  box-shadow:0 5px 20px #0003;
+}
+.cart-count{
+  background:#d62828;color:white;
+  padding:2px 7px;border-radius:20px;
+  margin-left:5px;
 }
 .modal{
- position:fixed;
- inset:0;
- background:#0008;
- z-index:30;
- display:none;
- overflow:auto;
- padding:15px
+  display:none;position:fixed;inset:0;
+  background:#0008;z-index:200;
+  padding:15px;overflow:auto;
+  align-items:center;justify-content:center;
 }
+.modal.show{display:flex}
 .modal-box{
- background:white;
- border-radius:15px;
- padding:20px;
- max-width:520px;
- margin:25px auto
+  background:white;width:100%;max-width:520px;
+  border-radius:16px;padding:20px;
+  max-height:92vh;overflow:auto;
 }
-.modal-box h2{margin-top:0}
-input,textarea,select{
- width:100%;
- padding:12px;
- margin:6px 0 12px;
- border:1px solid #ddd;
- border-radius:8px;
- font:inherit
+.modal-head{
+  display:flex;justify-content:space-between;
+  align-items:center;margin-bottom:15px;
 }
-label{font-size:13px;font-weight:bold}
-.close{float:right;background:#eee;color:#333;padding:7px 11px}
-footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
-.cartbar{
- position:fixed;
- bottom:12px;
- left:50%;
- transform:translateX(-50%);
- z-index:15;
- background:var(--dark);
- color:white;
- border-radius:30px;
- padding:13px 20px;
- display:none;
- white-space:nowrap;
- box-shadow:0 3px 15px #0003;
- cursor:pointer
+.modal-head h2{margin:0;font-size:21px}
+.close{
+  border:0;background:#f0f2f1;
+  width:34px;height:34px;border-radius:50%;
+  font-size:18px;
 }
-@media(max-width:650px){
- .grid{grid-template-columns:repeat(2,1fr)}
- .categories{grid-template-columns:repeat(3,1fr)}
- .card img{height:115px}
- .container{padding:12px}
- .hero h1{font-size:23px}
+.field{margin-bottom:12px}
+.field label{display:block;font-weight:600;margin-bottom:5px}
+.field input,.field textarea,.field select{
+  width:100%;border:1px solid #dce5df;
+  border-radius:9px;padding:11px;
+  font-size:15px;outline:none;background:white;
 }
-@media(max-width:380px){
- .grid{grid-template-columns:1fr}
+.field input:focus,.field textarea:focus{border-color:var(--green)}
+.field textarea{min-height:85px;resize:vertical}
+.submit{
+  width:100%;border:0;border-radius:10px;
+  padding:12px;background:var(--green);
+  color:white;font-size:16px;font-weight:700;
+}
+.cart-row{
+  display:flex;justify-content:space-between;
+  gap:10px;border-bottom:1px solid var(--border);
+  padding:10px 0;
+}
+.qty{display:flex;align-items:center;gap:8px}
+.qty button{
+  border:0;background:var(--light);
+  color:var(--green);border-radius:6px;
+  width:27px;height:27px;font-weight:bold;
+}
+.total{text-align:right;font-size:19px;font-weight:700;margin:15px 0}
+.notice{
+  padding:10px 12px;border-radius:9px;
+  background:#fff7e6;color:#805400;
+  font-size:13px;margin:10px 0;
+}
+@media(max-width:850px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .categories{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:520px){
+  .nav{padding:10px}
+  .brand h2{font-size:17px}
+  .nav-btn{padding:7px 9px;font-size:12px}
+  .hero{padding:28px 15px 35px}
+  .hero h1{font-size:25px}
+  .container{padding:18px 12px}
+  .grid{grid-template-columns:1fr}
+  .card-img{height:205px}
+  .section-title h2{font-size:20px}
+  .float-cart{right:12px;bottom:12px}
 }
 </style>
 </head>
@@ -197,565 +296,602 @@ footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
 <body>
 
 <header>
- <div class="logo">
-  UPAZILA EXPRESS
-  <small id="locationName">জীবননগর, চুয়াডাঙ্গা</small>
- </div>
- <button class="secondary" onclick="openCart()">
-  🛒 কার্ট <span id="cartCount">0</span>
- </button>
+  <div class="nav">
+    <div class="brand">
+      <div class="logo"><i class="fa-solid fa-truck-fast"></i></div>
+      <div>
+        <h2>UPAZILA EXPRESS</h2>
+        <small>আপনার এলাকার সকল সেবা এক জায়গায়</small>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a class="nav-btn" href="provider.html">
+        <i class="fa-solid fa-user-plus"></i> Provider
+      </a>
+      <button class="nav-btn" onclick="openCart()">
+        <i class="fa-solid fa-cart-shopping"></i> Cart
+      </button>
+    </div>
+  </div>
 </header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1>জীবননগরের সেবা এখন হাতের মুঠোয়</h1>
+    <p>দোকান, পণ্য, বাড়ি ভাড়া, শ্রমিক, টেকনিশিয়ান ও ডেলিভারি—সব এক প্ল্যাটফর্মে।</p>
+    <div class="search-box">
+      <input id="searchInput" type="search" placeholder="আপনি কী খুঁজছেন?">
+      <button onclick="applySearch()"><i class="fa-solid fa-search"></i> খুঁজুন</button>
+    </div>
+  </div>
+</section>
 
 <main class="container">
 
- <section class="hero">
-  <h1>আপনার এলাকার সব সেবা, এক জায়গায়!</h1>
-  <p>পণ্য কিনুন, বাড়ি ভাড়া খুঁজুন, শ্রমিক ও টেকনিশিয়ান পান—সহজেই।</p>
- </section>
-
- <input
-  class="search"
-  id="searchBox"
-  placeholder="পণ্য, দোকান, বাড়ি বা সেবা খুঁজুন..."
-  oninput="renderAll()"
- >
-
- <section class="categories">
-  <div class="category" onclick="showSection('products')">
-   <span class="emoji">🛍️</span><strong>দোকান ও পণ্য</strong>
+  <div class="section-title">
+    <h2>আমাদের সেবাসমূহ</h2>
+    <small>জীবননগর, চুয়াডাঙ্গা</small>
   </div>
-  <div class="category" onclick="showSection('rent')">
-   <span class="emoji">🏠</span><strong>বাড়ি ভাড়া</strong>
+
+  <div class="categories" id="categories">
+    <button class="cat active" data-cat="all" onclick="selectCategory('all',this)">
+      <div class="ico"><i class="fa-solid fa-border-all"></i></div>
+      <strong>সব সেবা</strong>
+    </button>
+    <button class="cat" data-cat="shop_product" onclick="selectCategory('shop_product',this)">
+      <div class="ico"><i class="fa-solid fa-store"></i></div>
+      <strong>দোকান ও পণ্য</strong>
+    </button>
+    <button class="cat" data-cat="rent" onclick="selectCategory('rent',this)">
+      <div class="ico"><i class="fa-solid fa-house"></i></div>
+      <strong>বাড়ি ভাড়া</strong>
+    </button>
+    <button class="cat" data-cat="worker" onclick="selectCategory('worker',this)">
+      <div class="ico"><i class="fa-solid fa-people-carry-box"></i></div>
+      <strong>শ্রমিক</strong>
+    </button>
+    <button class="cat" data-cat="technician" onclick="selectCategory('technician',this)">
+      <div class="ico"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+      <strong>টেকনিশিয়ান</strong>
+    </button>
+    <button class="cat" data-cat="pickup" onclick="selectCategory('pickup',this)">
+      <div class="ico"><i class="fa-solid fa-truck"></i></div>
+      <strong>পিকআপ ডেলিভারি</strong>
+    </button>
   </div>
-  <div class="category" onclick="showSection('workers')">
-   <span class="emoji">👷</span><strong>শ্রমিক</strong>
+
+  <div class="filters">
+    <button class="filter active" onclick="selectCategory('all',this)">সব বিজ্ঞাপন</button>
+    <button class="filter" onclick="selectCategory('support',this)">সাপোর্ট</button>
   </div>
-  <div class="category" onclick="showSection('technicians')">
-   <span class="emoji">🔧</span><strong>টেকনিশিয়ান</strong>
+
+  <div class="section-title">
+    <h2 id="listTitle">সকল বিজ্ঞাপন</h2>
+    <small id="resultCount">লোড হচ্ছে...</small>
   </div>
-  <div class="category" onclick="showSection('pickup')">
-   <span class="emoji">🚚</span><strong>পিকআপ ডেলিভারি</strong>
+
+  <div class="grid" id="adsGrid">
+    <div class="loading"><i class="fa-solid fa-spinner fa-spin"></i><br>বিজ্ঞাপন লোড হচ্ছে...</div>
   </div>
-  <div class="category" onclick="showSection('support')">
-   <span class="emoji">☎️</span><strong>সাপোর্ট</strong>
-  </div>
- </section>
-
- <nav>
-  <button onclick="showSection('products')">সব পণ্য</button>
-  <button onclick="showSection('rent')">বাড়ি ভাড়া</button>
-  <button onclick="showSection('workers')">শ্রমিক</button>
-  <button onclick="showSection('technicians')">টেকনিশিয়ান</button>
-  <button onclick="showSection('pickup')">পিকআপ</button>
-  <button onclick="openSubmit()">বিজ্ঞাপন/সেবা দিন</button>
- </nav>
-
- <div class="info" id="loadMessage">বিজ্ঞাপন লোড হচ্ছে...</div>
-
- <section class="section" id="products">
-  <h2>🛍️ স্থানীয় দোকান ও পণ্য</h2>
-  <div class="grid" id="productList"></div>
- </section>
-
- <section class="section" id="rent">
-  <h2>🏠 বাড়ি ভাড়ার বিজ্ঞাপন</h2>
-  <div class="grid" id="rentList"></div>
- </section>
-
- <section class="section" id="workers">
-  <h2>👷 শ্রমিক ও কর্মী</h2>
-  <div class="grid" id="workerList"></div>
- </section>
-
- <section class="section" id="technicians">
-  <h2>🔧 টেকনিশিয়ান ও কারিগর</h2>
-  <div class="grid" id="technicianList"></div>
- </section>
-
- <section class="section" id="pickup">
-  <h2>🚚 পিকআপ ও ডেলিভারি</h2>
-  <div class="grid" id="pickupList"></div>
- </section>
-
- <section class="section" id="support">
-  <h2>☎️ সাপোর্ট</h2>
-  <div class="grid" id="supportList"></div>
-  <button onclick="openRequest('support')" style="margin-top:12px">
-   সাপোর্ট অনুরোধ পাঠান
-  </button>
- </section>
-
- <section class="section">
-  <div class="card" style="text-align:center;padding:22px">
-   <h2>আপনি কি সেবা দিতে চান?</h2>
-   <p>নিজের দোকান, পণ্য, বাড়ি, শ্রমিক বা টেকনিশিয়ানের বিজ্ঞাপন দিন।</p>
-   <button class="green" onclick="goProvider()">Provider Registration / Login</button>
-  </div>
- </section>
-
 </main>
 
-<div class="cartbar" id="cartBar" onclick="openCart()">
- 🛒 কার্টে <span id="cartTotal">0</span> টাকা — অর্ডার করুন
-</div>
-
-<div class="modal" id="modal">
- <div class="modal-box">
-  <button class="close" onclick="closeModal()">✕</button>
-  <div id="modalContent"></div>
- </div>
-</div>
-
 <footer>
- <strong>UPAZILA EXPRESS</strong><br>
- জীবননগর, চুয়াডাঙ্গা<br>
- স্থানীয় মানুষের জন্য স্থানীয় সেবা।
+  <div class="footer-inner">
+    <div>
+      <h2>UPAZILA EXPRESS</h2>
+      <p>স্থানীয় মানুষের জন্য স্থানীয় সেবা।</p>
+      <p>জীবননগর, চুয়াডাঙ্গা</p>
+    </div>
+    <div>
+      <p><i class="fa-solid fa-handshake"></i> আপনি কি সার্ভিস প্রোভাইডার?</p>
+      <p><a href="provider.html">Provider Account খুলুন</a></p>
+      <p><a href="tel:">যোগাযোগ ও সহায়তা</a></p>
+    </div>
+  </div>
 </footer>
 
-<script>
-const C=window.UEX_CONFIG;
+<button class="float-cart" onclick="openCart()">
+  <i class="fa-solid fa-cart-shopping"></i> কার্ট
+  <span class="cart-count" id="cartCount">0</span>
+</button>
 
-if(!C || !C.SUPABASE_URL || !C.SUPABASE_ANON_KEY){
- alert("config.js সেটিংস পাওয়া যায়নি।");
- throw new Error("UEX_CONFIG missing");
+<!-- Cart Modal -->
+<div class="modal" id="cartModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2><i class="fa-solid fa-cart-shopping"></i> আপনার কার্ট</h2>
+      <button class="close" onclick="closeModal('cartModal')">×</button>
+    </div>
+    <div id="cartItems"></div>
+    <div class="total" id="cartTotal">মোট: ৳০</div>
+
+    <form id="checkoutForm">
+      <div class="field">
+        <label>আপনার নাম *</label>
+        <input id="customerName" required placeholder="সম্পূর্ণ নাম">
+      </div>
+      <div class="field">
+        <label>মোবাইল নম্বর *</label>
+        <input id="customerPhone" required type="tel" placeholder="01XXXXXXXXX">
+      </div>
+      <div class="field">
+        <label>ডেলিভারি ঠিকানা *</label>
+        <textarea id="deliveryAddress" required placeholder="বাড়ি, রাস্তা, বাজার বা পরিচিত স্থান"></textarea>
+      </div>
+      <div class="field">
+        <label>এলাকা *</label>
+        <select id="customerArea" required>
+          <option value="">এলাকা নির্বাচন করুন</option>
+          <option>জীবননগর বাজার</option>
+          <option>উথলী</option>
+          <option>হাসাদাহ</option>
+          <option>বাঁকা</option>
+          <option>অন্যান্য</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>অতিরিক্ত নির্দেশনা</label>
+        <textarea id="customerNote" placeholder="প্রয়োজনীয় তথ্য লিখুন"></textarea>
+      </div>
+      <div class="notice">অর্ডার জমা হওয়ার পর Admin অর্ডারটি যাচাই করে Rider নিয়োগ করবেন।</div>
+      <button class="submit" type="submit" id="checkoutBtn">অর্ডার নিশ্চিত করুন</button>
+    </form>
+  </div>
+</div>
+
+<!-- Service Request Modal -->
+<div class="modal" id="serviceModal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h2 id="serviceModalTitle">সেবার জন্য আবেদন</h2>
+      <button class="close" onclick="closeModal('serviceModal')">×</button>
+    </div>
+    <div id="selectedAdInfo"></div>
+    <form id="serviceForm">
+      <div class="field">
+        <label>আপনার নাম *</label>
+        <input id="serviceName" required>
+      </div>
+      <div class="field">
+        <label>মোবাইল নম্বর *</label>
+        <input id="servicePhone" type="tel" required placeholder="01XXXXXXXXX">
+      </div>
+      <div class="field">
+        <label>আপনার এলাকা *</label>
+        <input id="serviceArea" required placeholder="আপনার এলাকা">
+      </div>
+      <div class="field">
+        <label>বিস্তারিত তথ্য *</label>
+        <textarea id="serviceDetails" required placeholder="আপনার প্রয়োজন ও বিস্তারিত লিখুন"></textarea>
+      </div>
+      <button class="submit" type="submit" id="serviceSubmitBtn">আবেদন জমা দিন</button>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+
+<script>
+/* ================================
+   SUPABASE CONFIGURATION
+================================ */
+const CFG = window.UEX_CONFIG || {};
+if(!CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY){
+  document.getElementById('adsGrid').innerHTML =
+    '<div class="empty">Supabase configuration পাওয়া যায়নি। config.js পরীক্ষা করুন।</div>';
+  throw new Error('Supabase config missing');
 }
 
-const db=window.supabase.createClient(
- C.SUPABASE_URL,
- C.SUPABASE_ANON_KEY
+const db = window.supabase.createClient(
+  CFG.SUPABASE_URL,
+  CFG.SUPABASE_ANON_KEY
 );
 
-document.getElementById("locationName").textContent=
- (C.UPAZILA_NAME||"জীবননগর")+", "+(C.DISTRICT_NAME||"চুয়াডাঙ্গা");
-
-let ads=[];
-let products=[];
-let cart=[];
-let currentAction=null;
-
-const CATEGORY={
- shop_product:{name:"দোকান ও পণ্য",icon:"🛍️"},
- rent:{name:"বাড়ি ভাড়া",icon:"🏠"},
- worker:{name:"শ্রমিক",icon:"👷"},
- technician:{name:"টেকনিশিয়ান",icon:"🔧"},
- pickup:{name:"পিকআপ ডেলিভারি",icon:"🚚"},
- support:{name:"সাপোর্ট",icon:"☎️"}
+const CATEGORY_NAMES = {
+  shop_product:'দোকান ও পণ্য',
+  rent:'বাড়ি ভাড়া',
+  worker:'শ্রমিক',
+  technician:'টেকনিশিয়ান',
+  pickup:'পিকআপ ডেলিভারি',
+  support:'সাপোর্ট'
 };
 
-function esc(v){
- return String(v??"").replace(/[&<>"']/g,c=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
- }[c]));
+const CATEGORY_ICONS = {
+  shop_product:'fa-store',
+  rent:'fa-house',
+  worker:'fa-people-carry-box',
+  technician:'fa-screwdriver-wrench',
+  pickup:'fa-truck',
+  support:'fa-headset'
+};
+
+let allAds = [];
+let currentCategory = 'all';
+let searchTerm = '';
+let cart = [];
+let selectedServiceAd = null;
+
+/* ================================
+   COMMON HELPERS
+================================ */
+function esc(value){
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;',
+    '<':'&lt;',
+    '>':'&gt;',
+    '"':'&quot;',
+    "'":'&#039;'
+  })[ch]);
 }
 
-function digits(s){
- return String(s||"").replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d));
+function money(value){
+  const n = Number(value);
+  if(!Number.isFinite(n)) return 'দাম আলোচনা সাপেক্ষে';
+  return '৳' + n.toLocaleString('en-IN');
 }
 
-function money(v){
- const n=Number(v||0);
- return (Number.isFinite(n)?n:0).toLocaleString("bn-BD")+" টাকা";
+function showMessage(message){
+  alert(message);
 }
 
-function imageTag(url){
- if(url && /^https?:\/\//i.test(String(url))){
-  return `<img src="${esc(url)}" alt="বিজ্ঞাপনের ছবি" loading="lazy" onerror="this.style.display='none'">`;
- }
- return `<div class="no-image">📷</div>`;
+function closeModal(id){
+  document.getElementById(id).classList.remove('show');
 }
 
-function openModal(html){
- document.getElementById("modalContent").innerHTML=html;
- document.getElementById("modal").style.display="block";
+function openModal(id){
+  document.getElementById(id).classList.add('show');
 }
 
-function closeModal(){
- document.getElementById("modal").style.display="none";
-}
+/* ================================
+   LOAD APPROVED PROVIDER ADS
+================================ */
+async function loadAds(){
+  const grid = document.getElementById('adsGrid');
+  grid.innerHTML = '<div class="loading"><i class="fa-solid fa-spinner fa-spin"></i><br>বিজ্ঞাপন লোড হচ্ছে...</div>';
 
-function showSection(id){
- document.getElementById(id)?.scrollIntoView({behavior:"smooth"});
-}
+  const {data,error} = await db
+    .from('provider_ads')
+    .select('id,provider_id,category,title,description,price,price_unit,phone,area,image_url,status,created_at')
+    .eq('status','approved')
+    .order('created_at',{ascending:false})
+    .limit(500);
 
-function goProvider(){
- location.href="provider.html";
-}
-
-function priceText(ad){
- if(ad.price===null || ad.price===undefined || ad.price===""){
-  return "দাম জানতে যোগাযোগ করুন";
- }
- const n=Number(ad.price);
- if(!Number.isFinite(n))return esc(ad.price);
- return money(n)+(ad.price_unit?"/"+esc(ad.price_unit):"");
-}
-
-function filtered(items){
- const q=document.getElementById("searchBox").value.trim().toLowerCase();
- if(!q)return items;
-
- return items.filter(x=>
-  [
-   x.title,x.description,x.price,x.price_unit,
-   x.area,x.phone,CATEGORY[x.category]?.name
-  ].join(" ").toLowerCase().includes(q)
- );
-}
-
-function makeCard(ad){
- const cat=CATEGORY[ad.category]||{name:"সেবা",icon:"📌"};
- const isProduct=ad.category==="shop_product";
-
- let action="বিস্তারিত / অনুরোধ";
- if(isProduct)action="কার্টে যোগ করুন";
- if(ad.category==="rent")action="বাড়ি দেখতে চাই";
- if(ad.category==="worker")action="কাজের জন্য অনুরোধ";
- if(ad.category==="technician")action="টেকনিশিয়ান চাই";
- if(ad.category==="pickup")action="ডেলিভারি অনুরোধ";
-
- return `
- <article class="card">
-  ${imageTag(ad.image_url)}
-  <span class="tag">${cat.icon} ${cat.name}</span>
-  <h3>${esc(ad.title)}</h3>
-  <div class="price">${priceText(ad)}</div>
-  <p>📍 ${esc(ad.area||"জীবননগর")}</p>
-  <p>${esc(ad.description||"বিস্তারিত জানতে যোগাযোগ করুন")}</p>
-  ${ad.phone?`<p>📞 ${esc(ad.phone)}</p>`:""}
-  ${
-   isProduct
-   ?`<button onclick="addCart('${esc(ad.id)}')">${action}</button>`
-   :`<button onclick="openAdRequest('${esc(ad.id)}')">${action}</button>`
+  if(error){
+    console.error('Provider ads error:',error);
+    grid.innerHTML = '<div class="empty">বিজ্ঞাপন লোড করা যায়নি। কিছুক্ষণ পর আবার চেষ্টা করুন।<br><small>'+esc(error.message)+'</small></div>';
+    document.getElementById('resultCount').textContent = 'ত্রুটি';
+    return;
   }
- </article>`;
+
+  allAds = data || [];
+  renderAds();
 }
 
-function renderList(id,list,message){
- document.getElementById(id).innerHTML=list.length
-  ?list.map(makeCard).join("")
-  :`<div class="empty">${message}</div>`;
+/* ================================
+   FILTER AND SEARCH
+================================ */
+function selectCategory(category,button){
+  currentCategory = category;
+
+  document.querySelectorAll('.cat,.filter').forEach(el=>{
+    el.classList.remove('active');
+  });
+  if(button) button.classList.add('active');
+
+  document.querySelectorAll('.cat').forEach(el=>{
+    if(el.dataset.cat === category) el.classList.add('active');
+  });
+  document.querySelectorAll('.filter').forEach(el=>{
+    if(category === 'support' && el.textContent.includes('সাপোর্ট')) el.classList.add('active');
+    if(category === 'all' && el.textContent.includes('সব বিজ্ঞাপন')) el.classList.add('active');
+  });
+
+  renderAds();
 }
 
-function renderAll(){
- const list=filtered(ads);
-
- renderList("productList",
-  list.filter(x=>x.category==="shop_product"),
-  "এখনো কোনো পণ্য প্রকাশিত হয়নি।");
-
- renderList("rentList",
-  list.filter(x=>x.category==="rent"),
-  "এখনো কোনো বাড়ির বিজ্ঞাপন নেই।");
-
- renderList("workerList",
-  list.filter(x=>x.category==="worker"),
-  "এখনো কোনো শ্রমিকের বিজ্ঞাপন নেই।");
-
- renderList("technicianList",
-  list.filter(x=>x.category==="technician"),
-  "এখনো কোনো টেকনিশিয়ানের বিজ্ঞাপন নেই।");
-
- renderList("pickupList",
-  list.filter(x=>x.category==="pickup"),
-  "এখনো কোনো পিকআপ বিজ্ঞাপন নেই।");
-
- renderList("supportList",
-  list.filter(x=>x.category==="support"),
-  "এখনো কোনো সাপোর্ট বিজ্ঞাপন নেই।");
+function applySearch(){
+  searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
+  renderAds();
 }
 
-async function loadData(){
- const message=document.getElementById("loadMessage");
- message.textContent="বিজ্ঞাপন লোড হচ্ছে...";
+document.getElementById('searchInput').addEventListener('keydown',e=>{
+  if(e.key === 'Enter') applySearch();
+});
 
- const {data,error}=await db
-  .from("provider_ads")
-  .select("*")
-  .eq("status","approved")
-  .order("created_at",{ascending:false});
+/* ================================
+   DISPLAY ADS
+================================ */
+function renderAds(){
+  const grid = document.getElementById('adsGrid');
+  let ads = allAds.filter(ad=>{
+    const categoryMatch = currentCategory === 'all' || ad.category === currentCategory;
+    const text = [
+      ad.title,ad.description,ad.area,
+      CATEGORY_NAMES[ad.category]
+    ].join(' ').toLowerCase();
 
- if(error){
-  console.error("Provider Ads:",error);
-  message.textContent="বিজ্ঞাপন লোড করতে সমস্যা হয়েছে: "+error.message;
-  ads=[];
-  products=[];
-  renderAll();
-  return;
- }
+    return categoryMatch && (!searchTerm || text.includes(searchTerm));
+  });
 
- ads=data||[];
- products=ads.filter(x=>x.category==="shop_product");
+  document.getElementById('resultCount').textContent = ads.length+'টি বিজ্ঞাপন';
 
- message.textContent=ads.length
-  ?"অনুমোদিত বিজ্ঞাপন দেখানো হচ্ছে।"
-  :"এখনো কোনো অনুমোদিত বিজ্ঞাপন প্রকাশিত হয়নি।";
+  document.getElementById('listTitle').textContent =
+    currentCategory === 'all' ? 'সকল বিজ্ঞাপন' : (CATEGORY_NAMES[currentCategory] || 'বিজ্ঞাপন');
 
- renderAll();
+  if(!ads.length){
+    grid.innerHTML = `
+      <div class="empty">
+        <i class="fa-regular fa-folder-open"></i>
+        <h3>কোনো বিজ্ঞাপন পাওয়া যায়নি</h3>
+        <p>এই বিভাগে বর্তমানে অনুমোদিত বিজ্ঞাপন নেই।</p>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = ads.map(ad=>{
+    const isProduct = ad.category === 'shop_product';
+    const icon = CATEGORY_ICONS[ad.category] || 'fa-bullhorn';
+    const image = ad.image_url
+      ? `<img class="card-img" src="${esc(ad.image_url)}" alt="${esc(ad.title)}" loading="lazy" onerror="this.style.display='none'">`
+      : `<div class="no-image"><i class="fa-solid ${icon}"></i></div>`;
+
+    const price = ad.price !== null && ad.price !== ''
+      ? money(ad.price) + (ad.price_unit ? ' / '+esc(ad.price_unit) : '')
+      : 'দাম আলোচনা সাপেক্ষে';
+
+    return `
+      <article class="card">
+        ${image}
+        <div class="card-body">
+          <h3>${esc(ad.title)}</h3>
+          <div class="meta">
+            <span><i class="fa-solid ${icon}"></i>${esc(CATEGORY_NAMES[ad.category] || 'সেবা')}</span>
+            <span><i class="fa-solid fa-location-dot"></i>${esc(ad.area || 'জীবননগর')}</span>
+          </div>
+          <div class="description">${esc(ad.description || 'বিস্তারিত তথ্য দেওয়া হয়নি।')}</div>
+          <div class="price">${price}</div>
+          <div class="card-actions">
+            ${isProduct
+              ? `<button class="action-btn primary" onclick="addToCart('${ad.id}')"><i class="fa-solid fa-cart-plus"></i> কার্টে যোগ</button>`
+              : `<button class="action-btn primary" onclick="requestService('${ad.id}')"><i class="fa-solid fa-paper-plane"></i> আবেদন করুন</button>`
+            }
+            ${ad.phone
+              ? `<a class="action-btn secondary" href="tel:${esc(ad.phone)}"><i class="fa-solid fa-phone"></i> কল করুন</a>`
+              : ''
+            }
+          </div>
+        </div>
+      </article>`;
+  }).join('');
 }
 
-function addCart(id){
- const p=products.find(x=>String(x.id)===String(id));
- if(!p)return;
+/* ================================
+   CART FUNCTIONS
+================================ */
+function addToCart(adId){
+  const ad = allAds.find(x=>x.id === adId);
+  if(!ad) return;
 
- const price=Number(p.price);
- if(!Number.isFinite(price)||price<0){
-  alert("এই পণ্যের সঠিক দাম পাওয়া যায়নি।");
-  return;
- }
+  const price = Number(ad.price);
+  if(!Number.isFinite(price) || price < 0){
+    showMessage('এই পণ্যের নির্দিষ্ট মূল্য পাওয়া যায়নি। অর্ডার করার আগে Provider-এর সঙ্গে যোগাযোগ করুন।');
+    return;
+  }
 
- const old=cart.find(x=>x.id===id);
+  const existing = cart.find(x=>x.provider_ad_id === ad.id);
+  if(existing){
+    existing.qty++;
+  }else{
+    cart.push({
+      provider_ad_id:ad.id,
+      name:ad.title,
+      price:price,
+      qty:1
+    });
+  }
 
- if(old)old.qty++;
- else cart.push({
-  id:p.id,
-  name:p.title,
-  price,
-  qty:1
- });
-
- updateCart();
- alert("পণ্য কার্টে যোগ হয়েছে।");
+  updateCart();
+  showMessage('পণ্যটি কার্টে যোগ হয়েছে।');
 }
 
 function updateCart(){
- const count=cart.reduce((a,x)=>a+x.qty,0);
- const total=cart.reduce((a,x)=>a+x.price*x.qty,0);
+  document.getElementById('cartCount').textContent =
+    cart.reduce((sum,item)=>sum+item.qty,0);
 
- document.getElementById("cartCount").textContent=count;
- document.getElementById("cartTotal").textContent=total.toLocaleString("bn-BD");
- document.getElementById("cartBar").style.display=count?"block":"none";
+  const box = document.getElementById('cartItems');
+  if(!cart.length){
+    box.innerHTML = '<div class="empty">আপনার কার্ট খালি।</div>';
+    document.getElementById('cartTotal').textContent = 'মোট: ৳০';
+    return;
+  }
+
+  box.innerHTML = cart.map((item,index)=>`
+    <div class="cart-row">
+      <div>
+        <strong>${esc(item.name)}</strong>
+        <div class="description">${money(item.price)} × ${item.qty}</div>
+      </div>
+      <div class="qty">
+        <button onclick="changeQty(${index},-1)">−</button>
+        <strong>${item.qty}</strong>
+        <button onclick="changeQty(${index},1)">+</button>
+        <button onclick="removeCart(${index})" title="মুছুন" style="color:#c62828">×</button>
+      </div>
+    </div>
+  `).join('');
+
+  const total = cart.reduce((sum,item)=>sum+item.price*item.qty,0);
+  document.getElementById('cartTotal').textContent = 'মোট: '+money(total);
+}
+
+function changeQty(index,change){
+  if(!cart[index]) return;
+  cart[index].qty += change;
+  if(cart[index].qty <= 0) cart.splice(index,1);
+  updateCart();
+}
+
+function removeCart(index){
+  cart.splice(index,1);
+  updateCart();
 }
 
 function openCart(){
- if(!cart.length){
-  alert("আপনার কার্ট খালি।");
-  return;
- }
-
- const total=cart.reduce((a,x)=>a+x.price*x.qty,0);
-
- openModal(`
-  <h2>🛒 আপনার কার্ট</h2>
-  ${cart.map((x,i)=>`
-   <div style="padding:10px 0;border-bottom:1px solid #eee">
-    <strong>${esc(x.name)}</strong>
-    <p>${money(x.price)} ×
-     <input type="number" min="1" value="${x.qty}" style="width:75px"
-      onchange="changeQty(${i},this.value)">
-    </p>
-    <button class="secondary" onclick="removeCart(${i})">বাদ দিন</button>
-   </div>
-  `).join("")}
-  <h3>মোট: ${money(total)}</h3>
-  <button onclick="checkout()">অর্ডার সম্পন্ন করুন</button>
- `);
+  updateCart();
+  openModal('cartModal');
 }
 
-function changeQty(i,value){
- cart[i].qty=Math.max(1,Math.min(99,Number(value)||1));
- updateCart();
- openCart();
-}
+/* ================================
+   SUBMIT CUSTOMER ORDER
+   Uses create_customer_order RPC
+================================ */
+document.getElementById('checkoutForm').addEventListener('submit',async e=>{
+  e.preventDefault();
 
-function removeCart(i){
- cart.splice(i,1);
- updateCart();
- if(cart.length)openCart();
- else{
-  closeModal();
-  alert("কার্ট খালি হয়েছে।");
- }
-}
+  if(!cart.length){
+    showMessage('আপনার কার্টে কোনো পণ্য নেই।');
+    return;
+  }
 
-function checkout(){
- if(!cart.length){
-  alert("কার্ট খালি।");
-  return;
- }
+  const btn = document.getElementById('checkoutBtn');
+  btn.disabled = true;
+  btn.textContent = 'অর্ডার জমা হচ্ছে...';
 
- openModal(`
-  <h2>অর্ডার তথ্য</h2>
-  <form onsubmit="submitOrder(event)">
-   <label>আপনার নাম</label>
-   <input name="name" required minlength="2">
-
-   <label>মোবাইল নম্বর</label>
-   <input name="phone" required pattern="01[3-9][0-9]{8}" placeholder="01XXXXXXXXX">
-
-   <label>ডেলিভারি ঠিকানা</label>
-   <textarea name="address" required></textarea>
-
-   <label>এলাকা</label>
-   <select name="area" required>
-    ${(C.AREAS||["জীবননগর বাজার","উথলী","হাসাদাহ","বাঁকা","অন্য এলাকা"])
-     .map(a=>`<option value="${esc(a)}">${esc(a)}</option>`).join("")}
-   </select>
-
-   <label>অতিরিক্ত নির্দেশনা</label>
-   <textarea name="note"></textarea>
-
-   <button type="submit" id="orderButton">অর্ডার জমা দিন</button>
-  </form>
- `);
-}
-
-/*
-  গুরুত্বপূর্ণ:
-  অর্ডার সরাসরি customer_orders-এ INSERT করা হচ্ছে না।
-  create_customer_order RPC ব্যবহার করা হচ্ছে।
-*/
-async function submitOrder(e){
- e.preventDefault();
-
- const btn=document.getElementById("orderButton");
- btn.disabled=true;
- btn.textContent="অর্ডার জমা হচ্ছে...";
-
- try{
-  const f=new FormData(e.target);
-
-  const items=cart.map(x=>({
-   product_id:x.id,
-   product_name:x.name,
-   unit_price:x.price,
-   quantity:x.qty
+  const items = cart.map(item=>({
+    provider_ad_id:item.provider_ad_id,
+    product_name:item.name,
+    quantity:item.qty
   }));
 
-  const {data,error}=await db.rpc("create_customer_order",{
-   p_customer_name:f.get("name"),
-   p_customer_phone:digits(f.get("phone")),
-   p_delivery_address:f.get("address"),
-   p_area:f.get("area"),
-   p_customer_note:f.get("note"),
-   p_items:items
+  const payload = {
+    p_customer_name:document.getElementById('customerName').value.trim(),
+    p_customer_phone:document.getElementById('customerPhone').value.trim(),
+    p_delivery_address:document.getElementById('deliveryAddress').value.trim(),
+    p_area:document.getElementById('customerArea').value,
+    p_customer_note:document.getElementById('customerNote').value.trim(),
+    p_items:items
+  };
+
+  try{
+    const {data,error} = await db.rpc('create_customer_order',payload);
+
+    if(error) throw error;
+
+    if(data && data.success === false){
+      throw new Error(data.message || 'অর্ডার জমা হয়নি।');
+    }
+
+    const orderRef = data?.ref || data?.order_id || '';
+
+    cart = [];
+    updateCart();
+    document.getElementById('checkoutForm').reset();
+    closeModal('cartModal');
+
+    showMessage(
+      'আপনার অর্ডার সফলভাবে জমা হয়েছে।\n'+
+      (orderRef ? 'অর্ডার নম্বর: '+orderRef+'\n' : '')+
+      'Admin অর্ডারটি যাচাই করে পরবর্তী ব্যবস্থা নেবেন।'
+    );
+
+  }catch(error){
+    console.error('Order submit error:',error);
+    showMessage('অর্ডার জমা হয়নি: '+(error.message || 'অজানা সমস্যা'));
+  }finally{
+    btn.disabled = false;
+    btn.textContent = 'অর্ডার নিশ্চিত করুন';
+  }
+});
+
+/* ================================
+   SERVICE REQUEST
+================================ */
+function requestService(adId){
+  selectedServiceAd = allAds.find(x=>x.id === adId);
+  if(!selectedServiceAd) return;
+
+  document.getElementById('serviceModalTitle').textContent =
+    (CATEGORY_NAMES[selectedServiceAd.category] || 'সেবা')+' আবেদন';
+
+  document.getElementById('selectedAdInfo').innerHTML = `
+    <div class="notice">
+      <strong>${esc(selectedServiceAd.title)}</strong><br>
+      ${esc(selectedServiceAd.area || '')}<br>
+      ${esc(selectedServiceAd.description || '')}
+    </div>`;
+
+  document.getElementById('serviceDetails').value =
+    'আমি এই সেবাটি নিতে আগ্রহী। বিজ্ঞাপন: '+selectedServiceAd.title;
+
+  openModal('serviceModal');
+}
+
+document.getElementById('serviceForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+
+  if(!selectedServiceAd){
+    showMessage('সার্ভিস নির্বাচন করা হয়নি।');
+    return;
+  }
+
+  const btn = document.getElementById('serviceSubmitBtn');
+  btn.disabled = true;
+  btn.textContent = 'আবেদন জমা হচ্ছে...';
+
+  const serviceData = {
+    upazila_slug:CFG.UPAZILA_SLUG || 'jibannagar',
+    service:selectedServiceAd.category,
+    name:document.getElementById('serviceName').value.trim(),
+    phone:document.getElementById('servicePhone').value.trim(),
+    area:document.getElementById('serviceArea').value.trim(),
+    details:document.getElementById('serviceDetails').value.trim(),
+    extra:{
+      provider_ad_id:selectedServiceAd.id,
+      provider_id:selectedServiceAd.provider_id,
+      advertisement_title:selectedServiceAd.title
+    },
+    status:'pending'
+  };
+
+  try{
+    const {error} = await db
+      .from('service_requests')
+      .insert(serviceData);
+
+    if(error) throw error;
+
+    document.getElementById('serviceForm').reset();
+    closeModal('serviceModal');
+    selectedServiceAd = null;
+
+    showMessage('আপনার আবেদন সফলভাবে জমা হয়েছে। Admin আবেদনটি যাচাই করে যোগাযোগ করবেন।');
+
+  }catch(error){
+    console.error('Service request error:',error);
+    showMessage('আবেদন জমা হয়নি: '+(error.message || 'অজানা সমস্যা'));
+  }finally{
+    btn.disabled = false;
+    btn.textContent = 'আবেদন জমা দিন';
+  }
+});
+
+/* ================================
+   CLOSE MODALS ON BACKGROUND CLICK
+================================ */
+document.querySelectorAll('.modal').forEach(modal=>{
+  modal.addEventListener('click',e=>{
+    if(e.target === modal) modal.classList.remove('show');
   });
+});
 
-  if(error)throw error;
-  if(!data || !data.success)throw new Error("অর্ডার নিশ্চিত করা যায়নি।");
-
-  cart=[];
-  updateCart();
-  closeModal();
-
-  alert(
-   "অর্ডার সফলভাবে জমা হয়েছে!\n"+
-   "অর্ডার নম্বর: "+data.ref+"\n"+
-   "মোট মূল্য: "+money(data.total)
-  );
-
- }catch(error){
-  console.error("Order Error:",error);
-  alert("অর্ডার জমা হয়নি: "+error.message);
-  btn.disabled=false;
-  btn.textContent="অর্ডার জমা দিন";
- }
-}
-
-function openAdRequest(id){
- const ad=ads.find(x=>String(x.id)===String(id));
- if(!ad)return;
-
- let service="support";
-
- if(ad.category==="rent")service="rent";
- else if(ad.category==="worker"||ad.category==="technician")service="worker";
- else if(ad.category==="pickup")service="delivery";
-
- openRequest(service,ad.id,ad.title,ad.category);
-}
-
-function openRequest(service,id="",title="",category=""){
- currentAction={service,id,title,category};
-
- const headings={
-  rent:"বাড়ি দেখতে চাই",
-  worker:"কাজের জন্য অনুরোধ",
-  delivery:"পিকআপ ও ডেলিভারি",
-  support:"সাপোর্ট ও অভিযোগ"
- };
-
- openModal(`
-  <h2>${esc(title||headings[service]||"সার্ভিস অনুরোধ")}</h2>
-
-  ${title?`<p>বিজ্ঞাপন: <strong>${esc(title)}</strong></p>`:""}
-
-  <form onsubmit="submitRequest(event)">
-   <label>আপনার নাম</label>
-   <input name="name" required minlength="2">
-
-   <label>মোবাইল নম্বর</label>
-   <input name="phone" required pattern="01[3-9][0-9]{8}" placeholder="01XXXXXXXXX">
-
-   <label>আপনার এলাকা</label>
-   <input name="area" required>
-
-   <label>বিস্তারিত</label>
-   <textarea name="details" required></textarea>
-
-   <button type="submit" id="requestButton">অনুরোধ জমা দিন</button>
-  </form>
- `);
-}
-
-async function submitRequest(e){
- e.preventDefault();
-
- const btn=document.getElementById("requestButton");
- btn.disabled=true;
- btn.textContent="জমা হচ্ছে...";
-
- try{
-  const f=new FormData(e.target);
-
-  const {error}=await db.from("service_requests").insert({
-   ref:"UEX-"+Date.now().toString().slice(-9),
-   upazila_slug:C.UPAZILA_SLUG,
-   service:currentAction.service,
-   name:f.get("name"),
-   phone:digits(f.get("phone")),
-   area:f.get("area"),
-   details:f.get("details"),
-   extra:{
-    provider_ad_id:currentAction.id||null,
-    listing_id:currentAction.id||null,
-    category:currentAction.category||null,
-    ad_title:currentAction.title||null
-   }
-  });
-
-  if(error)throw error;
-
-  closeModal();
-  alert("আপনার অনুরোধ জমা হয়েছে। আমরা যোগাযোগ করব।");
-
- }catch(error){
-  console.error(error);
-  alert("অনুরোধ জমা হয়নি: "+error.message);
-  btn.disabled=false;
-  btn.textContent="অনুরোধ জমা দিন";
- }
-}
-
-function openSubmit(){
- openModal(`
-  <h2>আপনি কী দিতে চান?</h2>
-  <p>নিজের অ্যাকাউন্ট খুলে বিজ্ঞাপন জমা দিন।</p>
-  <p>🛍️ দোকান ও পণ্য</p>
-  <p>🏠 বাড়ি ভাড়া</p>
-  <p>👷 শ্রমিক</p>
-  <p>🔧 টেকনিশিয়ান</p>
-  <p>🚚 পিকআপ ডেলিভারি</p>
-  <p>☎️ সাপোর্ট</p>
-  <button class="green" onclick="goProvider()">Provider Registration / Login</button>
- `);
-}
-
-// প্রথমবার বিজ্ঞাপন লোড
-loadData();
-
-// নতুন Approved বিজ্ঞাপন দেখানোর জন্য ৩০ সেকেন্ড পরপর Refresh
-setInterval(loadData,30000);
-
+/* ================================
+   INITIAL LOAD + AUTO REFRESH
+================================ */
+updateCart();
+loadAds();
+setInterval(loadAds,30000);
 </script>
+
 </body>
 </html>
