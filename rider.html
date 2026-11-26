@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>UPAZILA EXPRESS - Rider Panel</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f1f5f9;color:#172033;font-family:Arial,sans-serif}
+header{background:#075e45;color:white;padding:18px}
+header h2{margin:0 0 5px}
+main{max-width:850px;margin:20px auto;padding:12px}
+.card{background:white;border-radius:13px;padding:18px;margin-bottom:15px;box-shadow:0 2px 10px #0000000c}
+input,button{width:100%;padding:13px;margin:7px 0;border-radius:8px;border:1px solid #ccd5df;font-size:16px}
+button{background:#087b55;color:white;border:0;font-weight:bold;cursor:pointer}
+button.secondary{background:#334155}
+button.danger{background:#b42318}
+button:disabled{opacity:.5}
+.small{color:#64748b;font-size:13px}
+.status{display:inline-block;padding:5px 10px;border-radius:20px;background:#e0f2fe;color:#075985;font-size:13px}
+.hidden{display:none}
+.order{border:1px solid #e2e8f0;border-radius:10px;padding:14px;margin:12px 0}
+.order h3{margin-top:0}
+a.call{display:block;text-align:center;background:#e8f7ef;color:#087b55;padding:12px;border-radius:8px;text-decoration:none;font-weight:bold;margin:8px 0}
+#message{white-space:pre-wrap;color:#b42318}
+</style>
+</head>
+<body>
+<header>
+  <h2>🛵 UPAZILA EXPRESS</h2>
+  Rider Dashboard | জীবননগর, চুয়াডাঙ্গা
+</header>
+
+<main>
+  <section class="card" id="loginBox">
+    <h3>Rider Login</h3>
+    <input id="email" type="email" placeholder="Rider Email">
+    <input id="password" type="password" placeholder="Password">
+    <button id="loginBtn" onclick="login()">Login করুন</button>
+    <p id="loginMsg"></p>
+  </section>
+
+  <section id="dashboard" class="hidden">
+    <div class="card">
+      <h3 id="riderName">Rider</h3>
+      <p id="riderPhone" class="small"></p>
+      <p>GPS: <span id="gpsStatus" class="status">বন্ধ</span></p>
+      <button onclick="startGPS()">📍 Live Location চালু করুন</button>
+      <button class="secondary" onclick="stopGPS()">GPS বন্ধ করুন</button>
+      <button class="secondary" onclick="loadRequests()">🔄 কাজ Refresh</button>
+      <button class="danger" onclick="logout()">Logout</button>
+      <p class="small">GPS চালু রাখতে ফোনে Location Permission ও Internet চালু রাখুন।</p>
+    </div>
+
+    <div class="card">
+      <h3>আমার Assigned কাজ</h3>
+      <div id="requestList">লোড হচ্ছে...</div>
+    </div>
+  </section>
+
+  <p id="message"></p>
+</main>
+
+<script>
+const cfg = window.UEX_CONFIG;
+if (!cfg || !cfg.SUPABASE_URL || !cfg.SUPABASE_ANON_KEY) {
+  document.getElementById('loginMsg').textContent =
+    'config.js পাওয়া যায়নি অথবা Supabase configuration অসম্পূর্ণ।';
+  throw new Error('Missing UEX_CONFIG');
+}
+
+const db = window.supabase.createClient(
+  cfg.SUPABASE_URL,
+  cfg.SUPABASE_ANON_KEY
+);
+
+let rider = null;
+let gpsWatch = null;
+
+function msg(text) {
+  document.getElementById('message').textContent = text || '';
+}
+
+async function login() {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  const out = document.getElementById('loginMsg');
+
+  out.textContent = 'Login হচ্ছে...';
+
+  const {data, error} = await db.auth.signInWithPassword({email,password});
+
+  if (error) {
+    out.textContent = 'Login ব্যর্থ: ' + error.message;
+    return;
+  }
+
+  await openDashboard();
+}
+
+async function openDashboard() {
+  const {data:{user}, error:authError} = await db.auth.getUser();
+
+  if (authError || !user) {
+    document.getElementById('loginBox').classList.remove('hidden');
+    return;
+  }
+
+  const {data, error} = await db
+    .from('riders')
+    .select('id,name,phone,status')
+    .eq('auth_user_id', user.id)
+    .maybeSingle();
+
+  if (error || !data || data.status !== 'active') {
+    await db.auth.signOut();
+    document.getElementById('loginMsg').textContent =
+      'এই Email-এর সঙ্গে Active Rider Profile যুক্ত নেই। Admin-এর সঙ্গে যোগাযোগ করুন।';
+    return;
+  }
+
+  rider = data;
+  document.getElementById('loginBox').classList.add('hidden');
+  document.getElementById('dashboard').classList.remove('hidden');
+  document.getElementById('riderName').textContent = '🛵 ' + rider.name;
+  document.getElementById('riderPhone').textContent = rider.phone || '';
+
+  await loadRequests();
+}
+
+async function loadRequests() {
+  if (!rider) return;
+
+  const box = document.getElementById('requestList');
+  box.textContent = 'কাজ লোড হচ্ছে...';
+
+  const {data, error} = await db
+    .from('service_requests')
+    .select('id,ref,service,name,phone,area,details,extra,status,created_at')
+    .eq('assigned_rider_id', rider.id)
+    .in('status', ['assigned','called'])
+    .order('created_at', {ascending:false});
+
+  if (error) {
+    box.textContent = 'তথ্য লোড হয়নি: ' + error.message;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    box.textContent = 'আপনার নামে এখনো কোনো কাজ Assign করা হয়নি।';
+    return;
+  }
+
+  box.innerHTML = '';
+
+  for (const r of data) {
+    let listing = null;
+    const listingId = r.extra && r.extra.listing_id;
+
+    if (r.service === 'rent' && listingId) {
+      const result = await db
+        .from('rent_listings')
+        .select('title,type,area,rent,description')
+        .eq('id', listingId)
+        .maybeSingle();
+      listing = result.data;
+    }
+
+    const item = document.createElement('div');
+    item.className = 'order';
+
+    const title = document.createElement('h3');
+    title.textContent = (r.service === 'rent' ? '🏠 বাড়ি দেখানো' :
+      r.service === 'delivery' ? '🚚 Pickup Delivery' : '📋 ' + r.service)
+      + ' — ' + r.ref;
+    item.appendChild(title);
+
+    const customer = document.createElement('p');
+    customer.textContent = 'Customer: ' + r.name + ' | ' + r.phone;
+    item.appendChild(customer);
+
+    const area = document.createElement('p');
+    area.textContent = 'এলাকা: ' + (r.area || 'উল্লেখ নেই');
+    item.appendChild(area);
+
+    if (listing) {
+      const house = document.createElement('p');
+      house.textContent = 'বাড়ি: ' + listing.title + ' | ' +
+        listing.area + ' | ভাড়া: ৳' + listing.rent;
+      item.appendChild(house);
+
+      const desc = document.createElement('p');
+      desc.textContent = listing.description || '';
+      item.appendChild(desc);
+    }
+
+    const details = document.createElement('p');
+    details.textContent = 'বিস্তারিত: ' + (r.details || 'নেই');
+    item.appendChild(details);
+
+    const state = document.createElement('p');
+    state.innerHTML = '<span class="status"></span>';
+    state.querySelector('span').textContent = 'অবস্থা: ' + r.status;
+    item.appendChild(state);
+
+    const call = document.createElement('a');
+    call.className = 'call';
+    call.href = 'tel:' + r.phone;
+    call.textContent = '📞 Customer-কে কল করুন';
+    item.appendChild(call);
+
+    if (r.status === 'assigned') {
+      const start = document.createElement('button');
+      start.textContent = 'কাজ শুরু / Customer-এর সঙ্গে যোগাযোগ';
+      start.onclick = () => updateStatus(r.id, 'called');
+      item.appendChild(start);
+    }
+
+    const done = document.createElement('button');
+    done.textContent = '✅ কাজ সম্পন্ন';
+    done.onclick = () => updateStatus(r.id, 'done');
+    item.appendChild(done);
+
+    box.appendChild(item);
+  }
+}
+
+async function updateStatus(id, status) {
+  if (!confirm('কাজের অবস্থা পরিবর্তন করবেন?')) return;
+
+  const {error} = await db.rpc('rider_update_request_status', {
+    p_request_id: id,
+    p_status: status
+  });
+
+  if (error) {
+    alert('Status পরিবর্তন হয়নি: ' + error.message);
+    return;
+  }
+
+  alert('Status আপডেট হয়েছে।');
+  await loadRequests();
+}
+
+function startGPS() {
+  if (!rider) return;
+
+  if (!navigator.geolocation) {
+    alert('এই ব্রাউজারে GPS সুবিধা নেই।');
+    return;
+  }
+
+  if (gpsWatch !== null) {
+    alert('GPS ইতিমধ্যে চালু আছে।');
+    return;
+  }
+
+  gpsWatch = navigator.geolocation.watchPosition(
+    async position => {
+      const p = position.coords;
+
+      const {error} = await db
+        .from('rider_locations')
+        .upsert({
+          rider_id: rider.id,
+          latitude: p.latitude,
+          longitude: p.longitude,
+          accuracy: p.accuracy,
+          heading: p.heading,
+          speed: p.speed,
+          updated_at: new Date().toISOString()
+        }, {onConflict:'rider_id'});
+
+      if (error) {
+        document.getElementById('gpsStatus').textContent = 'ত্রুটি';
+        msg('GPS পাঠানো যায়নি: ' + error.message);
+        return;
+      }
+
+      document.getElementById('gpsStatus').textContent = 'চালু';
+      msg('সর্বশেষ GPS পাঠানো হয়েছে: ' + new Date().toLocaleTimeString());
+    },
+    error => {
+      msg('GPS সমস্যা: ' + error.message);
+    },
+    {enableHighAccuracy:true, maximumAge:5000, timeout:20000}
+  );
+
+  document.getElementById('gpsStatus').textContent = 'চালু হচ্ছে';
+}
+
+function stopGPS() {
+  if (gpsWatch !== null) {
+    navigator.geolocation.clearWatch(gpsWatch);
+    gpsWatch = null;
+  }
+  document.getElementById('gpsStatus').textContent = 'বন্ধ';
+}
+
+async function logout() {
+  stopGPS();
+  await db.auth.signOut();
+  rider = null;
+  document.getElementById('dashboard').classList.add('hidden');
+  document.getElementById('loginBox').classList.remove('hidden');
+}
+
+db.auth.getSession().then(async ({data}) => {
+  if (data.session) await openDashboard();
+});
+
+setInterval(() => {
+  if (rider) loadRequests();
+}, 20000);
+</script>
+</body>
+</html>
