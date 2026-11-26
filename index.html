@@ -4,882 +4,319 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#e21b70">
-<title>উপজেলা এক্সপ্রেস | জীবননগর</title>
-<meta name="description" content="জীবননগরের দৈনন্দিন সব প্রয়োজনের সেবা এক প্ল্যাটফর্মে।">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap">
-
+<title>UPAZILA EXPRESS | জীবননগর</title>
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root {
-  --pink:#e21b70;
-  --dark:#29212a;
-  --light:#fff3f8;
-  --gray:#777;
-  --border:#f0e5eb;
-}
+:root{--primary:#e83e75;--dark:#252b36;--bg:#f5f6fa;--muted:#697386}
 *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:'Hind Siliguri',sans-serif;
-  color:var(--dark);
-  background:#fff;
-}
-button,input,textarea,select{font:inherit}
-button{cursor:pointer}
-.container{width:min(1120px,92%);margin:auto}
-
-/* HEADER */
-header{
-  position:sticky;
-  top:0;
-  z-index:10;
-  background:white;
-  border-bottom:1px solid var(--border);
-}
-.nav{
-  height:72px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-.logo{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-size:18px;
-  font-weight:700;
-}
-.logo-icon{
-  width:43px;
-  height:43px;
-  display:grid;
-  place-items:center;
-  background:var(--pink);
-  color:white;
-  border-radius:13px;
-  font-size:24px;
-}
-.logo small{
-  display:block;
-  font-size:10px;
-  color:var(--pink);
-  letter-spacing:1px;
-}
-.location{
-  font-size:12px;
-  color:var(--gray);
-}
-.location b{
-  display:block;
-  color:var(--dark);
-  font-size:14px;
-}
-.call-btn{
-  background:var(--light);
-  color:var(--pink);
-  border:1px solid #f4c4d9;
-  padding:9px 15px;
-  border-radius:10px;
-  text-decoration:none;
-  font-weight:700;
-}
-
-/* HERO */
-.hero{
-  margin:25px auto 0;
-  background:linear-gradient(110deg,#fff0f6,#ffe0ed);
-  border-radius:24px;
-  padding:40px 6%;
-  min-height:280px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  overflow:hidden;
-}
-.hero-content{max-width:620px}
-.eyebrow{
-  color:var(--pink);
-  font-size:13px;
-  font-weight:700;
-}
-.hero h1{
-  font-size:clamp(30px,4.5vw,49px);
-  line-height:1.2;
-  margin:10px 0;
-}
-.hero h1 span{color:var(--pink)}
-.hero p{
-  color:#655a63;
-  line-height:1.8;
-}
-.primary-btn{
-  display:inline-block;
-  background:var(--pink);
-  color:white;
-  border:0;
-  border-radius:10px;
-  padding:12px 22px;
-  text-decoration:none;
-  font-weight:700;
-}
-.hero-art{
-  font-size:110px;
-  padding:25px;
-}
-
-/* SEARCH */
-.search-area{
-  max-width:760px;
-  margin:30px auto;
-}
-.search-area label{
-  display:block;
-  font-weight:700;
-  margin-bottom:8px;
-}
-.search-box{
-  display:flex;
-  border:1px solid var(--border);
-  border-radius:13px;
-  padding:6px;
-  box-shadow:0 5px 20px #00000008;
-}
-.search-box input{
-  flex:1;
-  min-width:0;
-  border:0;
-  outline:0;
-  padding:10px;
-}
-.search-box button{
-  background:var(--pink);
-  color:white;
-  border:0;
-  border-radius:9px;
-  padding:9px 20px;
-}
-
-/* SECTIONS */
-.section{margin:50px auto}
-.section-heading{
-  display:flex;
-  justify-content:space-between;
-  align-items:end;
-  margin-bottom:20px;
-}
-.section h2{font-size:25px;margin:4px 0}
-.muted{font-size:12px;color:var(--gray)}
-
-/* CATEGORIES */
-.categories{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:12px;
-}
-.category{
-  border:1px solid var(--border);
-  border-radius:15px;
-  padding:17px 7px;
-  text-align:center;
-  text-decoration:none;
-  color:var(--dark);
-  transition:.2s;
-}
-.category:hover{
-  background:var(--light);
-  border-color:#ed9cbe;
-  transform:translateY(-3px);
-}
-.category-icon{
-  width:50px;
-  height:50px;
-  margin:0 auto 10px;
-  background:var(--light);
-  border-radius:15px;
-  display:grid;
-  place-items:center;
-  font-size:26px;
-}
-.category b{font-size:12px}
-
-/* SERVICE CARDS */
-.service-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-}
-.service-card{
-  display:flex;
-  gap:14px;
-  padding:18px;
-  border:1px solid var(--border);
-  border-radius:16px;
-  text-decoration:none;
-  color:var(--dark);
-  transition:.2s;
-}
-.service-card:hover{
-  box-shadow:0 8px 25px #0000000c;
-  transform:translateY(-2px);
-}
-.service-icon{
-  width:55px;
-  height:55px;
-  flex-shrink:0;
-  display:grid;
-  place-items:center;
-  border-radius:15px;
-  background:var(--light);
-  font-size:27px;
-}
-.service-card h3{margin:0 0 5px;font-size:16px}
-.service-card p{margin:0;color:var(--gray);font-size:12px}
-.service-link{
-  display:block;
-  margin-top:8px;
-  color:var(--pink);
-  font-size:12px;
-  font-weight:700;
-}
-
-/* HOW */
-.how{
-  margin:50px auto;
-  padding:28px;
-  border-radius:20px;
-  background:#fff8fb;
-}
-.steps{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:12px;
-  margin-top:20px;
-}
-.step{
-  padding:16px;
-  background:white;
-  border:1px solid var(--border);
-  border-radius:13px;
-}
-.step span{color:var(--pink);font-weight:700}
-.step b{display:block}
-.step small{color:var(--gray)}
-
-/* PHONE */
-.phone{
-  background:var(--dark);
-  color:white;
-  border-radius:17px;
-  padding:22px;
-  display:flex;
-  align-items:center;
-  gap:15px;
-  margin-bottom:40px;
-}
-.phone h3{margin:0}
-.phone p{margin:3px 0;color:#ddd;font-size:12px}
-.phone button{
-  margin-left:auto;
-  background:white;
-  color:var(--pink);
-  border:0;
-  border-radius:9px;
-  padding:10px 15px;
-  font-weight:700;
-}
-
-/* FOOTER */
-footer{
-  background:var(--dark);
-  color:white;
-  padding:30px 0;
-}
-footer p{color:#ccc;font-size:13px}
-.footer-bottom{
-  border-top:1px solid #514650;
-  padding-top:12px;
-  margin-top:15px;
-  font-size:11px;
-  color:#bbb;
-  display:flex;
-  justify-content:space-between;
-}
-
-/* REQUEST FORM */
-.panel{
-  border:1px solid var(--border);
-  border-radius:17px;
-  padding:25px;
-  margin:25px auto 40px;
-}
-.back{
-  display:inline-block;
-  margin-top:20px;
-  color:var(--pink);
-  text-decoration:none;
-}
-.form{
-  display:grid;
-  gap:13px;
-}
-.form label{
-  display:block;
-  font-weight:600;
-  font-size:13px;
-}
-.form input,.form select,.form textarea{
-  width:100%;
-  display:block;
-  margin-top:5px;
-  padding:11px;
-  border:1px solid var(--border);
-  border-radius:9px;
-  outline-color:var(--pink);
-}
-.form textarea{min-height:85px}
-.form button{
-  width:100%;
-  background:var(--pink);
-  color:white;
-  border:0;
-  border-radius:10px;
-  padding:13px;
-  font-weight:700;
-}
-.form button:disabled{opacity:.6}
-.msg{
-  padding:12px;
-  margin:12px 0;
-  border-radius:9px;
-  font-size:13px;
-}
-.error{background:#ffecec;color:#a22}
-.success{background:#e5f7ed;color:#176d45}
-.reference{
-  color:var(--pink);
-  font-size:23px;
-  font-weight:700;
-}
-.hidden-field{
-  position:absolute;
-  left:-9999px;
-}
-
-@media(max-width:800px){
-  .categories{grid-template-columns:repeat(3,1fr)}
-  .service-grid{grid-template-columns:repeat(2,1fr)}
-  .hero-art{font-size:75px}
-}
-@media(max-width:550px){
-  .nav{height:65px}
-  .location{font-size:10px}
-  .location b{font-size:11px}
-  .call-btn{font-size:11px;padding:8px}
-  .hero{padding:25px 20px;min-height:245px}
-  .hero h1{font-size:31px}
-  .hero-art{display:none}
-  .categories{gap:7px}
-  .category{padding:12px 4px}
-  .category-icon{width:42px;height:42px}
-  .category b{font-size:10px}
-  .service-grid{grid-template-columns:1fr}
-  .steps{grid-template-columns:1fr}
-  .phone{padding:16px;gap:9px}
-  .phone button{font-size:11px;padding:8px}
-  .section h2{font-size:21px}
-  .footer-bottom{flex-wrap:wrap;gap:8px}
-}
+body{margin:0;font-family:Arial,"Noto Sans Bengali",sans-serif;background:var(--bg);color:var(--dark)}
+header{background:white;padding:14px 5%;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 2px 12px #0001;position:sticky;top:0;z-index:5}
+.logo{font-size:21px;font-weight:800;color:var(--primary)}
+.logo small{display:block;font-size:11px;color:var(--muted);font-weight:400}
+button{border:0;border-radius:9px;padding:11px 15px;background:var(--primary);color:white;font-weight:bold;cursor:pointer}
+button.secondary{background:#fff0f5;color:var(--primary)}
+button:disabled{opacity:.5}
+.container{max-width:1100px;margin:auto;padding:18px}
+.hero{background:linear-gradient(120deg,#e83e75,#ff8b67);color:white;padding:28px 22px;border-radius:18px;margin-bottom:18px}
+.hero h1{margin:0 0 8px;font-size:27px}
+.hero p{margin:0;line-height:1.7}
+.search{width:100%;padding:14px;border:1px solid #ddd;border-radius:10px;margin:14px 0;font-size:15px}
+.categories{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:15px 0}
+.category{background:white;border-radius:13px;padding:16px 7px;text-align:center;cursor:pointer;border:1px solid #eee}
+.category .emoji{font-size:27px;display:block;margin-bottom:7px}
+.category strong{font-size:13px}
+.section{margin:25px 0}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.section h2{font-size:20px;margin:0 0 13px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}
+.card{background:white;border-radius:13px;padding:13px;border:1px solid #eee;overflow:hidden}
+.card img{width:100%;height:145px;object-fit:cover;border-radius:9px;background:#eee}
+.card h3{font-size:16px;margin:10px 0 5px}
+.card p{font-size:13px;color:var(--muted);line-height:1.5;margin:5px 0}
+.price{font-size:17px;color:var(--primary);font-weight:bold;margin:8px 0}
+.empty{background:white;padding:25px;border-radius:12px;text-align:center;color:var(--muted)}
+nav{display:flex;gap:8px;overflow:auto;padding:10px 0}
+nav button{white-space:nowrap}
+.modal{position:fixed;inset:0;background:#0008;z-index:20;display:none;overflow:auto;padding:20px}
+.modal-box{background:white;border-radius:15px;padding:20px;max-width:520px;margin:25px auto}
+.modal-box h2{margin-top:0}
+input,textarea,select{width:100%;padding:12px;margin:6px 0 12px;border:1px solid #ddd;border-radius:8px;font:inherit}
+label{font-size:13px;font-weight:bold}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.close{float:right;background:#eee;color:#333;padding:7px 11px}
+footer{text-align:center;padding:25px;color:var(--muted);font-size:13px}
+.cartbar{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);z-index:10;background:var(--dark);color:white;border-radius:30px;padding:12px 20px;display:none;box-shadow:0 3px 15px #0003;white-space:nowrap}
+@media(max-width:650px){.grid{grid-template-columns:repeat(2,1fr)}.categories{grid-template-columns:repeat(3,1fr)}.card img{height:115px}.container{padding:12px}.hero h1{font-size:23px}}
+@media(max-width:380px){.grid{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}}
 </style>
 </head>
-
 <body>
 
 <header>
-  <div class="container nav">
-    <a href="#home" class="logo">
-      <span class="logo-icon">উ</span>
-      <span>উপজেলা এক্সপ্রেস<small>UPAZILA EXPRESS</small></span>
-    </a>
-    <div class="location">
-      আপনার সেবার এলাকা
-      <b id="locationName">জীবননগর, চুয়াডাঙ্গা</b>
-    </div>
-    <a class="call-btn" id="hotline" href="tel:">☎ হটলাইন</a>
-  </div>
+ <div class="logo">UPAZILA EXPRESS<small id="locationName">জীবননগর, চুয়াডাঙ্গা</small></div>
+ <button class="secondary" onclick="openCart()">🛒 কার্ট <span id="cartCount">0</span></button>
 </header>
 
-<main class="container" id="app"></main>
+<main class="container">
+ <section class="hero">
+  <h1>আপনার এলাকার সব সেবা, এক জায়গায়!</h1>
+  <p id="heroText">পণ্য কিনুন, বাড়ি ভাড়া খুঁজুন, শ্রমিক ও টেকনিশিয়ান পান—সহজেই।</p>
+ </section>
+
+ <input class="search" id="searchBox" placeholder="পণ্য, দোকান, বাড়ি বা সেবা খুঁজুন..." oninput="renderAll()">
+
+ <section class="categories">
+  <div class="category" onclick="showSection('products')"><span class="emoji">🛍️</span><strong>দোকান ও পণ্য</strong></div>
+  <div class="category" onclick="showSection('rent')"><span class="emoji">🏠</span><strong>বাড়ি ভাড়া</strong></div>
+  <div class="category" onclick="showSection('providers')"><span class="emoji">👷</span><strong>শ্রমিক</strong></div>
+  <div class="category" onclick="showSection('providers')"><span class="emoji">🔧</span><strong>টেকনিশিয়ান</strong></div>
+  <div class="category" onclick="openRequest('delivery')"><span class="emoji">🚚</span><strong>পিকআপ ডেলিভারি</strong></div>
+  <div class="category" onclick="openRequest('support')"><span class="emoji">☎️</span><strong>সাপোর্ট</strong></div>
+ </section>
+
+ <nav>
+  <button onclick="showSection('products')">সব পণ্য</button>
+  <button onclick="showSection('rent')">বাড়ি ভাড়া</button>
+  <button onclick="showSection('providers')">কর্মী ও সার্ভিস</button>
+  <button onclick="openSubmit()">বিজ্ঞাপন/সেবা দিন</button>
+ </nav>
+
+ <section class="section" id="products">
+  <div class="section-head"><h2>🛍️ স্থানীয় দোকানের পণ্য</h2></div>
+  <div class="grid" id="productList"><div class="empty">লোড হচ্ছে...</div></div>
+ </section>
+
+ <section class="section" id="rent">
+  <h2>🏠 বাড়ি ভাড়ার বিজ্ঞাপন</h2>
+  <div class="grid" id="rentList"><div class="empty">লোড হচ্ছে...</div></div>
+ </section>
+
+ <section class="section" id="providers">
+  <h2>👷 শ্রমিক ও টেকনিশিয়ান</h2>
+  <div class="grid" id="providerList"><div class="empty">লোড হচ্ছে...</div></div>
+ </section>
+</main>
+
+<div class="cartbar" id="cartBar" onclick="openCart()">🛒 কার্টে <span id="cartTotal">0</span> টাকা — অর্ডার করুন</div>
+
+<div class="modal" id="modal">
+ <div class="modal-box">
+  <button class="close" onclick="closeModal()">✕</button>
+  <div id="modalContent"></div>
+ </div>
+</div>
 
 <footer>
-  <div class="container">
-    <b>উপজেলা এক্সপ্রেস</b>
-    <p>একটি উপজেলা, একটি প্ল্যাটফর্ম, দৈনন্দিন সব প্রয়োজনের সেবা।</p>
-    <div class="footer-bottom">
-      <span>© উপজেলা এক্সপ্রেস</span>
-      <span>জীবননগর, চুয়াডাঙ্গা</span>
-    </div>
-  </div>
+ <strong>UPAZILA EXPRESS</strong><br>
+ জীবননগর, চুয়াডাঙ্গা<br>
+ স্থানীয় মানুষের জন্য স্থানীয় সেবা।
 </footer>
 
-<!-- Existing Supabase configuration -->
-<script src="config.js"></script>
-
 <script>
-/* =========================================
-   CONFIGURATION
-========================================= */
+const C=window.UEX_CONFIG;
+if(!C || !C.SUPABASE_URL || !C.SUPABASE_ANON_KEY){
+ alert("config.js সেটিংস পাওয়া যায়নি।");
+ throw new Error("UEX_CONFIG missing");
+}
+const db=window.supabase.createClient(C.SUPABASE_URL,C.SUPABASE_ANON_KEY);
+document.getElementById("locationName").textContent=C.UPAZILA_NAME+", "+C.DISTRICT_NAME;
 
-const CONFIG = window.UEX_CONFIG || {};
+let products=[], rents=[], providers=[], cart=[], currentAction=null;
 
-const SUPABASE_URL = CONFIG.SUPABASE_URL;
-const SUPABASE_KEY = CONFIG.SUPABASE_ANON_KEY;
-
-const IS_CONNECTED = !!(SUPABASE_URL && SUPABASE_KEY);
-
-const SERVICES = {
-  delivery:{
-    title:"পিকআপ ও ডেলিভারি",
-    icon:"🛵",
-    description:"পার্সেল, কাগজপত্র ও পণ্য পৌঁছে দিন।",
-    fields:[
-      ["pickup","কোথা থেকে নিতে হবে?"],
-      ["drop","কোথায় পৌঁছাতে হবে?"],
-      ["item","কী পাঠাবেন?"]
-    ]
-  },
-  rent:{
-    title:"বাড়ি ভাড়া",
-    icon:"🏠",
-    description:"বাসা, ফ্ল্যাট, রুম ও দোকানঘর খুঁজুন।",
-    fields:[
-      ["rent_type","কী ধরনের বাসা চান?"],
-      ["budget","মাসিক বাজেট কত?"]
-    ]
-  },
-  worker:{
-    title:"শ্রমিক ও রাজমিস্ত্রি",
-    icon:"👷",
-    description:"দক্ষ শ্রমিক ও রাজমিস্ত্রি খুঁজুন।",
-    fields:[
-      ["worker_type","কী ধরনের শ্রমিক লাগবে?"],
-      ["quantity","কতজন লাগবে?"],
-      ["days","কত দিনের জন্য?"]
-    ]
-  },
-  technician:{
-    title:"টেকনিশিয়ান",
-    icon:"🧰",
-    description:"ইলেকট্রিশিয়ান, প্লাম্বার ও মেরামত সেবা।",
-    fields:[
-      ["technician_type","কোন টেকনিশিয়ান প্রয়োজন?"],
-      ["problem","সমস্যার বিবরণ"]
-    ]
-  },
-  shop:{
-    title:"স্থানীয় দোকান ও পণ্য",
-    icon:"🛍️",
-    description:"স্থানীয় দোকান থেকে প্রয়োজনীয় পণ্য নিন।",
-    fields:[
-      ["shop_name","দোকানের নাম (যদি জানা থাকে)"],
-      ["products","কী কী পণ্য প্রয়োজন?"]
-    ]
-  },
-  support:{
-    title:"কাস্টমার সাপোর্ট",
-    icon:"🎧",
-    description:"অভিযোগ বা যেকোনো সহায়তার জন্য।",
-    fields:[
-      ["issue","আপনার সমস্যাটি লিখুন"]
-    ]
-  }
-};
-
-const $ = id => document.getElementById(id);
-
-function escapeHTML(value){
-  return String(value ?? "").replace(/[&<>"']/g, c => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  }[c]));
+function esc(v){
+ return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function money(v){return Number(v||0).toLocaleString("bn-BD")+" টাকা"}
+function img(paths){
+ const p=Array.isArray(paths)?paths[0]:null;
+ return p && /^https?:\/\//i.test(p)?esc(p):"";
+}
+function imageTag(paths){
+ const url=img(paths);
+ return url?`<img src="${url}" alt="ছবি" loading="lazy">`:
+ `<div style="height:110px;background:#f3f3f3;border-radius:9px;display:grid;place-items:center;font-size:35px">📷</div>`;
+}
+function openModal(html){
+ document.getElementById("modalContent").innerHTML=html;
+ document.getElementById("modal").style.display="block";
+}
+function closeModal(){document.getElementById("modal").style.display="none"}
+function showSection(id){document.getElementById(id).scrollIntoView({behavior:"smooth"})}
+function filtered(items,fields){
+ const q=document.getElementById("searchBox").value.trim().toLowerCase();
+ if(!q)return items;
+ return items.filter(x=>fields.some(f=>String(x[f]||"").toLowerCase().includes(q)));
 }
 
-function generateReference(){
-  return "UEX-" + Math.floor(100000 + Math.random()*900000);
+async function loadData(){
+ const slug=C.UPAZILA_SLUG;
+ const [p,r,w]=await Promise.all([
+  db.from("products").select("*").eq("upazila_slug",slug).eq("status","published").order("created_at",{ascending:false}),
+  db.from("rent_listings").select("*").eq("upazila_slug",slug).eq("status","published").order("created_at",{ascending:false}),
+  db.from("provider_profiles").select("*").eq("upazila_slug",slug).eq("status","approved").order("created_at",{ascending:false})
+ ]);
+ if(p.error)console.error("Products:",p.error);
+ if(r.error)console.error("Rent:",r.error);
+ if(w.error)console.error("Providers:",w.error);
+ products=p.data||[];
+ rents=r.data||[];
+ providers=w.data||[];
+ renderAll();
 }
-
-function normalizePhone(value){
-  let phone = String(value).replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d)).replace(/[\s\-+]/g,"");
-  if(phone.startsWith("880")) phone=phone.slice(2);
-  return /^01[3-9]\d{8}$/.test(phone) ? phone : null;
+function renderAll(){
+ const ps=filtered(products,["product_name","category","description","seller_name"]);
+ const rs=filtered(rents,["title","type","area","description"]);
+ const ws=filtered(providers,["name","provider_type","service_area","description"]);
+ document.getElementById("productList").innerHTML=ps.length?ps.map(x=>`
+  <article class="card">${imageTag(x.photo_paths)}
+   <h3>${esc(x.product_name)}</h3><p>${esc(x.category)} · ${esc(x.unit||"টি")}</p>
+   <div class="price">${money(x.price)}</div><p>${esc(x.description||"")}</p>
+   <button onclick="addCart('${x.id}')">কার্টে যোগ করুন</button>
+  </article>`).join(""):`<div class="empty">এখনো কোনো পণ্য প্রকাশিত হয়নি।</div>`;
+ document.getElementById("rentList").innerHTML=rs.length?rs.map(x=>`
+  <article class="card">${imageTag(x.photo_paths)}
+   <h3>${esc(x.title)}</h3><p>${esc(x.type)} · ${esc(x.area)}</p>
+   <div class="price">${money(x.rent)}/মাস</div><p>${esc(x.description||"বিস্তারিত জানতে যোগাযোগ করুন")}</p>
+   <button onclick="openRequest('rent','${x.id}')">বাড়ি দেখতে চাই</button>
+  </article>`).join(""):`<div class="empty">এখনো কোনো বাড়ির বিজ্ঞাপন নেই।</div>`;
+ document.getElementById("providerList").innerHTML=ws.length?ws.map(x=>`
+  <article class="card">${imageTag(x.photo_paths)}
+   <h3>${esc(x.name)}</h3><p>${esc(x.provider_type)} · ${esc(x.service_area)}</p>
+   <p>${esc(x.description||"")}</p><p>অভিজ্ঞতা: ${esc(x.experience||"উল্লেখ নেই")}</p>
+   <button onclick="openRequest('worker','${x.id}')">কাজের জন্য যোগাযোগ</button>
+  </article>`).join(""):`<div class="empty">এখনো কোনো কর্মীর প্রোফাইল নেই।</div>`;
 }
-
-/* =========================================
-   HOME PAGE
-========================================= */
-
-function showHome(){
-
-$("app").innerHTML = `
-
-<section class="hero">
-  <div class="hero-content">
-    <span class="eyebrow">জীবননগরের ডিজিটাল সেবা প্ল্যাটফর্ম</span>
-
-    <h1>
-      আপনার এলাকার সব প্রয়োজন,
-      <span>এক জায়গায়।</span>
-    </h1>
-
-    <p>
-      ডেলিভারি, বাসা ভাড়া, মিস্ত্রি, টেকনিশিয়ান
-      ও স্থানীয় দোকান — সব সেবা এখন হাতের মুঠোয়।
-    </p>
-
-    <a href="#services" class="primary-btn">
-      সেবা খুঁজুন →
-    </a>
-  </div>
-
-  <div class="hero-art">🛵</div>
-</section>
-
-<div class="search-area">
-  <label>আপনি কী খুঁজছেন?</label>
-  <div class="search-box">
-    <input id="searchInput" placeholder="যেমন: বাসা ভাড়া, ডেলিভারি, মিস্ত্রি">
-    <button id="searchButton">খুঁজুন</button>
-  </div>
-</div>
-
-<section class="section" id="services">
-  <div class="section-heading">
-    <div>
-      <span class="eyebrow">আমাদের সেবা</span>
-      <h2>কোন সেবাটি প্রয়োজন?</h2>
-    </div>
-    <span class="muted">৬টি ক্যাটাগরি</span>
-  </div>
-
-  <div class="categories">
-    ${Object.entries(SERVICES).map(([key,s])=>`
-      <a class="category" href="#${key}">
-        <div class="category-icon">${s.icon}</div>
-        <b>${s.title}</b>
-      </a>
-    `).join("")}
-  </div>
-</section>
-
-<section class="section">
-  <div class="section-heading">
-    <div>
-      <span class="eyebrow">জনপ্রিয় সেবা</span>
-      <h2>আপনার জন্য বাছাই করা</h2>
-    </div>
-  </div>
-
-  <div class="service-grid">
-    ${Object.entries(SERVICES).map(([key,s])=>`
-      <a class="service-card" href="#${key}">
-        <div class="service-icon">${s.icon}</div>
-        <div>
-          <h3>${s.title}</h3>
-          <p>${s.description}</p>
-          <span class="service-link">অনুরোধ করুন →</span>
-        </div>
-      </a>
-    `).join("")}
-  </div>
-</section>
-
-<section class="how">
-  <span class="eyebrow">সহজ তিন ধাপ</span>
-  <h2>সেবা নিন খুব সহজে</h2>
-
-  <div class="steps">
-    <div class="step">
-      <span>০১</span>
-      <b>সেবা বেছে নিন</b>
-      <small>আপনার প্রয়োজনীয় সেবা নির্বাচন করুন।</small>
-    </div>
-
-    <div class="step">
-      <span>০২</span>
-      <b>অনুরোধ পাঠান</b>
-      <small>নাম, ফোন ও ঠিকানা লিখুন।</small>
-    </div>
-
-    <div class="step">
-      <span>০৩</span>
-      <b>সেবা নিশ্চিত করুন</b>
-      <small>আমাদের প্রতিনিধি ফোন করবেন।</small>
-    </div>
-  </div>
-</section>
-
-<section class="phone">
-  <div style="font-size:30px">☎</div>
-  <div>
-    <h3>বাটন ফোন ব্যবহার করেন?</h3>
-    <p>ফোনে যোগাযোগ করে সেবা নেওয়ার সুযোগ থাকবে।</p>
-  </div>
-  <button onclick="location.hash='support'">সহায়তা চাই</button>
-</section>
-
-`;
-
-$("searchButton").onclick = () => {
-  const q = $("searchInput").value.trim().toLowerCase();
-
-  const found = Object.entries(SERVICES).find(([key,s]) =>
-    (key+s.title+s.description).toLowerCase().includes(q)
-  );
-
-  if(found) location.hash = found[0];
-  else alert("এই নামে কোনো সেবা পাওয়া যায়নি।");
-};
-
+function addCart(id){
+ const p=products.find(x=>x.id===id);if(!p)return;
+ const old=cart.find(x=>x.id===id);
+ if(old)old.qty++;else cart.push({id:p.id,name:p.product_name,price:Number(p.price),qty:1});
+ updateCart();
 }
-
-/* =========================================
-   REQUEST FORM
-========================================= */
-
-function showService(key){
-
-const service = SERVICES[key];
-
-if(!service){
-  showHome();
-  return;
+function updateCart(){
+ const count=cart.reduce((a,x)=>a+x.qty,0);
+ const total=cart.reduce((a,x)=>a+x.price*x.qty,0);
+ document.getElementById("cartCount").textContent=count;
+ document.getElementById("cartTotal").textContent=money(total);
+ document.getElementById("cartBar").style.display=count?"block":"none";
 }
-
-$("app").innerHTML = `
-
-<a class="back" href="#home">← সব সেবা</a>
-
-<div class="panel">
-
-<span class="eyebrow">${service.icon} সেবা অনুরোধ</span>
-
-<h1>${service.title}</h1>
-
-<p>${service.description}</p>
-
-<form class="form" id="requestForm">
-
-<label>
-আপনার নাম
-<input name="name" required placeholder="আপনার নাম">
-</label>
-
-<label>
-মোবাইল নম্বর
-<input name="phone" type="tel" required
-placeholder="01XXXXXXXXX">
-</label>
-
-<label>
-আপনার এলাকা
-<select name="area" required>
-<option value="">এলাকা নির্বাচন করুন</option>
-<option>জীবননগর বাজার</option>
-<option>উথলী</option>
-<option>হাসাদাহ</option>
-<option>বাঁকা</option>
-<option>মনোহরপুর</option>
-<option>সন্তোষপুর</option>
-<option>অন্যান্য</option>
-</select>
-</label>
-
-${service.fields.map(([name,title])=>`
-<label>
-${title}
-<input name="${name}" required placeholder="${title}">
-</label>
-`).join("")}
-
-<label>
-বিস্তারিত ঠিকানা ও মন্তব্য
-<textarea name="details" placeholder="আপনার ঠিকানা ও বিস্তারিত লিখুন"></textarea>
-</label>
-
-<div id="formMessage"></div>
-
-<button type="submit" id="submitButton">
-অনুরোধ জমা দিন
-</button>
-
-</form>
-
-</div>
-`;
-
-$("requestForm").addEventListener("submit", submitRequest);
-
+function openCart(){
+ if(!cart.length){alert("আপনার কার্ট খালি।");return}
+ const total=cart.reduce((a,x)=>a+x.price*x.qty,0);
+ openModal(`<h2>🛒 আপনার কার্ট</h2>
+ ${cart.map((x,i)=>`<p>${esc(x.name)} — ${money(x.price)} ×
+ <input type="number" min="1" value="${x.qty}" style="width:65px" onchange="cart[${i}].qty=Math.max(1,Number(this.value)||1);openCart();updateCart()">
+ <button class="secondary" onclick="cart.splice(${i},1);updateCart();openCart()">বাদ দিন</button></p>`).join("")}
+ <h3>মোট: ${money(total)}</h3>
+ <button onclick="checkout()">অর্ডার সম্পন্ন করুন</button>`);
 }
-
-/* =========================================
-   SUPABASE SUBMISSION
-========================================= */
-
-async function submitRequest(event){
-
-event.preventDefault();
-
-const form = event.target;
-const button = $("submitButton");
-const message = $("formMessage");
-
-const data = new FormData(form);
-
-const phone = normalizePhone(data.get("phone"));
-
-if(!phone){
-  message.innerHTML = '<div class="msg error">সঠিক মোবাইল নম্বর দিন।</div>';
-  return;
+function checkout(){
+ openModal(`<h2>অর্ডার তথ্য</h2>
+ <form onsubmit="submitOrder(event)">
+ <label>আপনার নাম</label><input name="name" required minlength="2">
+ <label>মোবাইল নম্বর</label><input name="phone" required pattern="01[3-9][0-9]{8}" placeholder="01XXXXXXXXX">
+ <label>ডেলিভারি ঠিকানা</label><textarea name="address" required></textarea>
+ <label>এলাকা</label><select name="area">${C.AREAS.map(a=>`<option>${esc(a)}</option>`).join("")}</select>
+ <label>অতিরিক্ত নির্দেশনা</label><textarea name="note"></textarea>
+ <button type="submit">অর্ডার জমা দিন</button></form>`);
 }
-
-if(!IS_CONNECTED){
-  message.innerHTML = '<div class="msg error">Supabase সংযোগ পাওয়া যায়নি। config.js পরীক্ষা করুন।</div>';
-  return;
+function makeRef(){return "UEX-"+Date.now().toString().slice(-9)}
+function digits(s){return String(s||"").replace(/[০-৯]/g,d=>"০১২৩৪৫৬৭৮৯".indexOf(d))}
+async function submitOrder(e){
+ e.preventDefault();const f=new FormData(e.target);
+ const items=cart.map(x=>({product_id:x.id,product_name:x.name,unit_price:x.price,quantity:x.qty,line_total:x.price*x.qty}));
+ const total=items.reduce((a,x)=>a+x.line_total,0);
+ const ref=makeRef();
+ const {data:order,error}=await db.from("customer_orders").insert({
+  ref,upazila_slug:C.UPAZILA_SLUG,customer_name:f.get("name"),
+  customer_phone:digits(f.get("phone")),delivery_address:f.get("address"),
+  area:f.get("area"),customer_note:f.get("note"),total_amount:total
+ }).select("id").single();
+ if(error){alert("অর্ডার জমা হয়নি: "+error.message);return}
+ const {error:itemError}=await db.from("order_items").insert(items.map(x=>({...x,order_id:order.id})));
+ if(itemError){alert("অর্ডার তৈরি হয়েছে, কিন্তু পণ্যের তালিকা সংরক্ষণে সমস্যা হয়েছে। রেফারেন্স: "+ref);return}
+ cart=[];updateCart();closeModal();
+ alert("অর্ডার সফলভাবে জমা হয়েছে। রেফারেন্স: "+ref);
 }
-
-const extra = {};
-
-for(const [key,value] of data.entries()){
-  if(!["name","phone","area","details"].includes(key)){
-    extra[key] = value;
-  }
+function openRequest(service,id=""){
+ currentAction={service,id};
+ const titles={delivery:"পিকআপ ও ডেলিভারি",rent:"বাড়ি ভাড়া দেখতে চাই",worker:"কাজের জন্য অনুরোধ",support:"সাপোর্ট ও অভিযোগ"};
+ openModal(`<h2>${titles[service]||"সার্ভিস অনুরোধ"}</h2>
+ <form onsubmit="submitRequest(event)">
+ <label>আপনার নাম</label><input name="name" required minlength="2">
+ <label>মোবাইল নম্বর</label><input name="phone" required placeholder="01XXXXXXXXX">
+ <label>আপনার এলাকা</label><input name="area" required>
+ <label>বিস্তারিত</label><textarea name="details" required></textarea>
+ <button type="submit">অনুরোধ জমা দিন</button></form>`);
 }
-
-const request = {
-  ref: generateReference(),
-  upazila_slug: CONFIG.UPAZILA_SLUG || "jibannagar",
-  service: location.hash.replace("#",""),
-  name: String(data.get("name")).trim(),
-  phone: phone,
-  area: data.get("area"),
-  details: String(data.get("details") || "").trim() || null,
-  extra: extra
-};
-
-button.disabled = true;
-button.textContent = "অনুরোধ পাঠানো হচ্ছে...";
-
-try{
-
-  const response = await fetch(
-    SUPABASE_URL + "/rest/v1/service_requests",
-    {
-      method:"POST",
-      headers:{
-        "apikey":SUPABASE_KEY,
-        "Authorization":"Bearer "+SUPABASE_KEY,
-        "Content-Type":"application/json",
-        "Prefer":"return=minimal"
-      },
-      body:JSON.stringify(request)
-    }
-  );
-
-  if(!response.ok){
-    const errorText = await response.text();
-    console.error("Supabase error:",errorText);
-    throw new Error("Database error");
-  }
-
-  $("app").innerHTML = `
-
-  <div class="panel">
-    <span class="eyebrow">অনুরোধ সফল</span>
-
-    <h1>আপনার অনুরোধ পাওয়া গেছে!</h1>
-
-    <p>আপনার অনুরোধ নম্বর:</p>
-
-    <div class="reference">${request.ref}</div>
-
-    <p>
-      আমাদের প্রতিনিধি আপনার মোবাইল নম্বরে
-      যোগাযোগ করবেন।
-    </p>
-
-    <a href="#home" class="primary-btn">
-      হোমপেজে ফিরে যান
-    </a>
-  </div>
-
-  `;
-
-  window.scrollTo(0,0);
-
-}catch(error){
-
-  console.error(error);
-
-  message.innerHTML = `
-    <div class="msg error">
-      অনুরোধ জমা হয়নি। ইন্টারনেট, Supabase
-      এবং Database Policy পরীক্ষা করুন।
-    </div>
-  `;
-
-  button.disabled = false;
-  button.textContent = "আবার চেষ্টা করুন";
-
+async function submitRequest(e){
+ e.preventDefault();const f=new FormData(e.target);
+ const service=currentAction.service;
+ const {error}=await db.from("service_requests").insert({
+  ref:makeRef(),upazila_slug:C.UPAZILA_SLUG,service,
+  name:f.get("name"),phone:digits(f.get("phone")),
+  area:f.get("area"),details:f.get("details"),
+  extra:{listing_id:currentAction.id||null}
+ });
+ if(error){alert("জমা হয়নি: "+error.message);return}
+ closeModal();alert("আপনার অনুরোধ জমা হয়েছে। আমরা যোগাযোগ করব।");
 }
-
+function openSubmit(){
+ openModal(`<h2>আপনি কী দিতে চান?</h2>
+ <p>নতুন বিজ্ঞাপন বা সেবা প্রকাশের জন্য আবেদন করুন।</p>
+ <button onclick="listingForm('rent')">🏠 বাড়ি ভাড়ার বিজ্ঞাপন</button><br><br>
+ <button onclick="listingForm('shop')">🏪 দোকান নিবন্ধন</button><br><br>
+ <button onclick="listingForm('product')">🛍️ পণ্য জমা দিন</button><br><br>
+ <button onclick="listingForm('provider')">👷 কর্মী/টেকনিশিয়ান নিবন্ধন</button>`);
 }
-
-/* =========================================
-   ROUTING
-========================================= */
-
-function renderPage(){
-
-const page = location.hash.replace("#","");
-
-if(SERVICES[page]){
-  showService(page);
-}else{
-  showHome();
+function listingForm(type){
+ const titles={rent:"বাড়ি ভাড়ার বিজ্ঞাপন",shop:"দোকান নিবন্ধন",product:"পণ্য জমা দিন",provider:"কর্মী/টেকনিশিয়ান নিবন্ধন"};
+ let fields="";
+ if(type==="rent")fields=`
+ <label>বাড়ির শিরোনাম</label><input name="title" required>
+ <label>বাড়ির ধরন</label><input name="kind" required placeholder="ফ্ল্যাট/বাসা/মেস">
+ <label>এলাকা</label><input name="area" required>
+ <label>মাসিক ভাড়া</label><input name="price" type="number" min="0" required>
+ <label>বিস্তারিত</label><textarea name="description"></textarea>`;
+ if(type==="shop")fields=`
+ <label>দোকানের নাম</label><input name="shop" required>
+ <label>ধরন</label><input name="category" required>
+ <label>ঠিকানা</label><input name="address" required>`;
+ if(type==="product")fields=`
+ <label>পণ্যের নাম</label><input name="product" required>
+ <label>ক্যাটাগরি</label><input name="category" required>
+ <label>দাম</label><input name="price" type="number" min="0" required>
+ <label>বিস্তারিত</label><textarea name="description"></textarea>`;
+ if(type==="provider")fields=`
+ <label>আপনার কাজ</label><select name="kind"><option value="worker">শ্রমিক</option><option value="mason">রাজমিস্ত্রি</option><option value="electrician">ইলেকট্রিশিয়ান</option><option value="plumber">প্লাম্বার</option><option value="technician">টেকনিশিয়ান</option></select>
+ <label>কাজের এলাকা</label><input name="area" required>
+ <label>অভিজ্ঞতা</label><input name="experience">
+ <label>বিস্তারিত</label><textarea name="description"></textarea>`;
+ openModal(`<h2>${titles[type]}</h2>
+ <form onsubmit="submitListing(event,'${type}')">
+ ${fields}
+ <label>আপনার নাম</label><input name="name" required>
+ <label>মোবাইল নম্বর</label><input name="phone" required placeholder="01XXXXXXXXX">
+ <button type="submit">আবেদন জমা দিন</button></form>`);
 }
-
-window.scrollTo(0,0);
-
+async function submitListing(e,type){
+ e.preventDefault();const f=new FormData(e.target);
+ const phone=digits(f.get("phone")),base={upazila_slug:C.UPAZILA_SLUG};
+ let table,row;
+ if(type==="rent"){
+  table="rent_listings";row={...base,title:f.get("title"),type:f.get("kind"),area:f.get("area"),rent:Number(f.get("price")),description:f.get("description"),owner_name:f.get("name"),owner_phone:phone,contact_phone:phone,status:"pending"};
+ }else if(type==="shop"){
+  table="shops";row={...base,shop_name:f.get("shop"),category:f.get("category"),address:f.get("address"),owner_name:f.get("name"),owner_phone:phone,status:"pending"};
+ }else if(type==="product"){
+  table="products";row={...base,product_name:f.get("product"),category:f.get("category"),price:Number(f.get("price")),description:f.get("description"),seller_name:f.get("name"),seller_phone:phone,status:"pending"};
+ }else{
+  table="provider_profiles";row={...base,provider_type:f.get("kind"),name:f.get("name"),phone,service_area:f.get("area"),experience:f.get("experience"),description:f.get("description"),status:"pending"};
+ }
+ const {error}=await db.from(table).insert(row);
+ if(error){alert("আবেদন জমা হয়নি: "+error.message);return}
+ closeModal();alert("আপনার আবেদন জমা হয়েছে। অ্যাডমিন যাচাই করে প্রকাশ করবেন।");
 }
-
-window.addEventListener("hashchange",renderPage);
-
-/* =========================================
-   SETTINGS
-========================================= */
-
-if(CONFIG.UPAZILA_NAME){
-  $("locationName").textContent =
-    CONFIG.UPAZILA_NAME + ", " +
-    (CONFIG.DISTRICT_NAME || "চুয়াডাঙ্গা");
-}
-
-if(CONFIG.HOTLINE){
-  $("hotline").href = "tel:" + CONFIG.HOTLINE;
-  $("hotline").textContent = "☎ " + CONFIG.HOTLINE;
-}
-
-if("serviceWorker" in navigator){
-  window.addEventListener("load",()=>{
-    navigator.serviceWorker.register("sw.js").catch(console.error);
-  });
-}
-
-renderPage();
-
+loadData();
 </script>
 </body>
 </html>
