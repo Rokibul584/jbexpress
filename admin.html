@@ -8,213 +8,92 @@
 <title>UPAZILA EXPRESS | Admin Panel</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-<link rel="stylesheet"
-href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;
-  background:#f3f6f4;
-  color:#17251d;
-  font-family:'Hind Siliguri',sans-serif;
-}
-header{
-  background:#08734f;
-  color:white;
-  padding:14px 4%;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-}
+body{margin:0;background:#f3f6f4;color:#17251d;font-family:'Hind Siliguri',sans-serif}
+header{background:#08734f;color:#fff;padding:14px 4%;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
 header h2{margin:0;font-size:22px}
-main{max-width:1450px;margin:20px auto;padding:0 14px}
-.card{
-  background:white;
-  border:1px solid #dce5df;
-  border-radius:13px;
-  padding:16px;
-  margin-bottom:15px;
-}
+main{max-width:1400px;margin:20px auto;padding:0 14px}
+.card{background:#fff;border:1px solid #dce5df;border-radius:13px;padding:16px;margin-bottom:15px}
 .login{max-width:430px;margin:65px auto}
-input,select,textarea{
-  width:100%;
-  padding:10px;
-  border:1px solid #dce5df;
-  border-radius:8px;
-  font:inherit;
-  background:white;
-}
+input,select,textarea{width:100%;padding:10px;border:1px solid #dce5df;border-radius:8px;font:inherit;background:#fff}
 label{display:block;margin:10px 0 4px;font-weight:600}
-button{
-  border:0;
-  background:#08734f;
-  color:white;
-  padding:9px 14px;
-  border-radius:8px;
-  font:inherit;
-  cursor:pointer;
-}
+button{border:0;background:#08734f;color:white;padding:9px 14px;border-radius:8px;font:inherit;cursor:pointer}
 button:disabled{opacity:.5;cursor:not-allowed}
 .secondary{background:#e8f1eb;color:#08734f}
-.danger{background:#b42318;color:white}
+.danger{background:#b42318;color:#fff}
+.warning{background:#a15c00;color:#fff}
 .hidden{display:none!important}
-.tabs{
-  display:flex;
-  gap:7px;
-  flex-wrap:wrap;
-  margin-bottom:15px;
-}
-.tab{
-  background:white;
-  color:#17251d;
-  border:1px solid #dce5df;
-}
-.tab.active{background:#08734f;color:white}
-.stats{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(135px,1fr));
-  gap:10px;
-  margin-bottom:15px;
-}
-.stat{
-  background:white;
-  padding:14px;
-  border:1px solid #dce5df;
-  border-radius:12px;
-}
-.stat strong{
-  display:block;
-  font-size:26px;
-  color:#08734f;
-}
+.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:15px}
+.tab{background:#fff;color:#17251d;border:1px solid #dce5df}
+.tab.active{background:#08734f;color:#fff}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin-bottom:15px}
+.stat{background:#fff;padding:14px;border:1px solid #dce5df;border-radius:12px}
+.stat strong{display:block;font-size:26px;color:#08734f}
 .tablewrap{overflow-x:auto}
-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:720px;
-  font-size:14px;
-}
-th,td{
-  padding:10px;
-  border-bottom:1px solid #e1e9e3;
-  text-align:left;
-  vertical-align:top;
-}
+table{width:100%;border-collapse:collapse;min-width:720px;font-size:14px}
+th,td{padding:10px;border-bottom:1px solid #e1e9e3;text-align:left;vertical-align:top}
 th{background:#f5f8f6}
 .small{font-size:12px;color:#64736a}
-.msg{
-  padding:10px;
-  background:#fff3d8;
-  border-radius:8px;
-  margin:10px 0;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-}
+.msg{padding:10px;background:#fff3d8;border-radius:8px;margin:10px 0;white-space:pre-wrap;overflow-wrap:anywhere}
 .error{background:#fee4e2;color:#b42318}
 .success{background:#e0f5e8;color:#176b3c}
 a{color:#08734f}
-.formgrid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:0 14px;
-}
-.formbox{
-  background:#f7faf8;
-  padding:14px;
-  border-radius:10px;
-  margin:12px 0;
-}
-#liveMap{
-  width:100%;
-  height:500px;
-  border-radius:12px;
-  z-index:1;
-  background:#e8efeb;
-}
-.legend{
-  display:flex;
-  gap:15px;
-  flex-wrap:wrap;
-  margin:12px 0;
-  font-size:14px;
-}
-.dot{
-  display:inline-block;
-  width:11px;
-  height:11px;
-  border-radius:50%;
-  margin-right:5px;
-}
-.green{background:#16a34a}
-.blue{background:#2563eb}
-.mapinfo{
-  background:#f7faf8;
-  padding:10px;
-  border-radius:8px;
-  margin:10px 0;
-}
-@media(max-width:600px){
-  header h2{font-size:19px}
-  #liveMap{height:400px}
-  .card{padding:12px}
-}
+.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:0 14px}
+.formbox{background:#f7faf8;padding:14px;border-radius:10px;margin:12px 0}
+#liveMap{height:480px;width:100%;border-radius:12px;border:1px solid #dce5df;z-index:1}
+.mapstats{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.mapstat{background:#f3f7f4;padding:9px 13px;border-radius:8px}
+.mapstat b{color:#08734f}
+.pane h2{margin-top:0}
+.actionrow{display:flex;gap:7px;flex-wrap:wrap}
+@media(max-width:600px){#liveMap{height:380px}.card{padding:12px}header h2{font-size:19px}}
 </style>
 </head>
 
 <body>
-
 <header>
   <div>
     <h2>🛵 UPAZILA EXPRESS</h2>
     <small>Admin Control Panel | জীবননগর, চুয়াডাঙ্গা</small>
   </div>
-  <div>
-    <button id="refreshBtn" class="secondary hidden">রিফ্রেশ</button>
+  <div class="actionrow">
+    <button id="refreshBtn" class="secondary hidden">↻ রিফ্রেশ</button>
     <button id="logoutBtn" class="danger hidden">লগআউট</button>
   </div>
 </header>
 
 <main>
 
-<!-- LOGIN -->
 <section id="loginView" class="card login">
   <h2>Admin Login</h2>
   <p class="small">অনুমোদিত Admin Email ও Password দিয়ে প্রবেশ করুন।</p>
-
   <form id="loginForm">
     <label>Email</label>
     <input id="email" type="email" required autocomplete="username">
-
     <label>Password</label>
     <input id="password" type="password" required autocomplete="current-password">
-
     <div id="loginMsg"></div>
-
-    <button id="loginBtn" style="width:100%;margin-top:15px">
-      লগইন
-    </button>
+    <button id="loginBtn" style="width:100%;margin-top:15px">লগইন করুন</button>
   </form>
 </section>
 
-<!-- DASHBOARD -->
 <section id="dashboard" class="hidden">
 
   <div class="stats">
-    <div class="stat">মোট অর্ডার<strong id="totalOrders">০</strong></div>
-    <div class="stat">নতুন অর্ডার<strong id="newOrders">০</strong></div>
-    <div class="stat">চলমান অর্ডার<strong id="activeOrders">০</strong></div>
+    <div class="stat">মোট Order<strong id="totalOrders">০</strong></div>
+    <div class="stat">নতুন Order<strong id="newOrders">০</strong></div>
+    <div class="stat">চলমান Order<strong id="activeOrders">০</strong></div>
     <div class="stat">মোট Rider<strong id="totalRiders">০</strong></div>
-    <div class="stat">Active Rider<strong id="activeRiders">০</strong></div>
+    <div class="stat">GPS পাওয়া Rider<strong id="gpsRiders">০</strong></div>
   </div>
 
   <div class="tabs">
     <button class="tab active" data-tab="orders">📦 অর্ডার</button>
     <button class="tab" data-tab="riders">🛵 Rider</button>
-    <button class="tab" data-tab="tracking">📍 Live Map</button>
+    <button class="tab" data-tab="tracking">📍 Live Location</button>
     <button class="tab" data-tab="products">🛍️ পণ্য</button>
     <button class="tab" data-tab="shops">🏪 দোকান</button>
     <button class="tab" data-tab="rent">🏠 বাসা ভাড়া</button>
@@ -224,52 +103,37 @@ a{color:#08734f}
 
   <!-- ORDERS -->
   <section id="orders" class="card pane">
-    <h2>সকল Customer Order</h2>
-    <p class="small">
-      Admin প্রথমে অর্ডার যাচাই করবেন, তারপর Rider Assign করবেন।
-    </p>
+    <h2>📦 সকল Customer Order</h2>
+    <p class="small">Admin প্রথমে Order যাচাই করবেন, তারপর Rider Assign করবেন।</p>
     <div id="orderMsg"></div>
     <div id="orderTable" class="tablewrap">লোড হচ্ছে...</div>
   </section>
 
   <!-- RIDERS -->
   <section id="riders" class="card pane hidden">
-    <h2>Rider Management</h2>
-    <p class="small">
-      নতুন Rider-এর Login Account তৈরি করুন এবং কাজের অবস্থা নিয়ন্ত্রণ করুন।
-    </p>
-
+    <h2>🛵 Rider Management</h2>
     <div id="riderMsg"></div>
 
     <div class="formbox">
       <h3>নতুন Rider Account তৈরি করুন</h3>
-
       <form id="riderForm">
         <div class="formgrid">
-
           <div>
             <label>Rider-এর নাম</label>
             <input name="name" required maxlength="100">
           </div>
-
           <div>
             <label>মোবাইল নম্বর</label>
-            <input name="phone" required
-              placeholder="01XXXXXXXXX"
-              pattern="01[3-9][0-9]{8}">
+            <input name="phone" required placeholder="01XXXXXXXXX" pattern="01[3-9][0-9]{8}">
           </div>
-
           <div>
-            <label>Rider-এর Email</label>
+            <label>Rider Email</label>
             <input name="email" type="email" required autocomplete="off">
           </div>
-
           <div>
             <label>প্রাথমিক Password</label>
-            <input name="password" type="password"
-              required minlength="8" autocomplete="new-password">
+            <input name="password" type="password" required minlength="8" autocomplete="new-password">
           </div>
-
           <div>
             <label>যানবাহন</label>
             <select name="vehicle_type">
@@ -278,78 +142,64 @@ a{color:#08734f}
               <option value="other">অন্যান্য</option>
             </select>
           </div>
-
         </div>
-
-        <button id="createRiderBtn" type="submit" style="margin-top:14px">
-          নতুন Rider Account তৈরি করুন
-        </button>
+        <button id="createRiderBtn" type="submit" style="margin-top:14px">নতুন Rider Account তৈরি করুন</button>
       </form>
     </div>
 
     <h3>Rider তালিকা</h3>
+    <p class="small">কাজ না করা Rider-কে আপাতত Inactive করুন। এতে তার Login ও GPS কার্যক্রম বন্ধ হবে।</p>
     <div id="riderTable" class="tablewrap">লোড হচ্ছে...</div>
   </section>
 
-  <!-- LIVE MAP -->
+  <!-- LIVE LOCATION -->
   <section id="tracking" class="card pane hidden">
-
-    <h2>📍 Rider Live GPS ও Assigned Order</h2>
-
-    <p class="small">
-      চলমান অর্ডারের Rider-এর অবস্থান ও Customer-এর GPS একসঙ্গে দেখুন।
-    </p>
+    <h2>📍 Rider Live Location Map</h2>
+    <p class="small">সব Active Rider-এর সর্বশেষ GPS এখানে দেখা যাবে। Order Assign থাকা বাধ্যতামূলক নয়।</p>
 
     <div id="trackingMsg"></div>
 
-    <div class="legend">
-      <span><i class="dot green"></i>Rider GPS</span>
-      <span><i class="dot blue"></i>Customer GPS</span>
+    <div class="mapstats">
+      <div class="mapstat">Active Rider: <b id="mapActiveCount">০</b></div>
+      <div class="mapstat">GPS পাওয়া গেছে: <b id="mapGpsCount">০</b></div>
+      <div class="mapstat">GPS পাওয়া যায়নি: <b id="mapNoGpsCount">০</b></div>
+      <div class="mapstat">সর্বশেষ Refresh: <b id="lastMapUpdate">-</b></div>
     </div>
 
     <div id="liveMap"></div>
 
-    <div class="mapinfo">
-      <b>লাইভ আপডেট:</b>
-      <span id="lastMapUpdate">এখনো আপডেট হয়নি</span>
-      <br>
-      <span class="small">
-        Live Map খোলা থাকলে প্রতি ১০ সেকেন্ডে তথ্য রিফ্রেশ হবে।
-      </span>
+    <div class="actionrow" style="margin:12px 0">
+      <button id="mapRefreshBtn">↻ GPS Refresh</button>
+      <button id="fitMapBtn" class="secondary">সব Rider দেখুন</button>
     </div>
 
-    <h3>চলমান Order ও Rider তালিকা</h3>
+    <h3>Rider GPS তালিকা</h3>
     <div id="trackingTable" class="tablewrap"></div>
-
   </section>
 
-  <!-- PRODUCTS -->
+  <!-- APPROVAL PANELS -->
   <section id="products" class="card pane hidden">
-    <h2>পণ্য অনুমোদন</h2>
+    <h2>🛍️ পণ্য অনুমোদন</h2>
     <div id="productTable" class="tablewrap"></div>
   </section>
 
-  <!-- SHOPS -->
   <section id="shops" class="card pane hidden">
-    <h2>দোকান অনুমোদন</h2>
+    <h2>🏪 দোকান অনুমোদন</h2>
     <div id="shopTable" class="tablewrap"></div>
   </section>
 
-  <!-- RENT -->
   <section id="rent" class="card pane hidden">
-    <h2>বাসা ভাড়ার বিজ্ঞাপন</h2>
+    <h2>🏠 বাসা ভাড়ার বিজ্ঞাপন</h2>
     <div id="rentTable" class="tablewrap"></div>
   </section>
 
-  <!-- PROVIDERS -->
   <section id="providers" class="card pane hidden">
-    <h2>কর্মী ও টেকনিশিয়ান</h2>
+    <h2>👷 কর্মী ও টেকনিশিয়ান</h2>
     <div id="providerTable" class="tablewrap"></div>
   </section>
 
-  <!-- REQUESTS -->
   <section id="requests" class="card pane hidden">
-    <h2>অন্যান্য সার্ভিস অনুরোধ</h2>
+    <h2>📞 অন্যান্য সার্ভিস অনুরোধ</h2>
     <div id="requestTable" class="tablewrap"></div>
   </section>
 
@@ -363,37 +213,35 @@ a{color:#08734f}
 (function(){
 'use strict';
 
-/* ==============================
-   CONFIGURATION
-============================== */
+/* ================= CONFIG ================= */
 
-const C=window.UEX_CONFIG||{};
-const API=C.SUPABASE_URL;
-const KEY=C.SUPABASE_ANON_KEY;
+const C = window.UEX_CONFIG || {};
+const API = C.SUPABASE_URL;
+const KEY = C.SUPABASE_ANON_KEY;
 
-const $=id=>document.getElementById(id);
+const $ = id => document.getElementById(id);
 
-let token=null;
-let refreshTokenValue=null;
+let token = null;
+let refreshTokenValue = null;
+let loading = false;
 
-let orders=[];
-let riders=[];
-let locations=[];
-let products=[];
-let shops=[];
-let rents=[];
-let providers=[];
-let requests=[];
+let orders = [];
+let riders = [];
+let locations = [];
+let products = [];
+let shops = [];
+let rents = [];
+let providers = [];
+let requests = [];
 
-let loading=false;
-let liveMap=null;
-let riderLayer=null;
-let customerLayer=null;
-let mapTimer=null;
-let mapHasCentered=false;
-let mapBusy=false;
+let liveMap = null;
+let riderLayer = null;
+let customerLayer = null;
+let mapHasCentered = false;
 
-const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({
+let activeTab = 'orders';
+
+const esc = v => String(v ?? '').replace(/[&<>"']/g,c=>({
   '&':'&amp;',
   '<':'&lt;',
   '>':'&gt;',
@@ -401,91 +249,48 @@ const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({
   "'":'&#39;'
 }[c]));
 
-const bn=v=>String(v??0).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+const bn = v => String(v ?? 0).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
 
 function showMessage(id,message,type){
-  const el=$(id);
-  if(!el)return;
-
-  el.innerHTML=message
-    ?'<div class="msg '+(type||'success')+'">'+esc(message)+'</div>'
-    :'';
+  const el = $(id);
+  if(!el) return;
+  el.innerHTML = message
+    ? '<div class="msg '+(type || 'success')+'">'+esc(message)+'</div>'
+    : '';
 }
+
+function validCoordinate(lat,lon){
+  if(lat===null || lat===undefined || lon===null || lon===undefined) return false;
+  if(String(lat).trim()==='' || String(lon).trim()==='') return false;
+
+  const a = Number(lat);
+  const b = Number(lon);
+
+  return Number.isFinite(a) &&
+         Number.isFinite(b) &&
+         a >= -90 && a <= 90 &&
+         b >= -180 && b <= 180 &&
+         !(a===0 && b===0);
+}
+
+function phoneLink(phone){
+  if(!phone) return 'নেই';
+  return '<a href="tel:'+esc(phone)+'">'+esc(phone)+'</a>';
+}
+
+/* ================= AUTH ================= */
 
 function headers(extra){
   return {
     apikey:KEY,
-    Authorization:'Bearer '+(token||KEY),
+    Authorization:'Bearer '+(token || KEY),
     'Content-Type':'application/json',
-    ...(extra||{})
+    ...(extra || {})
   };
 }
 
-/* ==============================
-   SUPABASE API
-============================== */
-
-async function api(path,options){
-
-  const opts=options||{};
-
-  let response=await fetch(API+'/rest/v1/'+path,{
-    ...opts,
-    headers:headers(opts.headers)
-  });
-
-  if(response.status===401){
-    const refreshed=await refreshSession();
-
-    if(!refreshed){
-      throw Error('Session শেষ হয়েছে। আবার Login করুন।');
-    }
-
-    response=await fetch(API+'/rest/v1/'+path,{
-      ...opts,
-      headers:headers(opts.headers)
-    });
-  }
-
-  if(!response.ok){
-    const body=await response.text();
-    throw Error('Database Error ('+response.status+'): '+body);
-  }
-
-  if(response.status===204)return null;
-
-  const body=await response.text();
-  return body?JSON.parse(body):null;
-}
-
-async function rpc(name){
-
-  let response=await fetch(API+'/rest/v1/rpc/'+name,{
-    method:'POST',
-    headers:headers(),
-    body:'{}'
-  });
-
-  if(response.status===401 && await refreshSession()){
-    response=await fetch(API+'/rest/v1/rpc/'+name,{
-      method:'POST',
-      headers:headers(),
-      body:'{}'
-    });
-  }
-
-  if(!response.ok)return false;
-
-  return await response.json()===true;
-}
-
-/* ==============================
-   AUTHENTICATION
-============================== */
-
 async function signIn(email,password){
-
-  const response=await fetch(API+'/auth/v1/token?grant_type=password',{
+  const response = await fetch(API+'/auth/v1/token?grant_type=password',{
     method:'POST',
     headers:{
       apikey:KEY,
@@ -494,148 +299,154 @@ async function signIn(email,password){
     body:JSON.stringify({email,password})
   });
 
+  const data = await response.json();
+
   if(!response.ok){
-    throw Error('Login ব্যর্থ: '+await response.text());
+    throw Error(data.msg || data.message || data.error_description || 'Login ব্যর্থ হয়েছে।');
   }
 
-  const data=await response.json();
-
-  token=data.access_token;
-  refreshTokenValue=data.refresh_token;
+  token = data.access_token;
+  refreshTokenValue = data.refresh_token;
 }
 
 async function refreshSession(){
+  if(!refreshTokenValue) return false;
 
-  if(!refreshTokenValue)return false;
-
-  const response=await fetch(API+'/auth/v1/token?grant_type=refresh_token',{
+  const response = await fetch(API+'/auth/v1/token?grant_type=refresh_token',{
     method:'POST',
     headers:{
       apikey:KEY,
       'Content-Type':'application/json'
     },
-    body:JSON.stringify({
-      refresh_token:refreshTokenValue
-    })
+    body:JSON.stringify({refresh_token:refreshTokenValue})
   });
 
-  if(!response.ok)return false;
+  if(!response.ok) return false;
 
-  const data=await response.json();
-
-  token=data.access_token;
-  refreshTokenValue=data.refresh_token;
-
+  const data = await response.json();
+  token = data.access_token;
+  refreshTokenValue = data.refresh_token;
   saveSession();
   return true;
 }
 
 function saveSession(){
-
   localStorage.setItem('uex_admin_token',token);
   localStorage.setItem('uex_admin_refresh',refreshTokenValue);
 }
 
-function showDashboard(){
+async function rpc(name){
+  const response = await fetch(API+'/rest/v1/rpc/'+name,{
+    method:'POST',
+    headers:headers(),
+    body:'{}'
+  });
 
+  if(!response.ok) return false;
+
+  return await response.json() === true;
+}
+
+async function api(path,options={},retry=true){
+  const response = await fetch(API+'/rest/v1/'+path,{
+    ...options,
+    headers:headers(options.headers)
+  });
+
+  if(response.status===401 && retry){
+    if(await refreshSession()){
+      return api(path,options,false);
+    }
+    throw Error('Session শেষ হয়েছে। আবার Login করুন।');
+  }
+
+  if(!response.ok){
+    const body = await response.text();
+    throw Error('Database Error ('+response.status+'): '+body);
+  }
+
+  if(response.status===204) return null;
+
+  const body = await response.text();
+  return body ? JSON.parse(body) : null;
+}
+
+function showDashboard(){
   $('loginView').classList.add('hidden');
   $('dashboard').classList.remove('hidden');
-
   $('refreshBtn').classList.remove('hidden');
   $('logoutBtn').classList.remove('hidden');
 }
 
 function logout(){
-
-  stopMapRefresh();
-
-  token=null;
-  refreshTokenValue=null;
+  token = null;
+  refreshTokenValue = null;
 
   localStorage.removeItem('uex_admin_token');
   localStorage.removeItem('uex_admin_refresh');
 
   $('dashboard').classList.add('hidden');
   $('loginView').classList.remove('hidden');
-
   $('refreshBtn').classList.add('hidden');
   $('logoutBtn').classList.add('hidden');
 
-  $('password').value='';
+  if(liveMap){
+    liveMap.remove();
+    liveMap = null;
+    riderLayer = null;
+    customerLayer = null;
+    mapHasCentered = false;
+  }
 }
 
 async function loginHandler(event){
-
   event.preventDefault();
 
-  $('loginBtn').disabled=true;
-  showMessage('loginMsg','Login হচ্ছে...');
+  $('loginBtn').disabled = true;
+  showMessage('loginMsg','Login হচ্ছে...','success');
 
   try{
-
-    if(!API||!KEY){
-      throw Error('config.js-এ Supabase URL বা Publishable Key পাওয়া যায়নি।');
+    if(!API || !KEY){
+      throw Error('config.js-এ Supabase URL অথবা Publishable Key পাওয়া যায়নি।');
     }
 
-    await signIn(
-      $('email').value.trim(),
-      $('password').value
-    );
+    await signIn($('email').value.trim(),$('password').value);
 
     if(!(await rpc('is_admin'))){
       throw Error('এই Email-এর Admin অনুমতি নেই।');
     }
 
     saveSession();
-    $('password').value='';
-
+    $('password').value = '';
     showDashboard();
     await loadAll();
 
   }catch(error){
-
-    token=null;
-    refreshTokenValue=null;
-
+    token = null;
+    refreshTokenValue = null;
     showMessage('loginMsg',error.message,'error');
-
-  }finally{
-    $('loginBtn').disabled=false;
   }
+
+  $('loginBtn').disabled = false;
 }
 
-/* ==============================
-   LOAD ALL DATA
-============================== */
+/* ================= LOAD DATABASE ================= */
 
 async function loadAll(){
+  if(loading || !token) return;
 
-  if(loading)return;
-
-  loading=true;
-
-  $('orderTable').textContent='ডেটা লোড হচ্ছে...';
+  loading = true;
 
   try{
-
-    const result=await Promise.all([
-
+    const result = await Promise.all([
       api('customer_orders?select=*&order=created_at.desc&limit=300'),
-
       api('riders?select=*&order=created_at.desc'),
-
       api('rider_locations?select=*'),
-
       api('products?select=*&order=created_at.desc&limit=200'),
-
       api('shops?select=*&order=created_at.desc&limit=200'),
-
       api('rent_listings?select=*&order=created_at.desc&limit=200'),
-
       api('provider_profiles?select=*&order=created_at.desc&limit=200'),
-
       api('service_requests?select=*&order=created_at.desc&limit=200')
-
     ]);
 
     [
@@ -647,77 +458,57 @@ async function loadAll(){
       rents,
       providers,
       requests
-    ]=result;
+    ] = result;
 
     updateStats();
-
     renderOrders();
     renderRiders();
     renderTracking();
-
     renderApproval('products',products);
     renderApproval('shops',shops);
     renderApproval('rent',rents);
     renderApproval('providers',providers);
-
     renderRequests();
 
-    showMessage('orderMsg','সব তথ্য আপডেট হয়েছে।','success');
-
   }catch(error){
-
     showMessage('orderMsg',error.message,'error');
-
-    $('orderTable').innerHTML=
-      '<div class="msg error">'+esc(error.message)+'</div>';
-
-  }finally{
-    loading=false;
   }
+
+  loading = false;
 }
 
 function updateStats(){
+  $('totalOrders').textContent = bn(orders.length);
+  $('newOrders').textContent = bn(orders.filter(x=>x.status==='new').length);
 
-  $('totalOrders').textContent=bn(orders.length);
-
-  $('newOrders').textContent=bn(
-    orders.filter(x=>x.status==='new').length
+  $('activeOrders').textContent = bn(
+    orders.filter(x=>['confirmed','assigned','on_the_way'].includes(x.status)).length
   );
 
-  $('activeOrders').textContent=bn(
-    orders.filter(x=>
-      ['confirmed','assigned','on_the_way'].includes(x.status)
-    ).length
-  );
+  $('totalRiders').textContent = bn(riders.length);
 
-  $('totalRiders').textContent=bn(riders.length);
+  const count = riders.filter(r =>
+    r.status==='active' &&
+    locations.some(l =>
+      String(l.rider_id)===String(r.id) &&
+      validCoordinate(l.latitude,l.longitude)
+    )
+  ).length;
 
-  $('activeRiders').textContent=bn(
-    riders.filter(x=>x.status==='active').length
-  );
+  $('gpsRiders').textContent = bn(count);
 }
 
-function phoneLink(phone){
-
-  return phone
-    ?'<a href="tel:'+esc(phone)+'">'+esc(phone)+'</a>'
-    :'নেই';
-}
-
-/* ==============================
-   ORDER MANAGEMENT
-============================== */
+/* ================= ORDERS ================= */
 
 function renderOrders(){
-
   if(!orders.length){
-    $('orderTable').innerHTML='কোনো অর্ডার পাওয়া যায়নি।';
+    $('orderTable').innerHTML = 'কোনো Order পাওয়া যায়নি।';
     return;
   }
 
-  $('orderTable').innerHTML=
+  $('orderTable').innerHTML =
   '<table><thead><tr>'+
-  '<th>অর্ডার</th>'+
+  '<th>Order</th>'+
   '<th>Customer</th>'+
   '<th>বিবরণ</th>'+
   '<th>টাকা</th>'+
@@ -726,82 +517,47 @@ function renderOrders(){
   '</tr></thead><tbody>'+
 
   orders.map(o=>{
+    const rider = riders.find(r=>String(r.id)===String(o.assigned_rider_id));
 
-    const rider=riders.find(r=>r.id===o.assigned_rider_id);
-
-    const hasGPS=
-      o.customer_latitude!=null &&
-      o.customer_longitude!=null;
+    const customerMap =
+      validCoordinate(o.customer_latitude,o.customer_longitude)
+      ? '<br><a target="_blank" rel="noopener" href="https://maps.google.com/?q='+
+        encodeURIComponent(o.customer_latitude+','+o.customer_longitude)+
+        '">Customer Map</a>'
+      : '';
 
     return '<tr>'+
-
-      '<td><b>'+esc(o.ref)+'</b>'+
-      '<div class="small">'+esc(o.created_at)+'</div></td>'+
-
+      '<td><b>'+esc(o.ref || o.id)+'</b><div class="small">'+esc(o.created_at)+'</div></td>'+
+      '<td>'+esc(o.customer_name)+'<br>'+phoneLink(o.customer_phone)+'<br>'+
+      esc(o.delivery_address)+'<br>'+esc(o.area||'')+customerMap+'</td>'+
+      '<td>'+esc(o.customer_note||o.details||'')+'</td>'+
+      '<td>৳'+bn(o.total_amount||0)+'</td>'+
       '<td>'+
-      esc(o.customer_name)+'<br>'+
-      phoneLink(o.customer_phone)+'<br>'+
-      esc(o.delivery_address)+'<br>'+
-      esc(o.area||'')+
-
-      (hasGPS
-        ?'<br><a target="_blank" rel="noopener" href="https://maps.google.com/?q='+
-          encodeURIComponent(o.customer_latitude+','+o.customer_longitude)+
-          '">Customer Map</a>'
-        :'<br><span class="small">Customer GPS নেই</span>')+
-
+        '<select data-assign="'+esc(o.id)+'">'+
+        '<option value="">Rider নির্বাচন</option>'+
+        riders.filter(r=>r.status==='active').map(r=>
+          '<option value="'+esc(r.id)+'" '+(String(r.id)===String(o.assigned_rider_id)?'selected':'')+'>'+
+          esc(r.name)+' - '+esc(r.phone)+'</option>'
+        ).join('')+
+        '</select>'+
+        '<button data-save-rider="'+esc(o.id)+'">Assign</button>'+
+        (rider?'<div class="small">বর্তমান: '+esc(rider.name)+'</div>':'')+
       '</td>'+
-
-      '<td>'+esc(o.customer_note||'')+'</td>'+
-
-      '<td>৳'+bn(o.total_amount)+'</td>'+
-
-      '<td>'+
-      '<select data-assign="'+esc(o.id)+'">'+
-      '<option value="">Rider নির্বাচন</option>'+
-
-      riders.filter(r=>r.status==='active').map(r=>
-        '<option value="'+esc(r.id)+'" '+
-        (r.id===o.assigned_rider_id?'selected':'')+'>'+
-        esc(r.name)+' - '+esc(r.phone)+
-        '</option>'
-      ).join('')+
-
-      '</select>'+
-
-      '<button data-save-rider="'+esc(o.id)+'">Assign</button>'+
-
-      (rider
-        ?'<div class="small">বর্তমান: '+esc(rider.name)+'</div>'
-        :'')+
-
-      '</td>'+
-
       '<td><select data-status="'+esc(o.id)+'">'+
-
-      ['new','confirmed','assigned','on_the_way','delivered','cancelled']
-      .map(s=>
-        '<option value="'+s+'" '+
-        (o.status===s?'selected':'')+'>'+s+'</option>'
-      ).join('')+
-
+        ['new','confirmed','assigned','on_the_way','delivered','cancelled'].map(s=>
+          '<option value="'+s+'" '+(o.status===s?'selected':'')+'>'+s+'</option>'
+        ).join('')+
       '</select></td>'+
-
-      '</tr>';
-
+    '</tr>';
   }).join('')+
-
   '</tbody></table>';
 }
 
 async function assignRider(id){
+  const select = document.querySelector('[data-assign="'+id+'"]');
+  const riderId = select && select.value;
 
-  const select=document.querySelector('[data-assign="'+id+'"]');
-  const riderId=select&&select.value;
-
-  if(!riderId){
-    throw Error('প্রথমে Rider নির্বাচন করুন।');
-  }
+  if(!riderId) throw Error('প্রথমে Rider নির্বাচন করুন।');
 
   await api('customer_orders?id=eq.'+encodeURIComponent(id),{
     method:'PATCH',
@@ -819,19 +575,18 @@ async function assignRider(id){
 }
 
 async function changeOrderStatus(id,status){
+  const update = {status};
 
-  const update={status};
-
-  if(status==='delivered'||status==='cancelled'){
-    update.tracking_stopped_at=new Date().toISOString();
+  if(status==='delivered' || status==='cancelled'){
+    update.tracking_stopped_at = new Date().toISOString();
   }
 
   if(status==='on_the_way'){
-    update.tracking_started_at=new Date().toISOString();
+    update.tracking_started_at = new Date().toISOString();
   }
 
   if(status==='delivered'){
-    update.delivered_at=new Date().toISOString();
+    update.delivered_at = new Date().toISOString();
   }
 
   await api('customer_orders?id=eq.'+encodeURIComponent(id),{
@@ -844,9 +599,8 @@ async function changeOrderStatus(id,status){
 }
 
 $('orderTable').addEventListener('click',async e=>{
-
-  const id=e.target.dataset.saveRider;
-  if(!id)return;
+  const id = e.target.dataset.saveRider;
+  if(!id) return;
 
   try{
     await assignRider(id);
@@ -856,9 +610,8 @@ $('orderTable').addEventListener('click',async e=>{
 });
 
 $('orderTable').addEventListener('change',async e=>{
-
-  const id=e.target.dataset.status;
-  if(!id)return;
+  const id = e.target.dataset.status;
+  if(!id) return;
 
   try{
     await changeOrderStatus(id,e.target.value);
@@ -867,13 +620,10 @@ $('orderTable').addEventListener('change',async e=>{
   }
 });
 
-/* ==============================
-   RIDER ACCOUNT CREATION
-============================== */
+/* ================= RIDER ACCOUNT ================= */
 
 async function createRiderAccount(payload){
-
-  const response=await fetch(API+'/functions/v1/admin-create-rider',{
+  const response = await fetch(API+'/functions/v1/admin-create-rider',{
     method:'POST',
     headers:{
       apikey:KEY,
@@ -883,48 +633,37 @@ async function createRiderAccount(payload){
     body:JSON.stringify(payload)
   });
 
-  const raw=await response.text();
-
-  let result={};
+  const raw = await response.text();
+  let result = {};
 
   try{
-    result=raw?JSON.parse(raw):{};
+    result = raw ? JSON.parse(raw) : {};
   }catch(e){}
 
   if(!response.ok){
-    throw Error(
-      result.error||
-      result.message||
-      ('Rider Account তৈরি হয়নি। HTTP '+response.status+' '+raw)
-    );
+    throw Error(result.error || result.message || ('Rider Account তৈরি হয়নি। HTTP '+response.status+' '+raw));
   }
 
-  if(!result.success||!result.rider){
-    throw Error(result.error||'Rider তৈরি হয়েছে কি না নিশ্চিত হওয়া যায়নি।');
+  if(!result.success || !result.rider){
+    throw Error(result.error || 'Rider তৈরির ফলাফল নিশ্চিত করা যায়নি।');
   }
 
   return result.rider;
 }
 
 $('riderForm').addEventListener('submit',async e=>{
-
   e.preventDefault();
 
-  const form=e.target;
-  const f=new FormData(form);
+  const form = e.target;
+  const f = new FormData(form);
 
-  const payload={
+  const payload = {
     name:String(f.get('name')||'').trim(),
     phone:String(f.get('phone')||'').trim(),
     email:String(f.get('email')||'').trim().toLowerCase(),
     password:String(f.get('password')||''),
     vehicle_type:String(f.get('vehicle_type')||'motorcycle')
   };
-
-  if(!payload.name||!payload.phone||!payload.email){
-    showMessage('riderMsg','সব তথ্য পূরণ করুন।','error');
-    return;
-  }
 
   if(!/^01[3-9][0-9]{8}$/.test(payload.phone)){
     showMessage('riderMsg','সঠিক ১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর দিন।','error');
@@ -936,101 +675,70 @@ $('riderForm').addEventListener('submit',async e=>{
     return;
   }
 
-  const button=$('createRiderBtn');
-
-  button.disabled=true;
-  button.textContent='Account তৈরি হচ্ছে...';
-
-  showMessage('riderMsg','Rider Account তৈরি হচ্ছে। অপেক্ষা করুন...');
+  const btn = $('createRiderBtn');
+  btn.disabled = true;
+  btn.textContent = 'Account তৈরি হচ্ছে...';
 
   try{
-
-    const rider=await createRiderAccount(payload);
+    const rider = await createRiderAccount(payload);
 
     form.reset();
 
     showMessage(
       'riderMsg',
-      'সফলভাবে Rider Account তৈরি হয়েছে। নাম: '+
-      rider.name+' | Email: '+rider.email,
+      'সফলভাবে Rider Account তৈরি হয়েছে। নাম: '+rider.name+' | Email: '+rider.email,
       'success'
     );
 
     await loadAll();
 
   }catch(error){
-
     showMessage('riderMsg',error.message,'error');
-
   }finally{
-
-    button.disabled=false;
-    button.textContent='নতুন Rider Account তৈরি করুন';
+    btn.disabled = false;
+    btn.textContent = 'নতুন Rider Account তৈরি করুন';
   }
 });
 
-/* ==============================
-   RIDER MANAGEMENT
-============================== */
-
 function renderRiders(){
-
   if(!riders.length){
-    $('riderTable').innerHTML='এখনো Rider যোগ করা হয়নি।';
+    $('riderTable').innerHTML = 'এখনো Rider যোগ করা হয়নি।';
     return;
   }
 
-  $('riderTable').innerHTML=
+  $('riderTable').innerHTML =
   '<table><thead><tr>'+
-  '<th>নাম</th>'+
-  '<th>ফোন</th>'+
-  '<th>Email</th>'+
-  '<th>যানবাহন</th>'+
-  '<th>GPS</th>'+
-  '<th>অবস্থা</th>'+
+  '<th>নাম</th><th>ফোন</th><th>Email</th>'+
+  '<th>Auth UID</th><th>GPS</th><th>অবস্থা</th>'+
   '</tr></thead><tbody>'+
 
   riders.map(r=>{
-
-    const loc=locations.find(l=>l.rider_id===r.id);
+    const loc = locations.find(l=>String(l.rider_id)===String(r.id));
+    const hasGPS = loc && validCoordinate(loc.latitude,loc.longitude);
 
     return '<tr>'+
-
-      '<td><b>'+esc(r.name)+'</b></td>'+
-
+      '<td><b>'+esc(r.name)+'</b><div class="small">'+esc(r.vehicle_type||'')+'</div></td>'+
       '<td>'+phoneLink(r.phone)+'</td>'+
-
       '<td>'+esc(r.email||'Email নেই')+'</td>'+
-
-      '<td>'+esc(r.vehicle_type||'')+'</td>'+
-
-      '<td>'+(loc
-        ?'<span class="small">সর্বশেষ: '+esc(loc.updated_at)+'</span>'
-        :'GPS নেই')+'</td>'+
-
+      '<td class="small">'+esc(r.auth_user_id||'সংযুক্ত নয়')+'</td>'+
+      '<td>'+(hasGPS
+        ? '<span style="color:#08734f">GPS আছে</span>'
+        : '<span style="color:#b42318">GPS নেই</span>')+'</td>'+
       '<td><select data-rider-status="'+esc(r.id)+'">'+
-
-      ['active','inactive','suspended'].map(s=>
-        '<option value="'+s+'" '+
-        (r.status===s?'selected':'')+'>'+s+'</option>'
-      ).join('')+
-
+        ['active','inactive','suspended'].map(s=>
+          '<option value="'+s+'" '+(r.status===s?'selected':'')+'>'+s+'</option>'
+        ).join('')+
       '</select></td>'+
-
-      '</tr>';
-
+    '</tr>';
   }).join('')+
-
   '</tbody></table>';
 }
 
 $('riderTable').addEventListener('change',async e=>{
-
-  const id=e.target.dataset.riderStatus;
-  if(!id)return;
+  const id = e.target.dataset.riderStatus;
+  if(!id) return;
 
   try{
-
     await api('riders?id=eq.'+encodeURIComponent(id),{
       method:'PATCH',
       headers:{Prefer:'return=minimal'},
@@ -1038,341 +746,235 @@ $('riderTable').addEventListener('change',async e=>{
     });
 
     showMessage('riderMsg','Rider-এর অবস্থা পরিবর্তন হয়েছে।','success');
-
     await loadAll();
 
   }catch(error){
-
     showMessage('riderMsg',error.message,'error');
   }
 });
 
-/* ==============================
-   LIVE MAP
-============================== */
+/* ================= LIVE MAP ================= */
 
-function initLiveMap(){
+function initMap(){
+  if(liveMap) return;
 
-  if(liveMap){
-    setTimeout(()=>liveMap.invalidateSize(),200);
-    return;
-  }
-
-  if(typeof L==='undefined'){
-    showMessage(
-      'trackingMsg',
-      'Map library লোড হয়নি। ইন্টারনেট সংযোগ পরীক্ষা করুন।',
-      'error'
-    );
-    return;
-  }
-
-  liveMap=L.map('liveMap').setView([23.685,90.3563],8);
+  liveMap = L.map('liveMap').setView([23.405,88.825],12);
 
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     maxZoom:19,
-    attribution:'© OpenStreetMap'
+    attribution:'&copy; OpenStreetMap'
   }).addTo(liveMap);
 
-  riderLayer=L.layerGroup().addTo(liveMap);
-  customerLayer=L.layerGroup().addTo(liveMap);
+  riderLayer = L.layerGroup().addTo(liveMap);
+  customerLayer = L.layerGroup().addTo(liveMap);
 
   setTimeout(()=>liveMap.invalidateSize(),300);
 }
 
-function validCoordinate(lat,lon){
-
-  return lat!==null &&
-    lat!==undefined &&
-    lon!==null &&
-    lon!==undefined &&
-    Number.isFinite(Number(lat)) &&
-    Number.isFinite(Number(lon)) &&
-    Math.abs(Number(lat))<=90 &&
-    Math.abs(Number(lon))<=180;
-}
-
 function renderTracking(){
+  $('trackingMsg').innerHTML = '';
 
-  if(!liveMap || !riderLayer || !customerLayer)return;
+  const activeRiders = riders.filter(r=>r.status==='active');
+
+  const bounds = [];
+  let gpsCount = 0;
+  let noGpsCount = 0;
+
+  $('mapActiveCount').textContent = bn(activeRiders.length);
+
+  if(!liveMap) return;
 
   riderLayer.clearLayers();
   customerLayer.clearLayers();
 
-  const active=orders.filter(o=>
-    o.assigned_rider_id &&
-    !['delivered','cancelled'].includes(o.status)
-  );
+  activeRiders.forEach(rider=>{
+    const loc = locations.find(
+      l=>String(l.rider_id)===String(rider.id)
+    );
 
-  const groups={};
+    const assignedOrders = orders.filter(o=>
+      String(o.assigned_rider_id)===String(rider.id) &&
+      !['delivered','cancelled'].includes(o.status)
+    );
 
-  active.forEach(order=>{
-
-    const riderId=order.assigned_rider_id;
-
-    if(!groups[riderId]){
-      groups[riderId]={
-        rider:riders.find(r=>r.id===riderId),
-        location:locations.find(l=>l.rider_id===riderId),
-        orders:[]
-      };
+    if(!loc || !validCoordinate(loc.latitude,loc.longitude)){
+      noGpsCount++;
+      return;
     }
 
-    groups[riderId].orders.push(order);
-  });
+    const lat = Number(loc.latitude);
+    const lon = Number(loc.longitude);
 
-  const bounds=[];
+    const orderInfo = assignedOrders.length
+      ? assignedOrders.map(o=>
+          '<hr><b>Order: '+esc(o.ref||o.id)+'</b><br>'+
+          'Customer: '+esc(o.customer_name||'')+'<br>'+
+          'Phone: '+esc(o.customer_phone||'')+'<br>'+
+          'Status: '+esc(o.status||'')
+        ).join('')
+      : '<hr>বর্তমানে কোনো চলমান Order Assign নেই।';
 
-  let riderCount=0;
-  let customerCount=0;
+    const popup =
+      '<div style="min-width:200px">'+
+      '<b>🛵 '+esc(rider.name)+'</b><br>'+
+      'Phone: '+esc(rider.phone||'')+'<br>'+
+      'Vehicle: '+esc(rider.vehicle_type||'')+
+      '<br>চলমান Order: '+assignedOrders.length+
+      orderInfo+
+      '<hr>Latitude: '+lat+
+      '<br>Longitude: '+lon+
+      '<br>Accuracy: '+esc(loc.accuracy||'')+
+      '<br>GPS Update: '+esc(loc.updated_at||'')+
+      '<br><a target="_blank" rel="noopener" href="https://maps.google.com/?q='+lat+','+lon+'">Google Maps-এ খুলুন</a>'+
+      '</div>';
 
-  Object.values(groups).forEach(group=>{
+    L.circleMarker([lat,lon],{
+      radius:10,
+      color:'#08734f',
+      fillColor:'#16a34a',
+      fillOpacity:.95,
+      weight:3
+    }).bindPopup(popup).addTo(riderLayer);
 
-    const rider=group.rider;
-    const location=group.location;
+    bounds.push([lat,lon]);
+    gpsCount++;
 
-    /* RIDER MARKER */
+    /* Customer GPS: Assigned Order-এর জন্য */
+    assignedOrders.forEach(order=>{
+      if(!validCoordinate(order.customer_latitude,order.customer_longitude)) return;
 
-    if(location && validCoordinate(location.latitude,location.longitude)){
+      const clat = Number(order.customer_latitude);
+      const clon = Number(order.customer_longitude);
 
-      const lat=Number(location.latitude);
-      const lon=Number(location.longitude);
-
-      const orderHTML=group.orders.map(o=>
-        '<hr>'+
-        '<b>Order: '+esc(o.ref)+'</b><br>'+
-        'Customer: '+esc(o.customer_name||'')+'<br>'+
-        'Phone: '+esc(o.customer_phone||'')+'<br>'+
-        'Status: '+esc(o.status||'')
-      ).join('');
-
-      const popup=
-        '<div style="min-width:190px">'+
-        '<b>🛵 '+esc(rider?.name||'Rider')+'</b><br>'+
-        'Phone: '+esc(rider?.phone||'')+
-        orderHTML+
-        '<hr><small>GPS Updated: '+esc(location.updated_at||'')+'</small>'+
-        '</div>';
-
-      L.circleMarker([lat,lon],{
-        radius:10,
-        color:'#08734f',
-        fillColor:'#16a34a',
-        fillOpacity:.95,
-        weight:3
-      }).bindPopup(popup).addTo(riderLayer);
-
-      bounds.push([lat,lon]);
-      riderCount++;
-    }
-
-    /* CUSTOMER MARKER */
-
-    group.orders.forEach(order=>{
-
-      if(!validCoordinate(
-        order.customer_latitude,
-        order.customer_longitude
-      ))return;
-
-      const lat=Number(order.customer_latitude);
-      const lon=Number(order.customer_longitude);
-
-      const popup=
-        '<b>🔵 Customer Location</b><br>'+
-        'Order: '+esc(order.ref||'')+'<br>'+
-        'Customer: '+esc(order.customer_name||'')+'<br>'+
-        'Phone: '+esc(order.customer_phone||'')+'<br>'+
-        'Address: '+esc(order.delivery_address||'');
-
-      L.circleMarker([lat,lon],{
+      L.circleMarker([clat,clon],{
         radius:8,
         color:'#1d4ed8',
         fillColor:'#3b82f6',
         fillOpacity:.95,
         weight:2
-      }).bindPopup(popup).addTo(customerLayer);
+      }).bindPopup(
+        '<b>🔵 Customer Location</b><br>'+
+        'Order: '+esc(order.ref||order.id)+'<br>'+
+        'Customer: '+esc(order.customer_name||'')+'<br>'+
+        'Phone: '+esc(order.customer_phone||'')
+      ).addTo(customerLayer);
 
-      bounds.push([lat,lon]);
-      customerCount++;
+      bounds.push([clat,clon]);
     });
-
   });
 
+  $('mapGpsCount').textContent = bn(gpsCount);
+  $('mapNoGpsCount').textContent = bn(noGpsCount);
+  $('lastMapUpdate').textContent = new Date().toLocaleTimeString('bn-BD');
+
   if(bounds.length && !mapHasCentered){
-
-    liveMap.fitBounds(bounds,{
-      padding:[35,35],
-      maxZoom:15
-    });
-
-    mapHasCentered=true;
+    liveMap.fitBounds(bounds,{padding:[35,35],maxZoom:15});
+    mapHasCentered = true;
   }
 
-  $('trackingMsg').innerHTML=
-    '<div class="msg success">'+
-    'চলমান Order: '+bn(active.length)+
-    ' | GPS পাওয়া Rider: '+bn(riderCount)+
-    ' | Customer GPS: '+bn(customerCount)+
-    '</div>';
-
-  $('lastMapUpdate').textContent=new Date().toLocaleTimeString('bn-BD');
-
-  renderTrackingTable(active);
-}
-
-function renderTrackingTable(active){
-
-  if(!active.length){
-    $('trackingTable').innerHTML='কোনো চলমান Assigned Order নেই।';
-    return;
+  if(!gpsCount){
+    showMessage('trackingMsg',
+      'কোনো Active Rider-এর GPS পাওয়া যায়নি। Rider Panel-এ GPS চালু আছে কি না দেখুন।',
+      'error'
+    );
+  }else{
+    showMessage('trackingMsg',
+      gpsCount+' জন Active Rider-এর GPS পাওয়া গেছে।',
+      'success'
+    );
   }
 
-  $('trackingTable').innerHTML=
+  $('trackingTable').innerHTML =
   '<table><thead><tr>'+
-  '<th>Order</th>'+
-  '<th>Customer</th>'+
-  '<th>Rider</th>'+
-  '<th>Rider GPS</th>'+
-  '<th>Customer GPS</th>'+
-  '<th>সর্বশেষ আপডেট</th>'+
+  '<th>Rider</th><th>ফোন</th><th>GPS</th>'+
+  '<th>চলমান Order</th><th>Latitude / Longitude</th><th>সর্বশেষ Update</th>'+
   '</tr></thead><tbody>'+
 
-  active.map(order=>{
+  activeRiders.map(r=>{
+    const loc = locations.find(l=>String(l.rider_id)===String(r.id));
 
-    const rider=riders.find(r=>r.id===order.assigned_rider_id);
-
-    const location=locations.find(l=>
-      l.rider_id===order.assigned_rider_id
+    const assigned = orders.filter(o=>
+      String(o.assigned_rider_id)===String(r.id) &&
+      !['delivered','cancelled'].includes(o.status)
     );
 
-    const riderGPS=location &&
-      validCoordinate(location.latitude,location.longitude)
+    const hasGPS = loc && validCoordinate(loc.latitude,loc.longitude);
 
-      ?'<a target="_blank" rel="noopener" href="https://maps.google.com/?q='+
-       encodeURIComponent(location.latitude+','+location.longitude)+
-       '">Rider Map</a>'
-
-      :'<span style="color:#b42318">GPS নেই</span>';
-
-    const customerGPS=validCoordinate(
-      order.customer_latitude,
-      order.customer_longitude
-    )
-
-      ?'<a target="_blank" rel="noopener" href="https://maps.google.com/?q='+
-       encodeURIComponent(order.customer_latitude+','+order.customer_longitude)+
-       '">Customer Map</a>'
-
-      :'GPS নেই';
+    const gpsLink = hasGPS
+      ? '<a target="_blank" rel="noopener" href="https://maps.google.com/?q='+
+        encodeURIComponent(loc.latitude+','+loc.longitude)+
+        '">📍 ম্যাপে দেখুন</a>'
+      : '<span style="color:#b42318">GPS নেই</span>';
 
     return '<tr>'+
-
-      '<td><b>'+esc(order.ref||'')+'</b>'+
-      '<div class="small">'+esc(order.status||'')+'</div></td>'+
-
-      '<td>'+esc(order.customer_name||'')+'<br>'+
-      phoneLink(order.customer_phone)+'</td>'+
-
-      '<td>'+esc(rider?.name||'Rider')+'<br>'+
-      phoneLink(rider?.phone)+'</td>'+
-
-      '<td>'+riderGPS+'</td>'+
-
-      '<td>'+customerGPS+'</td>'+
-
-      '<td>'+esc(location?.updated_at||'GPS পাওয়া যায়নি')+'</td>'+
-
-      '</tr>';
-
+      '<td><b>'+esc(r.name)+'</b></td>'+
+      '<td>'+phoneLink(r.phone)+'</td>'+
+      '<td>'+gpsLink+'</td>'+
+      '<td>'+(
+        assigned.length
+          ? assigned.map(o=>esc(o.ref||o.id)).join('<br>')
+          : 'Order নেই'
+      )+'</td>'+
+      '<td>'+(hasGPS
+        ? esc(loc.latitude+', '+loc.longitude)
+        : '-')+'</td>'+
+      '<td>'+(hasGPS?esc(loc.updated_at||'-'):'-')+'</td>'+
+    '</tr>';
   }).join('')+
 
   '</tbody></table>';
 }
 
-async function refreshTracking(){
+$('mapRefreshBtn').addEventListener('click',async()=>{
+  await loadAll();
+  if(liveMap) setTimeout(()=>liveMap.invalidateSize(),200);
+});
 
-  if(mapBusy)return;
+$('fitMapBtn').addEventListener('click',()=>{
+  if(!liveMap) return;
 
-  mapBusy=true;
+  const points = [];
 
-  try{
+  locations.forEach(loc=>{
+    const rider = riders.find(r=>String(r.id)===String(loc.rider_id));
 
-    const result=await Promise.all([
+    if(rider && rider.status==='active' &&
+       validCoordinate(loc.latitude,loc.longitude)){
+      points.push([Number(loc.latitude),Number(loc.longitude)]);
+    }
+  });
 
-      api('customer_orders?select=*&order=created_at.desc&limit=300'),
-
-      api('rider_locations?select=*')
-
-    ]);
-
-    orders=result[0]||[];
-    locations=result[1]||[];
-
-    updateStats();
-    renderOrders();
-    renderTracking();
-
-  }finally{
-    mapBusy=false;
+  if(points.length){
+    liveMap.fitBounds(points,{padding:[35,35],maxZoom:15});
+  }else{
+    alert('কোনো Active Rider GPS পাওয়া যায়নি।');
   }
-}
+});
 
-function startMapRefresh(){
+/* ================= APPROVALS ================= */
 
-  stopMapRefresh();
-
-  refreshTracking().catch(error=>
-    showMessage('trackingMsg',error.message,'error')
-  );
-
-  mapTimer=setInterval(()=>{
-
-    if(document.hidden)return;
-
-    if($('tracking').classList.contains('hidden'))return;
-
-    refreshTracking().catch(error=>
-      showMessage('trackingMsg',error.message,'error')
-    );
-
-  },10000);
-}
-
-function stopMapRefresh(){
-
-  if(mapTimer){
-    clearInterval(mapTimer);
-    mapTimer=null;
-  }
-}
-
-/* ==============================
-   APPROVAL MANAGEMENT
-============================== */
-
-const tableNames={
+const tableNames = {
   products:'products',
   shops:'shops',
   rent:'rent_listings',
   providers:'provider_profiles'
 };
 
-const approvalNames={
+const approvalNames = {
   products:'product_name',
   shops:'shop_name',
   rent:'title',
   providers:'name'
 };
 
-const approvalStatuses={
+const approvalStatuses = {
   products:['pending','published','rejected','hidden'],
   shops:['pending','approved','rejected','hidden'],
   rent:['pending','published','rented','hidden'],
   providers:['pending','approved','rejected','hidden']
 };
 
-const statusLabels={
+const statusLabels = {
   pending:'অপেক্ষমাণ',
   published:'প্রকাশিত',
   approved:'অনুমোদিত',
@@ -1381,281 +983,180 @@ const statusLabels={
   rented:'ভাড়া হয়েছে'
 };
 
+const approvalTarget = {
+  products:'productTable',
+  shops:'shopTable',
+  rent:'rentTable',
+  providers:'providerTable'
+};
+
 function renderApproval(kind,items){
-
-  const targetIds={
-    products:'productTable',
-    shops:'shopTable',
-    rent:'rentTable',
-    providers:'providerTable'
-  };
-
-  const target=$(targetIds[kind]);
-  if(!target)return;
-
-  const nameField=approvalNames[kind];
+  const target = $(approvalTarget[kind]);
+  if(!target) return;
 
   if(!items.length){
-    target.innerHTML='কোনো তথ্য পাওয়া যায়নি।';
+    target.innerHTML = 'কোনো তথ্য পাওয়া যায়নি।';
     return;
   }
 
-  target.innerHTML=
+  const nameField = approvalNames[kind];
+
+  target.innerHTML =
   '<table><thead><tr>'+
-  '<th>তথ্য</th>'+
-  '<th>যোগাযোগ</th>'+
-  '<th>অবস্থা</th>'+
+  '<th>তথ্য</th><th>যোগাযোগ</th><th>অবস্থা</th>'+
   '</tr></thead><tbody>'+
 
   items.map(x=>
-
     '<tr>'+
-
-    '<td><b>'+esc(x[nameField])+'</b>'+
-    '<div class="small">'+
-    esc(x.description||x.category||x.type||'')+
-    '</div></td>'+
-
-    '<td>'+
-    esc(x.seller_name||x.owner_name||x.name||'')+'<br>'+
-    phoneLink(x.seller_phone||x.owner_phone||x.phone)+
-    '</td>'+
-
+    '<td><b>'+esc(x[nameField]||x.title||x.name||'')+'</b>'+
+    '<div class="small">'+esc(x.description||x.category||x.type||'')+'</div></td>'+
+    '<td>'+esc(x.seller_name||x.owner_name||x.name||'')+'<br>'+
+    phoneLink(x.seller_phone||x.owner_phone||x.phone)+'</td>'+
     '<td><select data-approval="'+kind+':'+esc(x.id)+'">'+
-
     approvalStatuses[kind].map(s=>
-      '<option value="'+s+'" '+
-      (x.status===s?'selected':'')+'>'+
-      (statusLabels[s]||s)+
-      '</option>'
+      '<option value="'+s+'" '+(x.status===s?'selected':'')+'>'+
+      (statusLabels[s]||s)+'</option>'
     ).join('')+
-
     '</select></td>'+
-
     '</tr>'
-
   ).join('')+
 
   '</tbody></table>';
 }
 
 ['products','shops','rent','providers'].forEach(kind=>{
+  $(approvalTarget[kind]).addEventListener('change',async e=>{
+    const value = e.target.dataset.approval;
+    if(!value) return;
 
-  const targetId={
-    products:'productTable',
-    shops:'shopTable',
-    rent:'rentTable',
-    providers:'providerTable'
-  }[kind];
-
-  $(targetId).addEventListener('change',async e=>{
-
-    const value=e.target.dataset.approval;
-    if(!value)return;
-
-    const [table,id]=value.split(':');
+    const [table,id] = value.split(':');
 
     try{
-
       await api(tableNames[table]+'?id=eq.'+encodeURIComponent(id),{
         method:'PATCH',
         headers:{Prefer:'return=minimal'},
-        body:JSON.stringify({
-          status:e.target.value
-        })
+        body:JSON.stringify({status:e.target.value})
       });
 
       await loadAll();
 
     }catch(error){
-
-      alert('অনুমোদন পরিবর্তন হয়নি: '+error.message);
+      alert('অবস্থা পরিবর্তন হয়নি: '+error.message);
     }
-
   });
 });
 
-/* ==============================
-   SERVICE REQUESTS
-============================== */
+/* ================= SERVICE REQUESTS ================= */
 
 function renderRequests(){
-
   if(!requests.length){
-    $('requestTable').innerHTML='কোনো অনুরোধ নেই।';
+    $('requestTable').innerHTML = 'কোনো অনুরোধ নেই।';
     return;
   }
 
-  $('requestTable').innerHTML=
+  $('requestTable').innerHTML =
   '<table><thead><tr>'+
-  '<th>নম্বর</th>'+
-  '<th>সেবা</th>'+
-  '<th>Customer</th>'+
-  '<th>বিবরণ</th>'+
-  '<th>অবস্থা</th>'+
+  '<th>নম্বর</th><th>সেবা</th><th>Customer</th>'+
+  '<th>বিবরণ</th><th>অবস্থা</th>'+
   '</tr></thead><tbody>'+
 
   requests.map(x=>{
-
-    const house=rents.find(r=>r.id===x.extra?.listing_id);
+    const house = rents.find(r=>r.id===x.extra?.listing_id);
 
     return '<tr>'+
-
-      '<td>'+esc(x.ref)+'</td>'+
-
+      '<td>'+esc(x.ref||x.id)+'</td>'+
       '<td>'+esc(x.service)+'</td>'+
-
       '<td>'+esc(x.name)+'<br>'+phoneLink(x.phone)+'</td>'+
-
-      '<td>'+
-
-      (house
-        ?'🏠 '+esc(house.title)+' — '+
-         esc(house.area)+' — ৳'+esc(house.rent)+'<br>'
-        :'')+
-
-      esc(x.details||'')+
-
-      '</td>'+
-
+      '<td>'+(house
+        ? '🏠 '+esc(house.title)+' — '+esc(house.area)+' — ৳'+esc(house.rent)+'<br>'
+        : '')+
+      esc(x.details||'')+'</td>'+
       '<td>'+esc(x.status)+'</td>'+
-
-      '</tr>';
-
+    '</tr>';
   }).join('')+
 
   '</tbody></table>';
 }
 
-/* ==============================
-   TAB CONTROL
-============================== */
+/* ================= TABS ================= */
 
 document.querySelectorAll('.tab').forEach(button=>{
+  button.addEventListener('click',()=>{
+    document.querySelectorAll('.pane').forEach(p=>p.classList.add('hidden'));
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
 
-  button.addEventListener('click',async ()=>{
-
-    document.querySelectorAll('.pane').forEach(p=>
-      p.classList.add('hidden')
-    );
-
-    document.querySelectorAll('.tab').forEach(b=>
-      b.classList.remove('active')
-    );
-
-    $(button.dataset.tab).classList.remove('hidden');
+    const tab = button.dataset.tab;
+    $(tab).classList.remove('hidden');
     button.classList.add('active');
+    activeTab = tab;
 
-    if(button.dataset.tab==='tracking'){
-
-      initLiveMap();
-      startMapRefresh();
-
+    if(tab==='tracking'){
+      initMap();
       setTimeout(()=>{
-        if(liveMap)liveMap.invalidateSize();
-      },300);
-
-    }else{
-
-      stopMapRefresh();
+        liveMap.invalidateSize();
+        renderTracking();
+      },250);
     }
-
   });
-
 });
 
-/* ==============================
-   BUTTON EVENTS
-============================== */
+/* ================= BUTTONS ================= */
 
 $('loginForm').addEventListener('submit',loginHandler);
-
 $('logoutBtn').addEventListener('click',logout);
-
 $('refreshBtn').addEventListener('click',loadAll);
 
-/* ==============================
-   SESSION RESTORE
-============================== */
+/* ================= START ================= */
 
 async function init(){
-
-  if(!API||!KEY){
-
-    showMessage(
-      'loginMsg',
-      'config.js-এ Supabase URL অথবা Publishable Key নেই।',
-      'error'
-    );
-
+  if(!API || !KEY){
+    showMessage('loginMsg','config.js-এ Supabase URL অথবা Publishable Key নেই।','error');
     return;
   }
 
-  const saved=localStorage.getItem('uex_admin_token');
-  const savedRefresh=localStorage.getItem('uex_admin_refresh');
+  const saved = localStorage.getItem('uex_admin_token');
+  const savedRefresh = localStorage.getItem('uex_admin_refresh');
 
-  if(!saved||!savedRefresh)return;
+  if(!saved || !savedRefresh) return;
 
-  token=saved;
-  refreshTokenValue=savedRefresh;
+  token = saved;
+  refreshTokenValue = savedRefresh;
 
   try{
-
     if(!(await rpc('is_admin'))){
-
       if(!(await refreshSession()) || !(await rpc('is_admin'))){
         throw Error('আবার Login করুন।');
       }
-
-      saveSession();
     }
 
+    saveSession();
     showDashboard();
     await loadAll();
 
   }catch(error){
-
     logout();
-
     showMessage('loginMsg',error.message,'error');
   }
 }
 
-/* Dashboard data auto refresh: ৩০ সেকেন্ড */
+/* প্রতি ১০ সেকেন্ডে তথ্য Refresh */
 setInterval(()=>{
-
   if(
     token &&
     !document.hidden &&
-    !$('dashboard').classList.contains('hidden') &&
-    $('tracking').classList.contains('hidden')
+    !$('dashboard').classList.contains('hidden')
   ){
-    loadAll();
+    loadAll().then(()=>{
+      if(activeTab==='tracking' && liveMap){
+        liveMap.invalidateSize();
+      }
+    });
   }
-
-},30000);
-
-document.addEventListener('visibilitychange',()=>{
-
-  if(document.hidden){
-    return;
-  }
-
-  if(
-    token &&
-    !$('tracking').classList.contains('hidden')
-  ){
-    refreshTracking().catch(error=>
-      showMessage('trackingMsg',error.message,'error')
-    );
-  }
-
-});
+},10000);
 
 init();
 
 })();
 </script>
-
 </body>
 </html>
