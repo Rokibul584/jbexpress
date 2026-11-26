@@ -3,291 +3,1160 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>UPAZILA EXPRESS | Rider</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#08734f">
+<title>UPAZILA EXPRESS | Rider Panel</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#f1f6f3;color:#183126;font-family:'Hind Siliguri',sans-serif}
-header{background:#08734f;color:white;padding:16px}
-main{max-width:650px;margin:25px auto;padding:0 14px}
-.card{background:white;border:1px solid #dce8df;border-radius:14px;padding:20px;margin-bottom:15px}
-h2{margin:0 0 8px}
-label{display:block;margin:12px 0 5px;font-weight:600}
-input{width:100%;padding:12px;border:1px solid #ccd9d0;border-radius:8px;font:inherit}
-button{background:#08734f;color:white;border:0;border-radius:8px;padding:11px 18px;font:inherit;cursor:pointer}
-button:disabled{opacity:.5}
-.secondary{background:#e5f1e9;color:#08734f}
+
+body{
+  margin:0;
+  background:#f1f6f3;
+  color:#183126;
+  font-family:'Hind Siliguri',sans-serif;
+}
+
+header{
+  background:#08734f;
+  color:white;
+  padding:17px;
+  box-shadow:0 3px 12px #0001;
+}
+
+.header-inner{
+  max-width:720px;
+  margin:auto;
+}
+
+header h2{
+  margin:0;
+  font-size:23px;
+}
+
+header p{
+  margin:3px 0 0;
+  opacity:.9;
+}
+
+main{
+  max-width:720px;
+  margin:22px auto;
+  padding:0 14px;
+}
+
+.card{
+  background:white;
+  border:1px solid #dce8df;
+  border-radius:15px;
+  padding:19px;
+  margin-bottom:15px;
+  box-shadow:0 4px 15px #18312608;
+}
+
+h2,h3{margin-top:0}
+
+label{
+  display:block;
+  margin:13px 0 5px;
+  font-weight:600;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  border:1px solid #ccd9d0;
+  border-radius:9px;
+  font:inherit;
+  outline:none;
+}
+
+input:focus{
+  border-color:#08734f;
+}
+
+button{
+  background:#08734f;
+  color:white;
+  border:0;
+  border-radius:9px;
+  padding:12px 17px;
+  font:inherit;
+  font-weight:600;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
+.secondary{
+  background:#e5f1e9;
+  color:#08734f;
+}
+
+.danger{
+  background:#fee7e5;
+  color:#a51d16;
+}
+
+.button-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+  margin-top:14px;
+}
+
+.button-row button{
+  flex:1;
+  min-width:130px;
+}
+
 .hidden{display:none!important}
-.msg{padding:11px;border-radius:8px;margin:12px 0;background:#e7f2eb;white-space:pre-wrap}
-.error{background:#fee7e5;color:#a51d16}
-.success{background:#e1f5e8;color:#176b3c}
-.status{font-weight:600;color:#08734f}
-.small{font-size:13px;color:#64756b}
+
+.small{
+  font-size:13px;
+  color:#64756b;
+}
+
+.msg{
+  padding:11px;
+  border-radius:9px;
+  margin:12px 0;
+  background:#e7f2eb;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
+
+.error{
+  background:#fee7e5;
+  color:#a51d16;
+}
+
+.success{
+  background:#e1f5e8;
+  color:#176b3c;
+}
+
+.status{
+  display:inline-block;
+  padding:5px 11px;
+  border-radius:20px;
+  background:#e5f1e9;
+  color:#08734f;
+  font-weight:600;
+}
+
+.status.off{
+  background:#f1eeee;
+  color:#777;
+}
+
+.status.bad{
+  background:#fee7e5;
+  color:#a51d16;
+}
+
+.info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:14px;
+}
+
+.info{
+  background:#f5f8f6;
+  padding:12px;
+  border-radius:10px;
+  min-width:0;
+}
+
+.info span{
+  display:block;
+  color:#64756b;
+  font-size:12px;
+}
+
+.info strong{
+  display:block;
+  margin-top:4px;
+  overflow-wrap:anywhere;
+  font-size:15px;
+}
+
+footer{
+  text-align:center;
+  color:#75847b;
+  font-size:12px;
+  padding:15px;
+}
+
+@media(max-width:420px){
+  .info-grid{grid-template-columns:1fr 1fr}
+  .button-row button{min-width:100%}
+}
 </style>
 </head>
+
 <body>
+
 <header>
-  <h2>🛵 UPAZILA EXPRESS</h2>
-  <div>Rider Panel | জীবননগর</div>
+  <div class="header-inner">
+    <h2>🛵 UPAZILA EXPRESS</h2>
+    <p>Rider Panel | জীবননগর</p>
+  </div>
 </header>
 
 <main>
+
+<!-- LOGIN -->
 <section id="loginBox" class="card">
   <h2>Rider Login</h2>
-  <p class="small">Admin থেকে দেওয়া Email ও Password দিয়ে প্রবেশ করুন।</p>
+  <p class="small">
+    Admin থেকে দেওয়া Email ও Password দিয়ে প্রবেশ করুন।
+  </p>
+
   <form id="loginForm">
-    <label>Email</label>
-    <input id="email" type="email" required autocomplete="username">
+    <label>Email Address</label>
+    <input
+      id="email"
+      type="email"
+      autocomplete="username"
+      required
+      placeholder="আপনার ইমেইল"
+    >
+
     <label>Password</label>
-    <input id="password" type="password" required autocomplete="current-password">
+    <input
+      id="password"
+      type="password"
+      autocomplete="current-password"
+      required
+      placeholder="আপনার পাসওয়ার্ড"
+    >
+
     <div id="loginMsg"></div>
-    <button id="loginBtn" type="submit">লগইন করুন</button>
+
+    <button id="loginBtn" type="submit">
+      লগইন করুন
+    </button>
   </form>
 </section>
 
+<!-- RIDER PANEL -->
 <section id="panel" class="hidden">
+
   <div class="card">
     <h2 id="riderName">Rider</h2>
     <div id="riderPhone" class="small"></div>
-    <p>GPS অবস্থা: <span id="gpsStatus" class="status">বন্ধ</span></p>
-    <div id="gpsMsg" class="msg">GPS চালু করতে নিচের বাটনে চাপ দিন।</div>
-    <button id="startBtn">📍 Live Location চালু করুন</button>
-    <button id="stopBtn" class="secondary" disabled>Location বন্ধ করুন</button>
-    <button id="logoutBtn" class="secondary">লগআউট</button>
+
+    <p>
+      GPS অবস্থা:
+      <span id="gpsStatus" class="status off">বন্ধ</span>
+    </p>
+
+    <div id="gpsMsg" class="msg">
+      Live Location চালু করতে নিচের বাটনে চাপ দিন।
+    </div>
+
+    <div class="button-row">
+      <button id="startBtn">
+        📍 Live Location চালু করুন
+      </button>
+
+      <button id="stopBtn" class="secondary" disabled>
+        Location বন্ধ করুন
+      </button>
+    </div>
+
+    <div class="button-row">
+      <button id="logoutBtn" class="danger">
+        লগআউট
+      </button>
+    </div>
   </div>
 
   <div class="card">
-    <h3>আপনার বর্তমান অবস্থান</h3>
-    <div id="coordinates">এখনো GPS পাওয়া যায়নি।</div>
-    <p class="small">GPS পাঠানোর জন্য Rider-এর ফোনে Location চালু এবং এই পেজ খোলা রাখতে হবে।</p>
+    <h3>📍 আপনার বর্তমান অবস্থান</h3>
+
+    <div class="info-grid">
+      <div class="info">
+        <span>Latitude</span>
+        <strong id="latitude">অপেক্ষা করছে</strong>
+      </div>
+
+      <div class="info">
+        <span>Longitude</span>
+        <strong id="longitude">অপেক্ষা করছে</strong>
+      </div>
+
+      <div class="info">
+        <span>GPS Accuracy</span>
+        <strong id="accuracy">--</strong>
+      </div>
+
+      <div class="info">
+        <span>Speed</span>
+        <strong id="speed">--</strong>
+      </div>
+
+      <div class="info">
+        <span>Heading</span>
+        <strong id="heading">--</strong>
+      </div>
+
+      <div class="info">
+        <span>সর্বশেষ পাঠানো</span>
+        <strong id="lastSent">--</strong>
+      </div>
+    </div>
+
+    <p class="small">
+      আপনার GPS Admin-এর কাছে পাঠানো হবে।
+      Location পাঠানোর জন্য ফোনের GPS চালু রাখুন
+      এবং এই পেজ খোলা রাখুন।
+    </p>
   </div>
+
+  <div class="card">
+    <h3>নির্দেশনা</h3>
+    <p class="small">
+      ১. ফোনের Location চালু করুন।<br>
+      ২. Browser-এ Location Permission Allow করুন।<br>
+      ৩. Live Location চালু করুন।<br>
+      ৪. GPS সফল হলে Admin আপনার অবস্থান দেখতে পারবেন।<br>
+      ৫. কাজ শেষ হলে Location বন্ধ করুন।
+    </p>
+  </div>
+
 </section>
+
 </main>
 
+<footer>
+  UPAZILA EXPRESS | Rider Service
+</footer>
+
 <script src="config.js"></script>
+
 <script>
 (function(){
+
 'use strict';
 
-const C=window.UEX_CONFIG||{};
-const API=C.SUPABASE_URL;
-const KEY=C.SUPABASE_ANON_KEY;
-const $=id=>document.getElementById(id);
+/* ==================================
+   CONFIGURATION
+================================== */
 
-let token=null;
-let userId=null;
-let rider=null;
-let watchId=null;
-let lastSent=0;
-let sending=false;
+const CONFIG = window.UEX_CONFIG || {};
+
+const API = CONFIG.SUPABASE_URL;
+const KEY = CONFIG.SUPABASE_ANON_KEY;
+
+const $ = id => document.getElementById(id);
+
+let token = null;
+let refreshToken = null;
+let userId = null;
+let rider = null;
+
+let watchId = null;
+let lastSent = 0;
+let sending = false;
+let refreshing = false;
+let sessionExpired = false;
+
+
+/* ==================================
+   MESSAGE
+================================== */
 
 function message(id,text,type){
-  const el=$(id);
-  el.className='msg '+(type||'');
-  el.textContent=text;
+
+  const el = $(id);
+
+  el.className = 'msg ' + (type || '');
+
+  el.textContent = text;
+
 }
 
-function headers(){
-  return {
-    apikey:KEY,
-    Authorization:'Bearer '+token,
-    'Content-Type':'application/json'
-  };
-}
 
-async function request(path,options={}){
-  const res=await fetch(API+path,{
-    ...options,
-    headers:{...headers(),...(options.headers||{})}
-  });
-  const text=await res.text();
-  let data={};
-  try{data=text?JSON.parse(text):{};}catch(e){}
-  if(!res.ok)throw Error(data.message||data.error_description||data.hint||text||'Request failed');
-  return data;
-}
+/* ==================================
+   SESSION STORAGE
+================================== */
 
-async function login(email,password){
-  const res=await fetch(API+'/auth/v1/token?grant_type=password',{
-    method:'POST',
-    headers:{apikey:KEY,'Content-Type':'application/json'},
-    body:JSON.stringify({email,password})
-  });
-  const data=await res.json();
-  if(!res.ok)throw Error(data.msg||data.message||data.error_description||'Login ব্যর্থ হয়েছে');
+function saveSession(data){
 
-  token=data.access_token;
-  userId=data.user.id;
+  token = data.access_token;
 
-  const profiles=await request(
-    '/rest/v1/riders?auth_user_id=eq.'+
-    encodeURIComponent(userId)+'&select=id,name,phone,status'
-  );
-
-  if(!profiles.length){
-    token=null;
-    throw Error('এই Login-এর সঙ্গে Rider Profile পাওয়া যায়নি। Admin-এর সঙ্গে যোগাযোগ করুন।');
+  if(data.refresh_token){
+    refreshToken = data.refresh_token;
   }
 
-  rider=profiles[0];
-
-  if(rider.status!=='active'){
-    token=null;
-    throw Error('আপনার Rider Account বর্তমানে Active নয়। Admin-এর সঙ্গে যোগাযোগ করুন।');
+  if(data.user && data.user.id){
+    userId = data.user.id;
   }
 
   sessionStorage.setItem('uex_rider_token',token);
-  sessionStorage.setItem('uex_rider_uid',userId);
-  showPanel();
+
+  if(refreshToken){
+    sessionStorage.setItem(
+      'uex_rider_refresh',
+      refreshToken
+    );
+  }
+
+  if(userId){
+    sessionStorage.setItem('uex_rider_uid',userId);
+  }
+
 }
+
+
+function clearSession(){
+
+  token = null;
+  refreshToken = null;
+  userId = null;
+  rider = null;
+
+  sessionStorage.removeItem('uex_rider_token');
+  sessionStorage.removeItem('uex_rider_refresh');
+  sessionStorage.removeItem('uex_rider_uid');
+
+}
+
+
+/* ==================================
+   REQUEST HEADERS
+================================== */
+
+function headers(){
+
+  return {
+    apikey: KEY,
+    Authorization: 'Bearer ' + token,
+    'Content-Type': 'application/json'
+  };
+
+}
+
+
+/* ==================================
+   API REQUEST
+================================== */
+
+async function request(path,options={}){
+
+  if(!API || !KEY){
+    throw Error('config.js অথবা Supabase Configuration পাওয়া যায়নি।');
+  }
+
+  const res = await fetch(API + path,{
+    ...options,
+    headers:{
+      ...headers(),
+      ...(options.headers || {})
+    }
+  });
+
+  const raw = await res.text();
+
+  let data = {};
+
+  try{
+    data = raw ? JSON.parse(raw) : {};
+  }catch(e){}
+
+  if(!res.ok){
+
+    const error = Error(
+      data.message ||
+      data.msg ||
+      data.error_description ||
+      data.hint ||
+      raw ||
+      'Request failed'
+    );
+
+    error.status = res.status;
+
+    throw error;
+  }
+
+  return data;
+
+}
+
+
+/* ==================================
+   REFRESH SESSION
+================================== */
+
+async function refreshSession(){
+
+  if(refreshing) return false;
+
+  if(!refreshToken) return false;
+
+  refreshing = true;
+
+  try{
+
+    const res = await fetch(
+      API + '/auth/v1/token?grant_type=refresh_token',
+      {
+        method:'POST',
+        headers:{
+          apikey:KEY,
+          'Content-Type':'application/json'
+        },
+        body:JSON.stringify({
+          refresh_token:refreshToken
+        })
+      }
+    );
+
+    const data = await res.json();
+
+    if(!res.ok){
+      throw Error('Session Refresh ব্যর্থ হয়েছে।');
+    }
+
+    saveSession(data);
+
+    return true;
+
+  }catch(error){
+
+    return false;
+
+  }finally{
+
+    refreshing = false;
+
+  }
+
+}
+
+
+/* ==================================
+   RIDER PROFILE
+================================== */
+
+async function loadRiderProfile(){
+
+  const profiles = await request(
+    '/rest/v1/riders?auth_user_id=eq.' +
+    encodeURIComponent(userId) +
+    '&select=id,name,phone,status'
+  );
+
+  if(!profiles || !profiles.length){
+
+    throw Error(
+      'এই Login-এর সঙ্গে Rider Profile পাওয়া যায়নি। Admin-এর সঙ্গে যোগাযোগ করুন।'
+    );
+
+  }
+
+  const profile = profiles[0];
+
+  if(profile.status !== 'active'){
+
+    throw Error(
+      'আপনার Rider Account বর্তমানে Active নয়। Admin-এর সঙ্গে যোগাযোগ করুন।'
+    );
+
+  }
+
+  rider = profile;
+
+}
+
+
+/* ==================================
+   SHOW PANEL
+================================== */
 
 function showPanel(){
+
   $('loginBox').classList.add('hidden');
+
   $('panel').classList.remove('hidden');
-  $('riderName').textContent=rider.name;
-  $('riderPhone').textContent=rider.phone||'';
+
+  $('riderName').textContent =
+    rider.name || 'Rider';
+
+  $('riderPhone').textContent =
+    rider.phone || '';
+
 }
 
+
+/* ==================================
+   GPS STATUS
+================================== */
+
+function setGPSStatus(text,type){
+
+  const el = $('gpsStatus');
+
+  el.textContent = text;
+
+  el.className = 'status ' + (type || '');
+
+}
+
+
+/* ==================================
+   GPS LOCATION SEND
+================================== */
+
 async function sendLocation(position){
-  if(sending||!rider||!token)return;
 
-  const now=Date.now();
-  if(now-lastSent<10000)return;
+  if(sending || !rider || !token) return;
 
-  sending=true;
-  const c=position.coords;
+  if(sessionExpired) return;
 
-  const row={
-    rider_id:rider.id,
-    latitude:c.latitude,
-    longitude:c.longitude,
-    accuracy:c.accuracy,
-    heading:c.heading,
-    speed:c.speed,
-    updated_at:new Date().toISOString()
+  const now = Date.now();
+
+  if(now - lastSent < 10000) return;
+
+  sending = true;
+
+  const c = position.coords;
+
+  const row = {
+
+    rider_id: rider.id,
+
+    latitude: c.latitude,
+
+    longitude: c.longitude,
+
+    accuracy: c.accuracy,
+
+    heading: c.heading,
+
+    speed: c.speed,
+
+    updated_at: new Date().toISOString()
+
   };
 
   try{
-    await request('/rest/v1/rider_locations',{
-      method:'POST',
-      headers:{Prefer:'return=minimal'},
-      body:JSON.stringify(row)
-    });
 
-    lastSent=now;
-    $('gpsStatus').textContent='চালু — Location পাঠানো হচ্ছে';
-    $('coordinates').textContent=
-      'Latitude: '+c.latitude.toFixed(6)+
-      '\nLongitude: '+c.longitude.toFixed(6)+
-      '\nAccuracy: '+Math.round(c.accuracy)+' মিটার';
-    message('gpsMsg','আপনার Live Location Admin-এর কাছে পাঠানো হচ্ছে।','success');
+    /*
+      Same rider_id এর পুরোনো Row update হবে।
+      নতুন Duplicate Row তৈরি হবে না।
+    */
+
+    await request(
+      '/rest/v1/rider_locations?on_conflict=rider_id',
+      {
+        method:'POST',
+
+        headers:{
+          Prefer:
+          'resolution=merge-duplicates,return=minimal'
+        },
+
+        body:JSON.stringify(row)
+      }
+    );
+
+    lastSent = now;
+
+    $('latitude').textContent =
+      c.latitude.toFixed(6);
+
+    $('longitude').textContent =
+      c.longitude.toFixed(6);
+
+    $('accuracy').textContent =
+      Math.round(c.accuracy) + ' মিটার';
+
+    $('speed').textContent =
+      c.speed === null
+      ? 'তথ্য নেই'
+      : (c.speed * 3.6).toFixed(1) + ' km/h';
+
+    $('heading').textContent =
+      c.heading === null
+      ? 'তথ্য নেই'
+      : Math.round(c.heading) + '°';
+
+    $('lastSent').textContent =
+      new Date().toLocaleTimeString('bn-BD');
+
+    setGPSStatus(
+      'চালু',
+      ''
+    );
+
+    message(
+      'gpsMsg',
+      'আপনার Live Location সফলভাবে Admin-এর কাছে পাঠানো হচ্ছে।',
+      'success'
+    );
+
   }catch(error){
-    message('gpsMsg','GPS পাঠানো যায়নি: '+error.message,'error');
+
+    if(error.status === 401){
+
+      const refreshed = await refreshSession();
+
+      if(!refreshed){
+
+        sessionExpired = true;
+
+        stopGPS();
+
+        message(
+          'gpsMsg',
+          'আপনার Login Session শেষ হয়েছে। আবার Login করুন।',
+          'error'
+        );
+
+      }
+
+    }else{
+
+      message(
+        'gpsMsg',
+        'GPS পাঠানো যায়নি: ' + error.message,
+        'error'
+      );
+
+      setGPSStatus(
+        'সমস্যা',
+        'bad'
+      );
+
+    }
+
   }finally{
-    sending=false;
+
+    sending = false;
+
   }
+
 }
+
+
+/* ==================================
+   GPS ERROR
+================================== */
 
 function gpsError(error){
-  let text='GPS পাওয়া যায়নি।';
-  if(error.code===1)text='Location permission দেওয়া হয়নি। ফোনের Browser Settings থেকে Location অনুমতি দিন।';
-  if(error.code===2)text='আপনার GPS অবস্থান পাওয়া যাচ্ছে না। ফোনের Location চালু করুন।';
-  if(error.code===3)text='GPS পেতে সময় লাগছে। আবার চেষ্টা করুন।';
-  message('gpsMsg',text,'error');
-  $('gpsStatus').textContent='সমস্যা';
+
+  let text = 'GPS পাওয়া যায়নি।';
+
+  if(error.code === 1){
+
+    text =
+      'Location Permission দেওয়া হয়নি। Browser Settings থেকে Location Allow করুন।';
+
+  }
+
+  if(error.code === 2){
+
+    text =
+      'আপনার GPS অবস্থান পাওয়া যাচ্ছে না। ফোনের Location চালু করুন।';
+
+  }
+
+  if(error.code === 3){
+
+    text =
+      'GPS পেতে সময় লাগছে। খোলা জায়গায় গিয়ে আবার চেষ্টা করুন।';
+
+  }
+
+  message(
+    'gpsMsg',
+    text,
+    'error'
+  );
+
+  setGPSStatus(
+    'সমস্যা',
+    'bad'
+  );
+
 }
 
+
+/* ==================================
+   START GPS
+================================== */
+
 function startGPS(){
+
   if(!navigator.geolocation){
-    message('gpsMsg','এই Browser GPS সমর্থন করে না।','error');
+
+    message(
+      'gpsMsg',
+      'এই Browser GPS সমর্থন করে না।',
+      'error'
+    );
+
     return;
+
   }
 
   if(!window.isSecureContext){
-    message('gpsMsg','GPS ব্যবহারের জন্য HTTPS ওয়েবসাইট প্রয়োজন।','error');
+
+    message(
+      'gpsMsg',
+      'GPS ব্যবহারের জন্য HTTPS ওয়েবসাইট প্রয়োজন।',
+      'error'
+    );
+
     return;
+
   }
 
-  if(watchId!==null)return;
+  if(!rider || !token){
 
-  message('gpsMsg','GPS Permission চাওয়া হচ্ছে...','');
-  watchId=navigator.geolocation.watchPosition(
-    sendLocation,
-    gpsError,
-    {enableHighAccuracy:true,maximumAge:5000,timeout:20000}
+    message(
+      'gpsMsg',
+      'প্রথমে Rider Login করুন।',
+      'error'
+    );
+
+    return;
+
+  }
+
+  if(watchId !== null) return;
+
+  sessionExpired = false;
+
+  message(
+    'gpsMsg',
+    'GPS Permission চাওয়া হচ্ছে...',
+    ''
   );
 
-  $('startBtn').disabled=true;
-  $('stopBtn').disabled=false;
+  watchId = navigator.geolocation.watchPosition(
+
+    sendLocation,
+
+    gpsError,
+
+    {
+      enableHighAccuracy:true,
+      maximumAge:5000,
+      timeout:20000
+    }
+
+  );
+
+  $('startBtn').disabled = true;
+
+  $('stopBtn').disabled = false;
+
 }
+
+
+/* ==================================
+   STOP GPS
+================================== */
 
 function stopGPS(){
-  if(watchId!==null){
+
+  if(watchId !== null){
+
     navigator.geolocation.clearWatch(watchId);
-    watchId=null;
+
+    watchId = null;
+
   }
-  $('gpsStatus').textContent='বন্ধ';
-  $('startBtn').disabled=false;
-  $('stopBtn').disabled=true;
-  message('gpsMsg','আপনার GPS পাঠানো বন্ধ হয়েছে।','');
+
+  setGPSStatus(
+    'বন্ধ',
+    'off'
+  );
+
+  $('startBtn').disabled = false;
+
+  $('stopBtn').disabled = true;
+
+  if(rider){
+
+    message(
+      'gpsMsg',
+      'আপনার GPS পাঠানো বন্ধ হয়েছে।',
+      ''
+    );
+
+  }
+
 }
+
+
+/* ==================================
+   LOGIN
+================================== */
+
+async function login(email,password){
+
+  const res = await fetch(
+    API + '/auth/v1/token?grant_type=password',
+    {
+      method:'POST',
+
+      headers:{
+        apikey:KEY,
+        'Content-Type':'application/json'
+      },
+
+      body:JSON.stringify({
+        email,
+        password
+      })
+    }
+  );
+
+  const data = await res.json();
+
+  if(!res.ok){
+
+    throw Error(
+      data.msg ||
+      data.message ||
+      data.error_description ||
+      'Login ব্যর্থ হয়েছে।'
+    );
+
+  }
+
+  saveSession(data);
+
+  try{
+
+    await loadRiderProfile();
+
+  }catch(error){
+
+    clearSession();
+
+    throw error;
+
+  }
+
+  showPanel();
+
+}
+
+
+/* ==================================
+   LOGOUT
+================================== */
 
 function logout(){
+
   stopGPS();
-  token=null;
-  userId=null;
-  rider=null;
-  sessionStorage.removeItem('uex_rider_token');
-  sessionStorage.removeItem('uex_rider_uid');
+
+  clearSession();
+
+  sessionExpired = false;
+
   $('panel').classList.add('hidden');
+
   $('loginBox').classList.remove('hidden');
-  $('password').value='';
+
+  $('password').value = '';
+
+  $('email').value = '';
+
+  message(
+    'loginMsg',
+    'আপনি সফলভাবে Logout করেছেন।',
+    'success'
+  );
+
 }
 
-$('loginForm').addEventListener('submit',async e=>{
-  e.preventDefault();
-  $('loginBtn').disabled=true;
-  message('loginMsg','লগইন হচ্ছে...','');
-  try{
-    if(!API||!KEY)throw Error('config.js পাওয়া যায়নি।');
-    await login($('email').value.trim(),$('password').value);
-    $('password').value='';
-  }catch(error){
-    message('loginMsg',error.message,'error');
-  }
-  $('loginBtn').disabled=false;
-});
 
-$('startBtn').addEventListener('click',startGPS);
-$('stopBtn').addEventListener('click',stopGPS);
-$('logoutBtn').addEventListener('click',logout);
+/* ==================================
+   LOGIN FORM
+================================== */
+
+$('loginForm').addEventListener(
+  'submit',
+  async function(e){
+
+    e.preventDefault();
+
+    $('loginBtn').disabled = true;
+
+    message(
+      'loginMsg',
+      'লগইন হচ্ছে...',
+      ''
+    );
+
+    try{
+
+      if(!API || !KEY){
+
+        throw Error(
+          'config.js পাওয়া যায়নি। Supabase Configuration পরীক্ষা করুন।'
+        );
+
+      }
+
+      await login(
+        $('email').value.trim(),
+        $('password').value
+      );
+
+      $('password').value = '';
+
+    }catch(error){
+
+      message(
+        'loginMsg',
+        error.message,
+        'error'
+      );
+
+    }finally{
+
+      $('loginBtn').disabled = false;
+
+    }
+
+  }
+);
+
+
+/* ==================================
+   BUTTON EVENTS
+================================== */
+
+$('startBtn').addEventListener(
+  'click',
+  startGPS
+);
+
+$('stopBtn').addEventListener(
+  'click',
+  stopGPS
+);
+
+$('logoutBtn').addEventListener(
+  'click',
+  logout
+);
+
+
+/* ==================================
+   RESTORE SESSION
+================================== */
 
 async function restore(){
-  const saved=sessionStorage.getItem('uex_rider_token');
-  const uid=sessionStorage.getItem('uex_rider_uid');
-  if(!saved||!uid)return;
 
-  token=saved;
-  userId=uid;
-  try{
-    const user=await request('/auth/v1/user');
-    userId=user.id;
-    const profiles=await request(
-      '/rest/v1/riders?auth_user_id=eq.'+
-      encodeURIComponent(userId)+'&select=id,name,phone,status'
-    );
-    if(!profiles.length||profiles[0].status!=='active')throw Error('Rider Account Active নয়।');
-    rider=profiles[0];
-    showPanel();
-  }catch(error){
-    logout();
-    message('loginMsg','আবার Login করুন। '+error.message,'error');
+  const savedToken =
+    sessionStorage.getItem('uex_rider_token');
+
+  const savedRefresh =
+    sessionStorage.getItem('uex_rider_refresh');
+
+  const savedUid =
+    sessionStorage.getItem('uex_rider_uid');
+
+  if(!savedToken || !savedUid){
+
+    return;
+
   }
+
+  token = savedToken;
+
+  refreshToken = savedRefresh;
+
+  userId = savedUid;
+
+  try{
+
+    const user = await request(
+      '/auth/v1/user'
+    );
+
+    userId = user.id;
+
+    await loadRiderProfile();
+
+    showPanel();
+
+  }catch(error){
+
+    if(error.status === 401){
+
+      const refreshed = await refreshSession();
+
+      if(refreshed){
+
+        try{
+
+          await loadRiderProfile();
+
+          showPanel();
+
+          return;
+
+        }catch(e){}
+
+      }
+
+    }
+
+    clearSession();
+
+    $('panel').classList.add('hidden');
+
+    $('loginBox').classList.remove('hidden');
+
+    message(
+      'loginMsg',
+      'আপনার Session পাওয়া যায়নি। আবার Login করুন। ' +
+      error.message,
+      'error'
+    );
+
+  }
+
 }
 
-restore();
+
+/* ==================================
+   START APPLICATION
+================================== */
+
+if(!API || !KEY){
+
+  message(
+    'loginMsg',
+    'config.js অথবা Supabase URL / Publishable Key পাওয়া যায়নি।',
+    'error'
+  );
+
+}else{
+
+  restore();
+
+}
+
 })();
 </script>
+
 </body>
 </html>
