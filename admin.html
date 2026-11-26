@@ -17,7 +17,7 @@ main{max-width:1250px;margin:20px auto;padding:0 14px}
 input,select{width:100%;padding:10px;border:1px solid #dce5df;border-radius:8px;font:inherit;background:white}
 label{display:block;margin:10px 0 4px;font-weight:600}
 button{border:0;background:#08734f;color:white;padding:9px 14px;border-radius:8px;font:inherit;cursor:pointer}
-button:disabled{opacity:.5}
+button:disabled{opacity:.5;cursor:not-allowed}
 .secondary{background:#e8f1eb;color:#08734f}
 .danger{background:#b42318}
 .hidden{display:none!important}
@@ -36,6 +36,8 @@ th{background:#f5f8f6}
 .error{background:#fee4e2;color:#b42318}
 .success{background:#e0f5e8;color:#176b3c}
 a{color:#08734f}
+.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 14px}
+.formbox{background:#f7faf8;padding:14px;border-radius:10px;margin:12px 0}
 </style>
 </head>
 <body>
@@ -94,24 +96,45 @@ a{color:#08734f}
 
 <section id="riders" class="card pane hidden">
 <h2>Rider Management</h2>
+<p class="small">এখান থেকে Rider-এর লগইন অ্যাকাউন্ট তৈরি হবে। Rider-কে তার Email ও Password নিরাপদে জানিয়ে দিন।</p>
 <div id="riderMsg"></div>
+
+<div class="formbox">
+<h3>নতুন Rider Account তৈরি করুন</h3>
 <form id="riderForm">
+<div class="formgrid">
+<div>
 <label>Rider-এর নাম</label>
-<input name="name" required>
+<input name="name" required maxlength="100" placeholder="Rider-এর পূর্ণ নাম">
+</div>
+<div>
 <label>মোবাইল নম্বর</label>
-<input name="phone" required placeholder="01XXXXXXXXX">
-<label>Supabase Auth User ID (ঐচ্ছিক)</label>
-<input name="auth_user_id">
+<input name="phone" required placeholder="01XXXXXXXXX" pattern="01[3-9][0-9]{8}">
+</div>
+<div>
+<label>Rider-এর Email</label>
+<input name="email" type="email" required placeholder="rider@example.com" autocomplete="off">
+</div>
+<div>
+<label>প্রাথমিক Password</label>
+<input name="password" type="password" required minlength="8" placeholder="কমপক্ষে ৮ অক্ষর" autocomplete="new-password">
+</div>
+<div>
 <label>যানবাহন</label>
 <select name="vehicle_type">
 <option value="motorcycle">মোটরসাইকেল</option>
 <option value="bicycle">সাইকেল</option>
 <option value="other">অন্যান্য</option>
 </select>
-<button style="margin-top:12px">নতুন Rider যোগ করুন</button>
+</div>
+</div>
+<button id="createRiderBtn" type="submit" style="margin-top:14px">নতুন Rider Account তৈরি করুন</button>
 </form>
+</div>
+
 <hr>
-<div id="riderTable" class="tablewrap"></div>
+<h3>Rider তালিকা</h3>
+<div id="riderTable" class="tablewrap">লোড হচ্ছে...</div>
 </section>
 
 <section id="tracking" class="card pane hidden">
@@ -140,6 +163,7 @@ a{color:#08734f}
 <section id="requests" class="card pane hidden">
 <h2>অন্যান্য সার্ভিস অনুরোধ</h2><div id="requestTable" class="tablewrap"></div>
 </section>
+
 </section>
 </main>
 
@@ -191,6 +215,31 @@ throw Error('Database Error ('+response.status+'): '+body);
 if(response.status===204)return null;
 const body=await response.text();
 return body?JSON.parse(body):null;
+}
+
+/* Secure Edge Function দিয়ে Rider Auth Account তৈরি */
+async function createRiderAccount(payload){
+const response=await fetch(API+'/functions/v1/admin-create-rider',{
+method:'POST',
+headers:{
+'apikey':KEY,
+'Authorization':'Bearer '+token,
+'Content-Type':'application/json'
+},
+body:JSON.stringify(payload)
+});
+
+const raw=await response.text();
+let result={};
+try{result=raw?JSON.parse(raw):{};}catch(e){}
+
+if(!response.ok){
+throw Error(result.error||result.message||('Rider Account তৈরি হয়নি। HTTP '+response.status+' '+raw));
+}
+if(!result.success||!result.rider){
+throw Error(result.error||'Rider তৈরি হয়েছে কি না নিশ্চিত হওয়া যায়নি।');
+}
+return result.rider;
 }
 
 async function rpc(name){
@@ -297,10 +346,10 @@ updateStats();
 renderOrders();
 renderRiders();
 renderTracking();
-renderApproval('products',products,'product_name');
-renderApproval('shops',shops,'shop_name');
-renderApproval('rent',rents,'title');
-renderApproval('providers',providers,'name');
+renderApproval('products',products);
+renderApproval('shops',shops);
+renderApproval('rent',rents);
+renderApproval('providers',providers);
 renderRequests();
 
 showMessage('orderMsg','সব তথ্য আপডেট হয়েছে।','success');
@@ -340,7 +389,7 @@ return '<tr>'+
 '<td><b>'+esc(o.ref)+'</b><div class="small">'+esc(o.created_at)+'</div></td>'+
 '<td>'+esc(o.customer_name)+'<br>'+phoneLink(o.customer_phone)+'<br>'+
 esc(o.delivery_address)+'<br>'+esc(o.area||'')+
-(lat!=null&&lon!=null?'<br><a target="_blank" href="https://maps.google.com/?q='+lat+','+lon+'">Customer Map</a>':'<br><span class="small">Customer GPS নেই</span>')+
+(lat!=null&&lon!=null?'<br><a target="_blank" href="https://maps.google.com/?q='+encodeURIComponent(lat+','+lon)+'">Customer Map</a>':'<br><span class="small">Customer GPS নেই</span>')+
 '</td>'+
 '<td>'+esc(o.customer_note||'')+'</td>'+
 '<td>৳'+bn(o.total_amount)+'</td>'+
@@ -396,26 +445,54 @@ try{await changeOrderStatus(e.target.dataset.status,e.target.value);}
 catch(error){showMessage('orderMsg',error.message,'error');}
 });
 
+/* Rider Account তৈরি */
 $('riderForm').addEventListener('submit',async e=>{
 e.preventDefault();
-const f=new FormData(e.target);
-const row={
-name:String(f.get('name')).trim(),
-phone:String(f.get('phone')).trim(),
-vehicle_type:f.get('vehicle_type'),
-status:'active'
+
+const form=e.target;
+const f=new FormData(form);
+
+const payload={
+name:String(f.get('name')||'').trim(),
+phone:String(f.get('phone')||'').trim(),
+email:String(f.get('email')||'').trim().toLowerCase(),
+password:String(f.get('password')||''),
+vehicle_type:String(f.get('vehicle_type')||'motorcycle')
 };
-const uid=String(f.get('auth_user_id')||'').trim();
-if(uid)row.auth_user_id=uid;
+
+if(!payload.name||!payload.phone||!payload.email){
+showMessage('riderMsg','সব তথ্য পূরণ করুন।','error');
+return;
+}
+
+if(!/^01[3-9][0-9]{8}$/.test(payload.phone)){
+showMessage('riderMsg','সঠিক ১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর দিন।','error');
+return;
+}
+
+if(payload.password.length<8){
+showMessage('riderMsg','Password কমপক্ষে ৮ অক্ষরের হতে হবে।','error');
+return;
+}
+
+const button=$('createRiderBtn');
+button.disabled=true;
+button.textContent='Account তৈরি হচ্ছে...';
+showMessage('riderMsg','Rider Account তৈরি হচ্ছে। অপেক্ষা করুন...','success');
+
 try{
-await api('riders',{
-method:'POST',headers:{Prefer:'return=minimal'},
-body:JSON.stringify(row)
-});
-e.target.reset();
-showMessage('riderMsg','নতুন Rider যোগ হয়েছে।');
+const rider=await createRiderAccount(payload);
+form.reset();
+showMessage('riderMsg',
+'সফলভাবে Rider Account তৈরি হয়েছে। নাম: '+rider.name+' | Email: '+rider.email,
+'success');
 await loadAll();
-}catch(error){showMessage('riderMsg',error.message,'error');}
+}catch(error){
+showMessage('riderMsg',error.message,'error');
+}finally{
+button.disabled=false;
+button.textContent='নতুন Rider Account তৈরি করুন';
+}
 });
 
 function renderRiders(){
@@ -423,11 +500,19 @@ if(!riders.length){
 $('riderTable').innerHTML='এখনো Rider যোগ করা হয়নি।';
 return;
 }
-$('riderTable').innerHTML='<table><thead><tr><th>নাম</th><th>ফোন</th><th>Auth UID</th><th>অবস্থা</th></tr></thead><tbody>'+
-riders.map(r=>'<tr><td>'+esc(r.name)+'</td><td>'+phoneLink(r.phone)+'</td>'+
-'<td class="small">'+esc(r.auth_user_id||'সংযুক্ত নয়')+'</td><td><select data-rider-status="'+esc(r.id)+'">'+
-['active','inactive','suspended'].map(s=>'<option '+(r.status===s?'selected':'')+'>'+s+'</option>').join('')+
-'</select></td></tr>').join('')+'</tbody></table>';
+
+$('riderTable').innerHTML='<table><thead><tr>'+
+'<th>নাম</th><th>ফোন</th><th>Email</th><th>Auth UID</th><th>অবস্থা</th>'+
+'</tr></thead><tbody>'+
+riders.map(r=>'<tr>'+
+'<td><b>'+esc(r.name)+'</b></td>'+
+'<td>'+phoneLink(r.phone)+'</td>'+
+'<td>'+esc(r.email||'Email নেই')+'</td>'+
+'<td class="small">'+esc(r.auth_user_id||'সংযুক্ত নয়')+'</td>'+
+'<td><select data-rider-status="'+esc(r.id)+'">'+
+['active','inactive','suspended'].map(s=>'<option value="'+s+'" '+(r.status===s?'selected':'')+'>'+s+'</option>').join('')+
+'</select></td></tr>').join('')+
+'</tbody></table>';
 }
 
 $('riderTable').addEventListener('change',async e=>{
@@ -438,8 +523,11 @@ await api('riders?id=eq.'+encodeURIComponent(id),{
 method:'PATCH',headers:{Prefer:'return=minimal'},
 body:JSON.stringify({status:e.target.value})
 });
+showMessage('riderMsg','Rider-এর অবস্থা পরিবর্তন হয়েছে।','success');
 await loadAll();
-}catch(error){showMessage('riderMsg',error.message,'error');}
+}catch(error){
+showMessage('riderMsg',error.message,'error');
+}
 });
 
 function renderTracking(){
@@ -452,7 +540,7 @@ location:locations.find(l=>l.rider_id===o.assigned_rider_id)
 const withLocation=rows.filter(x=>x.location);
 
 $('mapLinks').innerHTML=withLocation.map(x=>
-'<p><a target="_blank" href="https://maps.google.com/?q='+x.location.latitude+','+x.location.longitude+'">📍 '+esc(x.rider?.name||'Rider')+' — '+esc(x.order.ref)+' — ম্যাপে দেখুন</a></p>'
+'<p><a target="_blank" href="https://maps.google.com/?q='+encodeURIComponent(x.location.latitude+','+x.location.longitude)+'">📍 '+esc(x.rider?.name||'Rider')+' — '+esc(x.order.ref)+' — ম্যাপে দেখুন</a></p>'
 ).join('')||'<p class="small">এখনো কোনো সক্রিয় Rider GPS পাঠায়নি।</p>';
 
 $('trackingTable').innerHTML='<table><thead><tr><th>Order</th><th>Rider</th><th>GPS</th><th>আপডেট</th></tr></thead><tbody>'+
@@ -516,12 +604,14 @@ approvalStatuses[kind].map(s=>'<option value="'+s+'" '+(x.status===s?'selected':
 }
 
 ['products','shops','rent','providers'].forEach(kind=>{
-$( {
+const targetId={
 products:'productTable',
 shops:'shopTable',
 rent:'rentTable',
 providers:'providerTable'
-}[kind]).addEventListener('change',async e=>{
+}[kind];
+
+$(targetId).addEventListener('change',async e=>{
 const value=e.target.dataset.approval;
 if(!value)return;
 const [table,id]=value.split(':');
@@ -531,7 +621,9 @@ method:'PATCH',headers:{Prefer:'return=minimal'},
 body:JSON.stringify({status:e.target.value})
 });
 await loadAll();
-}catch(error){alert('অনুমোদন পরিবর্তন হয়নি: '+error.message);}
+}catch(error){
+alert('অনুমোদন পরিবর্তন হয়নি: '+error.message);
+}
 });
 });
 
@@ -568,12 +660,14 @@ if(!API||!KEY){
 showMessage('loginMsg','config.js-এ Supabase URL অথবা Publishable Key নেই।','error');
 return;
 }
+
 const saved=localStorage.getItem('uex_admin_token');
 const savedRefresh=localStorage.getItem('uex_admin_refresh');
 if(!saved||!savedRefresh)return;
 
 token=saved;
 refreshTokenValue=savedRefresh;
+
 try{
 if(!(await rpc('is_admin'))){
 if(!(await refreshSession())||!(await rpc('is_admin')))throw Error('আবার Login করুন।');
