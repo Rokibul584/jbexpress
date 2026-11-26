@@ -4,690 +4,1658 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>UPAZILA EXPRESS | Admin</title>
+<meta name="theme-color" content="#08734f">
+<title>UPAZILA EXPRESS | Admin Panel</title>
+
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet"
+href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#f3f6f4;color:#17251d;font-family:'Hind Siliguri',sans-serif}
-header{background:#08734f;color:white;padding:15px 4%;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+body{
+  margin:0;
+  background:#f3f6f4;
+  color:#17251d;
+  font-family:'Hind Siliguri',sans-serif;
+}
+header{
+  background:#08734f;
+  color:white;
+  padding:14px 4%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
 header h2{margin:0;font-size:22px}
-main{max-width:1250px;margin:20px auto;padding:0 14px}
-.card{background:white;border:1px solid #dce5df;border-radius:13px;padding:16px;margin-bottom:15px}
-.login{max-width:420px;margin:60px auto}
-input,select{width:100%;padding:10px;border:1px solid #dce5df;border-radius:8px;font:inherit;background:white}
+main{max-width:1450px;margin:20px auto;padding:0 14px}
+.card{
+  background:white;
+  border:1px solid #dce5df;
+  border-radius:13px;
+  padding:16px;
+  margin-bottom:15px;
+}
+.login{max-width:430px;margin:65px auto}
+input,select,textarea{
+  width:100%;
+  padding:10px;
+  border:1px solid #dce5df;
+  border-radius:8px;
+  font:inherit;
+  background:white;
+}
 label{display:block;margin:10px 0 4px;font-weight:600}
-button{border:0;background:#08734f;color:white;padding:9px 14px;border-radius:8px;font:inherit;cursor:pointer}
+button{
+  border:0;
+  background:#08734f;
+  color:white;
+  padding:9px 14px;
+  border-radius:8px;
+  font:inherit;
+  cursor:pointer;
+}
 button:disabled{opacity:.5;cursor:not-allowed}
 .secondary{background:#e8f1eb;color:#08734f}
-.danger{background:#b42318}
+.danger{background:#b42318;color:white}
 .hidden{display:none!important}
-.tabs{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:15px}
-.tab{background:white;color:#17251d;border:1px solid #dce5df}
+.tabs{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-bottom:15px;
+}
+.tab{
+  background:white;
+  color:#17251d;
+  border:1px solid #dce5df;
+}
 .tab.active{background:#08734f;color:white}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin-bottom:15px}
-.stat{background:white;padding:14px;border:1px solid #dce5df;border-radius:12px}
-.stat strong{display:block;font-size:26px;color:#08734f}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(135px,1fr));
+  gap:10px;
+  margin-bottom:15px;
+}
+.stat{
+  background:white;
+  padding:14px;
+  border:1px solid #dce5df;
+  border-radius:12px;
+}
+.stat strong{
+  display:block;
+  font-size:26px;
+  color:#08734f;
+}
 .tablewrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:720px;font-size:14px}
-th,td{padding:10px;border-bottom:1px solid #e1e9e3;text-align:left;vertical-align:top}
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:720px;
+  font-size:14px;
+}
+th,td{
+  padding:10px;
+  border-bottom:1px solid #e1e9e3;
+  text-align:left;
+  vertical-align:top;
+}
 th{background:#f5f8f6}
 .small{font-size:12px;color:#64736a}
-.msg{padding:10px;background:#fff3d8;border-radius:8px;margin:10px 0;white-space:pre-wrap;overflow-wrap:anywhere}
+.msg{
+  padding:10px;
+  background:#fff3d8;
+  border-radius:8px;
+  margin:10px 0;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
 .error{background:#fee4e2;color:#b42318}
 .success{background:#e0f5e8;color:#176b3c}
 a{color:#08734f}
-.formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 14px}
-.formbox{background:#f7faf8;padding:14px;border-radius:10px;margin:12px 0}
+.formgrid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:0 14px;
+}
+.formbox{
+  background:#f7faf8;
+  padding:14px;
+  border-radius:10px;
+  margin:12px 0;
+}
+#liveMap{
+  width:100%;
+  height:500px;
+  border-radius:12px;
+  z-index:1;
+  background:#e8efeb;
+}
+.legend{
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
+  margin:12px 0;
+  font-size:14px;
+}
+.dot{
+  display:inline-block;
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  margin-right:5px;
+}
+.green{background:#16a34a}
+.blue{background:#2563eb}
+.mapinfo{
+  background:#f7faf8;
+  padding:10px;
+  border-radius:8px;
+  margin:10px 0;
+}
+@media(max-width:600px){
+  header h2{font-size:19px}
+  #liveMap{height:400px}
+  .card{padding:12px}
+}
 </style>
 </head>
+
 <body>
 
 <header>
-<div>
-<h2>🛵 UPAZILA EXPRESS</h2>
-<small>Admin Control Panel | জীবননগর, চুয়াডাঙ্গা</small>
-</div>
-<div>
-<button id="refreshBtn" class="secondary hidden">রিফ্রেশ</button>
-<button id="logoutBtn" class="danger hidden">লগআউট</button>
-</div>
+  <div>
+    <h2>🛵 UPAZILA EXPRESS</h2>
+    <small>Admin Control Panel | জীবননগর, চুয়াডাঙ্গা</small>
+  </div>
+  <div>
+    <button id="refreshBtn" class="secondary hidden">রিফ্রেশ</button>
+    <button id="logoutBtn" class="danger hidden">লগআউট</button>
+  </div>
 </header>
 
 <main>
+
+<!-- LOGIN -->
 <section id="loginView" class="card login">
-<h2>Admin Login</h2>
-<p class="small">অনুমোদিত Admin Email ও Password দিয়ে প্রবেশ করুন।</p>
-<form id="loginForm">
-<label>Email</label>
-<input id="email" type="email" required autocomplete="username">
-<label>Password</label>
-<input id="password" type="password" required autocomplete="current-password">
-<div id="loginMsg"></div>
-<button id="loginBtn" style="width:100%;margin-top:15px">লগইন</button>
-</form>
+  <h2>Admin Login</h2>
+  <p class="small">অনুমোদিত Admin Email ও Password দিয়ে প্রবেশ করুন।</p>
+
+  <form id="loginForm">
+    <label>Email</label>
+    <input id="email" type="email" required autocomplete="username">
+
+    <label>Password</label>
+    <input id="password" type="password" required autocomplete="current-password">
+
+    <div id="loginMsg"></div>
+
+    <button id="loginBtn" style="width:100%;margin-top:15px">
+      লগইন
+    </button>
+  </form>
 </section>
 
+<!-- DASHBOARD -->
 <section id="dashboard" class="hidden">
 
-<div class="stats">
-<div class="stat">মোট অর্ডার<strong id="totalOrders">০</strong></div>
-<div class="stat">নতুন অর্ডার<strong id="newOrders">০</strong></div>
-<div class="stat">চলমান অর্ডার<strong id="activeOrders">০</strong></div>
-<div class="stat">মোট Rider<strong id="totalRiders">০</strong></div>
-</div>
+  <div class="stats">
+    <div class="stat">মোট অর্ডার<strong id="totalOrders">০</strong></div>
+    <div class="stat">নতুন অর্ডার<strong id="newOrders">০</strong></div>
+    <div class="stat">চলমান অর্ডার<strong id="activeOrders">০</strong></div>
+    <div class="stat">মোট Rider<strong id="totalRiders">০</strong></div>
+    <div class="stat">Active Rider<strong id="activeRiders">০</strong></div>
+  </div>
 
-<div class="tabs">
-<button class="tab active" data-tab="orders">📦 অর্ডার</button>
-<button class="tab" data-tab="riders">🛵 Rider</button>
-<button class="tab" data-tab="tracking">📍 Live Location</button>
-<button class="tab" data-tab="products">🛍️ পণ্য</button>
-<button class="tab" data-tab="shops">🏪 দোকান</button>
-<button class="tab" data-tab="rent">🏠 বাসা ভাড়া</button>
-<button class="tab" data-tab="providers">👷 কর্মী/টেকনিশিয়ান</button>
-<button class="tab" data-tab="requests">📞 অন্যান্য অনুরোধ</button>
-</div>
+  <div class="tabs">
+    <button class="tab active" data-tab="orders">📦 অর্ডার</button>
+    <button class="tab" data-tab="riders">🛵 Rider</button>
+    <button class="tab" data-tab="tracking">📍 Live Map</button>
+    <button class="tab" data-tab="products">🛍️ পণ্য</button>
+    <button class="tab" data-tab="shops">🏪 দোকান</button>
+    <button class="tab" data-tab="rent">🏠 বাসা ভাড়া</button>
+    <button class="tab" data-tab="providers">👷 কর্মী/টেকনিশিয়ান</button>
+    <button class="tab" data-tab="requests">📞 অন্যান্য অনুরোধ</button>
+  </div>
 
-<section id="orders" class="card pane">
-<h2>সকল Customer Order</h2>
-<p class="small">Admin প্রথমে অর্ডার যাচাই করবেন, তারপর Rider Assign করবেন।</p>
-<div id="orderMsg"></div>
-<div id="orderTable" class="tablewrap">লোড হচ্ছে...</div>
-</section>
+  <!-- ORDERS -->
+  <section id="orders" class="card pane">
+    <h2>সকল Customer Order</h2>
+    <p class="small">
+      Admin প্রথমে অর্ডার যাচাই করবেন, তারপর Rider Assign করবেন।
+    </p>
+    <div id="orderMsg"></div>
+    <div id="orderTable" class="tablewrap">লোড হচ্ছে...</div>
+  </section>
 
-<section id="riders" class="card pane hidden">
-<h2>Rider Management</h2>
-<p class="small">এখান থেকে Rider-এর লগইন অ্যাকাউন্ট তৈরি হবে। Rider-কে তার Email ও Password নিরাপদে জানিয়ে দিন।</p>
-<div id="riderMsg"></div>
+  <!-- RIDERS -->
+  <section id="riders" class="card pane hidden">
+    <h2>Rider Management</h2>
+    <p class="small">
+      নতুন Rider-এর Login Account তৈরি করুন এবং কাজের অবস্থা নিয়ন্ত্রণ করুন।
+    </p>
 
-<div class="formbox">
-<h3>নতুন Rider Account তৈরি করুন</h3>
-<form id="riderForm">
-<div class="formgrid">
-<div>
-<label>Rider-এর নাম</label>
-<input name="name" required maxlength="100" placeholder="Rider-এর পূর্ণ নাম">
-</div>
-<div>
-<label>মোবাইল নম্বর</label>
-<input name="phone" required placeholder="01XXXXXXXXX" pattern="01[3-9][0-9]{8}">
-</div>
-<div>
-<label>Rider-এর Email</label>
-<input name="email" type="email" required placeholder="rider@example.com" autocomplete="off">
-</div>
-<div>
-<label>প্রাথমিক Password</label>
-<input name="password" type="password" required minlength="8" placeholder="কমপক্ষে ৮ অক্ষর" autocomplete="new-password">
-</div>
-<div>
-<label>যানবাহন</label>
-<select name="vehicle_type">
-<option value="motorcycle">মোটরসাইকেল</option>
-<option value="bicycle">সাইকেল</option>
-<option value="other">অন্যান্য</option>
-</select>
-</div>
-</div>
-<button id="createRiderBtn" type="submit" style="margin-top:14px">নতুন Rider Account তৈরি করুন</button>
-</form>
-</div>
+    <div id="riderMsg"></div>
 
-<hr>
-<h3>Rider তালিকা</h3>
-<div id="riderTable" class="tablewrap">লোড হচ্ছে...</div>
-</section>
+    <div class="formbox">
+      <h3>নতুন Rider Account তৈরি করুন</h3>
 
-<section id="tracking" class="card pane hidden">
-<h2>Rider Live Location</h2>
-<div id="trackingMsg"></div>
-<div id="mapLinks"></div>
-<div id="trackingTable" class="tablewrap"></div>
-</section>
+      <form id="riderForm">
+        <div class="formgrid">
 
-<section id="products" class="card pane hidden">
-<h2>পণ্য অনুমোদন</h2><div id="productTable" class="tablewrap"></div>
-</section>
+          <div>
+            <label>Rider-এর নাম</label>
+            <input name="name" required maxlength="100">
+          </div>
 
-<section id="shops" class="card pane hidden">
-<h2>দোকান অনুমোদন</h2><div id="shopTable" class="tablewrap"></div>
-</section>
+          <div>
+            <label>মোবাইল নম্বর</label>
+            <input name="phone" required
+              placeholder="01XXXXXXXXX"
+              pattern="01[3-9][0-9]{8}">
+          </div>
 
-<section id="rent" class="card pane hidden">
-<h2>বাসা ভাড়ার বিজ্ঞাপন</h2><div id="rentTable" class="tablewrap"></div>
-</section>
+          <div>
+            <label>Rider-এর Email</label>
+            <input name="email" type="email" required autocomplete="off">
+          </div>
 
-<section id="providers" class="card pane hidden">
-<h2>কর্মী ও টেকনিশিয়ান</h2><div id="providerTable" class="tablewrap"></div>
-</section>
+          <div>
+            <label>প্রাথমিক Password</label>
+            <input name="password" type="password"
+              required minlength="8" autocomplete="new-password">
+          </div>
 
-<section id="requests" class="card pane hidden">
-<h2>অন্যান্য সার্ভিস অনুরোধ</h2><div id="requestTable" class="tablewrap"></div>
-</section>
+          <div>
+            <label>যানবাহন</label>
+            <select name="vehicle_type">
+              <option value="motorcycle">মোটরসাইকেল</option>
+              <option value="bicycle">সাইকেল</option>
+              <option value="other">অন্যান্য</option>
+            </select>
+          </div>
+
+        </div>
+
+        <button id="createRiderBtn" type="submit" style="margin-top:14px">
+          নতুন Rider Account তৈরি করুন
+        </button>
+      </form>
+    </div>
+
+    <h3>Rider তালিকা</h3>
+    <div id="riderTable" class="tablewrap">লোড হচ্ছে...</div>
+  </section>
+
+  <!-- LIVE MAP -->
+  <section id="tracking" class="card pane hidden">
+
+    <h2>📍 Rider Live GPS ও Assigned Order</h2>
+
+    <p class="small">
+      চলমান অর্ডারের Rider-এর অবস্থান ও Customer-এর GPS একসঙ্গে দেখুন।
+    </p>
+
+    <div id="trackingMsg"></div>
+
+    <div class="legend">
+      <span><i class="dot green"></i>Rider GPS</span>
+      <span><i class="dot blue"></i>Customer GPS</span>
+    </div>
+
+    <div id="liveMap"></div>
+
+    <div class="mapinfo">
+      <b>লাইভ আপডেট:</b>
+      <span id="lastMapUpdate">এখনো আপডেট হয়নি</span>
+      <br>
+      <span class="small">
+        Live Map খোলা থাকলে প্রতি ১০ সেকেন্ডে তথ্য রিফ্রেশ হবে।
+      </span>
+    </div>
+
+    <h3>চলমান Order ও Rider তালিকা</h3>
+    <div id="trackingTable" class="tablewrap"></div>
+
+  </section>
+
+  <!-- PRODUCTS -->
+  <section id="products" class="card pane hidden">
+    <h2>পণ্য অনুমোদন</h2>
+    <div id="productTable" class="tablewrap"></div>
+  </section>
+
+  <!-- SHOPS -->
+  <section id="shops" class="card pane hidden">
+    <h2>দোকান অনুমোদন</h2>
+    <div id="shopTable" class="tablewrap"></div>
+  </section>
+
+  <!-- RENT -->
+  <section id="rent" class="card pane hidden">
+    <h2>বাসা ভাড়ার বিজ্ঞাপন</h2>
+    <div id="rentTable" class="tablewrap"></div>
+  </section>
+
+  <!-- PROVIDERS -->
+  <section id="providers" class="card pane hidden">
+    <h2>কর্মী ও টেকনিশিয়ান</h2>
+    <div id="providerTable" class="tablewrap"></div>
+  </section>
+
+  <!-- REQUESTS -->
+  <section id="requests" class="card pane hidden">
+    <h2>অন্যান্য সার্ভিস অনুরোধ</h2>
+    <div id="requestTable" class="tablewrap"></div>
+  </section>
 
 </section>
 </main>
 
 <script src="config.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
 <script>
 (function(){
 'use strict';
 
+/* ==============================
+   CONFIGURATION
+============================== */
+
 const C=window.UEX_CONFIG||{};
 const API=C.SUPABASE_URL;
 const KEY=C.SUPABASE_ANON_KEY;
+
 const $=id=>document.getElementById(id);
 
 let token=null;
 let refreshTokenValue=null;
-let orders=[],riders=[],locations=[],products=[],shops=[],rents=[],providers=[],requests=[];
+
+let orders=[];
+let riders=[];
+let locations=[];
+let products=[];
+let shops=[];
+let rents=[];
+let providers=[];
+let requests=[];
+
 let loading=false;
+let liveMap=null;
+let riderLayer=null;
+let customerLayer=null;
+let mapTimer=null;
+let mapHasCentered=false;
+let mapBusy=false;
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({
-'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  '&':'&amp;',
+  '<':'&lt;',
+  '>':'&gt;',
+  '"':'&quot;',
+  "'":'&#39;'
 }[c]));
 
 const bn=v=>String(v??0).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
 
-function showMessage(id,text,type){
-const el=$(id);
-if(el)el.innerHTML=text?'<div class="msg '+(type||'success')+'">'+esc(text)+'</div>':'';
+function showMessage(id,message,type){
+  const el=$(id);
+  if(!el)return;
+
+  el.innerHTML=message
+    ?'<div class="msg '+(type||'success')+'">'+esc(message)+'</div>'
+    :'';
 }
 
 function headers(extra){
-return {
-'apikey':KEY,
-'Authorization':'Bearer '+(token||KEY),
-'Content-Type':'application/json',
-...(extra||{})
-};
+  return {
+    apikey:KEY,
+    Authorization:'Bearer '+(token||KEY),
+    'Content-Type':'application/json',
+    ...(extra||{})
+  };
 }
+
+/* ==============================
+   SUPABASE API
+============================== */
 
 async function api(path,options){
-const response=await fetch(API+'/rest/v1/'+path,{
-...(options||{}),
-headers:headers(options&&options.headers)
-});
-if(response.status===401)throw Error('Session শেষ হয়েছে। আবার Login করুন।');
-if(!response.ok){
-const body=await response.text();
-throw Error('Database Error ('+response.status+'): '+body);
-}
-if(response.status===204)return null;
-const body=await response.text();
-return body?JSON.parse(body):null;
-}
 
-/* Secure Edge Function দিয়ে Rider Auth Account তৈরি */
-async function createRiderAccount(payload){
-const response=await fetch(API+'/functions/v1/admin-create-rider',{
-method:'POST',
-headers:{
-'apikey':KEY,
-'Authorization':'Bearer '+token,
-'Content-Type':'application/json'
-},
-body:JSON.stringify(payload)
-});
+  const opts=options||{};
 
-const raw=await response.text();
-let result={};
-try{result=raw?JSON.parse(raw):{};}catch(e){}
+  let response=await fetch(API+'/rest/v1/'+path,{
+    ...opts,
+    headers:headers(opts.headers)
+  });
 
-if(!response.ok){
-throw Error(result.error||result.message||('Rider Account তৈরি হয়নি। HTTP '+response.status+' '+raw));
-}
-if(!result.success||!result.rider){
-throw Error(result.error||'Rider তৈরি হয়েছে কি না নিশ্চিত হওয়া যায়নি।');
-}
-return result.rider;
+  if(response.status===401){
+    const refreshed=await refreshSession();
+
+    if(!refreshed){
+      throw Error('Session শেষ হয়েছে। আবার Login করুন।');
+    }
+
+    response=await fetch(API+'/rest/v1/'+path,{
+      ...opts,
+      headers:headers(opts.headers)
+    });
+  }
+
+  if(!response.ok){
+    const body=await response.text();
+    throw Error('Database Error ('+response.status+'): '+body);
+  }
+
+  if(response.status===204)return null;
+
+  const body=await response.text();
+  return body?JSON.parse(body):null;
 }
 
 async function rpc(name){
-const response=await fetch(API+'/rest/v1/rpc/'+name,{
-method:'POST',
-headers:headers(),
-body:'{}'
-});
-if(!response.ok)return false;
-return await response.json()===true;
+
+  let response=await fetch(API+'/rest/v1/rpc/'+name,{
+    method:'POST',
+    headers:headers(),
+    body:'{}'
+  });
+
+  if(response.status===401 && await refreshSession()){
+    response=await fetch(API+'/rest/v1/rpc/'+name,{
+      method:'POST',
+      headers:headers(),
+      body:'{}'
+    });
+  }
+
+  if(!response.ok)return false;
+
+  return await response.json()===true;
 }
 
+/* ==============================
+   AUTHENTICATION
+============================== */
+
 async function signIn(email,password){
-const response=await fetch(API+'/auth/v1/token?grant_type=password',{
-method:'POST',
-headers:{apikey:KEY,'Content-Type':'application/json'},
-body:JSON.stringify({email,password})
-});
-if(!response.ok){
-const body=await response.text();
-throw Error('Login ব্যর্থ: '+body);
-}
-const data=await response.json();
-token=data.access_token;
-refreshTokenValue=data.refresh_token;
+
+  const response=await fetch(API+'/auth/v1/token?grant_type=password',{
+    method:'POST',
+    headers:{
+      apikey:KEY,
+      'Content-Type':'application/json'
+    },
+    body:JSON.stringify({email,password})
+  });
+
+  if(!response.ok){
+    throw Error('Login ব্যর্থ: '+await response.text());
+  }
+
+  const data=await response.json();
+
+  token=data.access_token;
+  refreshTokenValue=data.refresh_token;
 }
 
 async function refreshSession(){
-if(!refreshTokenValue)return false;
-const response=await fetch(API+'/auth/v1/token?grant_type=refresh_token',{
-method:'POST',
-headers:{apikey:KEY,'Content-Type':'application/json'},
-body:JSON.stringify({refresh_token:refreshTokenValue})
-});
-if(!response.ok)return false;
-const data=await response.json();
-token=data.access_token;
-refreshTokenValue=data.refresh_token;
-return true;
+
+  if(!refreshTokenValue)return false;
+
+  const response=await fetch(API+'/auth/v1/token?grant_type=refresh_token',{
+    method:'POST',
+    headers:{
+      apikey:KEY,
+      'Content-Type':'application/json'
+    },
+    body:JSON.stringify({
+      refresh_token:refreshTokenValue
+    })
+  });
+
+  if(!response.ok)return false;
+
+  const data=await response.json();
+
+  token=data.access_token;
+  refreshTokenValue=data.refresh_token;
+
+  saveSession();
+  return true;
 }
 
 function saveSession(){
-localStorage.setItem('uex_admin_token',token);
-localStorage.setItem('uex_admin_refresh',refreshTokenValue);
+
+  localStorage.setItem('uex_admin_token',token);
+  localStorage.setItem('uex_admin_refresh',refreshTokenValue);
 }
 
 function showDashboard(){
-$('loginView').classList.add('hidden');
-$('dashboard').classList.remove('hidden');
-$('refreshBtn').classList.remove('hidden');
-$('logoutBtn').classList.remove('hidden');
+
+  $('loginView').classList.add('hidden');
+  $('dashboard').classList.remove('hidden');
+
+  $('refreshBtn').classList.remove('hidden');
+  $('logoutBtn').classList.remove('hidden');
 }
 
 function logout(){
-token=null;
-refreshTokenValue=null;
-localStorage.removeItem('uex_admin_token');
-localStorage.removeItem('uex_admin_refresh');
-$('dashboard').classList.add('hidden');
-$('loginView').classList.remove('hidden');
-$('refreshBtn').classList.add('hidden');
-$('logoutBtn').classList.add('hidden');
+
+  stopMapRefresh();
+
+  token=null;
+  refreshTokenValue=null;
+
+  localStorage.removeItem('uex_admin_token');
+  localStorage.removeItem('uex_admin_refresh');
+
+  $('dashboard').classList.add('hidden');
+  $('loginView').classList.remove('hidden');
+
+  $('refreshBtn').classList.add('hidden');
+  $('logoutBtn').classList.add('hidden');
+
+  $('password').value='';
 }
 
 async function loginHandler(event){
-event.preventDefault();
-$('loginBtn').disabled=true;
-showMessage('loginMsg','Login হচ্ছে...','success');
-try{
-if(!API||!KEY)throw Error('config.js-এ Supabase URL বা Publishable Key পাওয়া যায়নি।');
-await signIn($('email').value.trim(),$('password').value);
-if(!(await rpc('is_admin')))throw Error('এই Email-এর Admin অনুমতি নেই।');
-saveSession();
-$('password').value='';
-showDashboard();
-await loadAll();
-}catch(error){
-token=null;
-refreshTokenValue=null;
-showMessage('loginMsg',error.message,'error');
+
+  event.preventDefault();
+
+  $('loginBtn').disabled=true;
+  showMessage('loginMsg','Login হচ্ছে...');
+
+  try{
+
+    if(!API||!KEY){
+      throw Error('config.js-এ Supabase URL বা Publishable Key পাওয়া যায়নি।');
+    }
+
+    await signIn(
+      $('email').value.trim(),
+      $('password').value
+    );
+
+    if(!(await rpc('is_admin'))){
+      throw Error('এই Email-এর Admin অনুমতি নেই।');
+    }
+
+    saveSession();
+    $('password').value='';
+
+    showDashboard();
+    await loadAll();
+
+  }catch(error){
+
+    token=null;
+    refreshTokenValue=null;
+
+    showMessage('loginMsg',error.message,'error');
+
+  }finally{
+    $('loginBtn').disabled=false;
+  }
 }
-$('loginBtn').disabled=false;
-}
+
+/* ==============================
+   LOAD ALL DATA
+============================== */
 
 async function loadAll(){
-if(loading)return;
-loading=true;
-$('orderTable').textContent='ডেটা লোড হচ্ছে...';
-try{
-const result=await Promise.all([
-api('customer_orders?select=*&order=created_at.desc&limit=300'),
-api('riders?select=*&order=created_at.desc'),
-api('rider_locations?select=*'),
-api('products?select=*&order=created_at.desc&limit=200'),
-api('shops?select=*&order=created_at.desc&limit=200'),
-api('rent_listings?select=*&order=created_at.desc&limit=200'),
-api('provider_profiles?select=*&order=created_at.desc&limit=200'),
-api('service_requests?select=*&order=created_at.desc&limit=200')
-]);
 
-[orders,riders,locations,products,shops,rents,providers,requests]=result;
+  if(loading)return;
 
-updateStats();
-renderOrders();
-renderRiders();
-renderTracking();
-renderApproval('products',products);
-renderApproval('shops',shops);
-renderApproval('rent',rents);
-renderApproval('providers',providers);
-renderRequests();
+  loading=true;
 
-showMessage('orderMsg','সব তথ্য আপডেট হয়েছে।','success');
-}catch(error){
-showMessage('orderMsg',error.message,'error');
-$('orderTable').innerHTML='<div class="msg error">'+esc(error.message)+'</div>';
-}
-loading=false;
+  $('orderTable').textContent='ডেটা লোড হচ্ছে...';
+
+  try{
+
+    const result=await Promise.all([
+
+      api('customer_orders?select=*&order=created_at.desc&limit=300'),
+
+      api('riders?select=*&order=created_at.desc'),
+
+      api('rider_locations?select=*'),
+
+      api('products?select=*&order=created_at.desc&limit=200'),
+
+      api('shops?select=*&order=created_at.desc&limit=200'),
+
+      api('rent_listings?select=*&order=created_at.desc&limit=200'),
+
+      api('provider_profiles?select=*&order=created_at.desc&limit=200'),
+
+      api('service_requests?select=*&order=created_at.desc&limit=200')
+
+    ]);
+
+    [
+      orders,
+      riders,
+      locations,
+      products,
+      shops,
+      rents,
+      providers,
+      requests
+    ]=result;
+
+    updateStats();
+
+    renderOrders();
+    renderRiders();
+    renderTracking();
+
+    renderApproval('products',products);
+    renderApproval('shops',shops);
+    renderApproval('rent',rents);
+    renderApproval('providers',providers);
+
+    renderRequests();
+
+    showMessage('orderMsg','সব তথ্য আপডেট হয়েছে।','success');
+
+  }catch(error){
+
+    showMessage('orderMsg',error.message,'error');
+
+    $('orderTable').innerHTML=
+      '<div class="msg error">'+esc(error.message)+'</div>';
+
+  }finally{
+    loading=false;
+  }
 }
 
 function updateStats(){
-$('totalOrders').textContent=bn(orders.length);
-$('newOrders').textContent=bn(orders.filter(x=>x.status==='new').length);
-$('activeOrders').textContent=bn(orders.filter(x=>['confirmed','assigned','on_the_way'].includes(x.status)).length);
-$('totalRiders').textContent=bn(riders.length);
+
+  $('totalOrders').textContent=bn(orders.length);
+
+  $('newOrders').textContent=bn(
+    orders.filter(x=>x.status==='new').length
+  );
+
+  $('activeOrders').textContent=bn(
+    orders.filter(x=>
+      ['confirmed','assigned','on_the_way'].includes(x.status)
+    ).length
+  );
+
+  $('totalRiders').textContent=bn(riders.length);
+
+  $('activeRiders').textContent=bn(
+    riders.filter(x=>x.status==='active').length
+  );
 }
 
 function phoneLink(phone){
-return phone?'<a href="tel:'+esc(phone)+'">'+esc(phone)+'</a>':'নেই';
+
+  return phone
+    ?'<a href="tel:'+esc(phone)+'">'+esc(phone)+'</a>'
+    :'নেই';
 }
+
+/* ==============================
+   ORDER MANAGEMENT
+============================== */
 
 function renderOrders(){
-if(!orders.length){
-$('orderTable').innerHTML='কোনো অর্ডার পাওয়া যায়নি।';
-return;
-}
 
-$('orderTable').innerHTML='<table><thead><tr>'+
-'<th>অর্ডার</th><th>Customer</th><th>বিজ্ঞাপনদাতা/পণ্য</th>'+
-'<th>টাকা</th><th>Rider Assign</th><th>অবস্থা</th>'+
-'</tr></thead><tbody>'+
-orders.map(o=>{
-const rider=riders.find(r=>r.id===o.assigned_rider_id);
-const lat=o.customer_latitude;
-const lon=o.customer_longitude;
-return '<tr>'+
-'<td><b>'+esc(o.ref)+'</b><div class="small">'+esc(o.created_at)+'</div></td>'+
-'<td>'+esc(o.customer_name)+'<br>'+phoneLink(o.customer_phone)+'<br>'+
-esc(o.delivery_address)+'<br>'+esc(o.area||'')+
-(lat!=null&&lon!=null?'<br><a target="_blank" href="https://maps.google.com/?q='+encodeURIComponent(lat+','+lon)+'">Customer Map</a>':'<br><span class="small">Customer GPS নেই</span>')+
-'</td>'+
-'<td>'+esc(o.customer_note||'')+'</td>'+
-'<td>৳'+bn(o.total_amount)+'</td>'+
-'<td><select data-assign="'+esc(o.id)+'"><option value="">Rider নির্বাচন</option>'+
-riders.filter(r=>r.status==='active').map(r=>'<option value="'+esc(r.id)+'" '+(r.id===o.assigned_rider_id?'selected':'')+'>'+esc(r.name)+' - '+esc(r.phone)+'</option>').join('')+
-'</select><button data-save-rider="'+esc(o.id)+'">Assign</button>'+
-(rider?'<div class="small">'+esc(rider.name)+'</div>':'')+
-'</td>'+
-'<td><select data-status="'+esc(o.id)+'">'+
-['new','confirmed','assigned','on_the_way','delivered','cancelled'].map(s=>'<option value="'+s+'" '+(o.status===s?'selected':'')+'>'+s+'</option>').join('')+
-'</select></td></tr>';
-}).join('')+'</tbody></table>';
+  if(!orders.length){
+    $('orderTable').innerHTML='কোনো অর্ডার পাওয়া যায়নি।';
+    return;
+  }
+
+  $('orderTable').innerHTML=
+  '<table><thead><tr>'+
+  '<th>অর্ডার</th>'+
+  '<th>Customer</th>'+
+  '<th>বিবরণ</th>'+
+  '<th>টাকা</th>'+
+  '<th>Rider Assign</th>'+
+  '<th>অবস্থা</th>'+
+  '</tr></thead><tbody>'+
+
+  orders.map(o=>{
+
+    const rider=riders.find(r=>r.id===o.assigned_rider_id);
+
+    const hasGPS=
+      o.customer_latitude!=null &&
+      o.customer_longitude!=null;
+
+    return '<tr>'+
+
+      '<td><b>'+esc(o.ref)+'</b>'+
+      '<div class="small">'+esc(o.created_at)+'</div></td>'+
+
+      '<td>'+
+      esc(o.customer_name)+'<br>'+
+      phoneLink(o.customer_phone)+'<br>'+
+      esc(o.delivery_address)+'<br>'+
+      esc(o.area||'')+
+
+      (hasGPS
+        ?'<br><a target="_blank" rel="noopener" href="https://maps.google.com/?q='+
+          encodeURIComponent(o.customer_latitude+','+o.customer_longitude)+
+          '">Customer Map</a>'
+        :'<br><span class="small">Customer GPS নেই</span>')+
+
+      '</td>'+
+
+      '<td>'+esc(o.customer_note||'')+'</td>'+
+
+      '<td>৳'+bn(o.total_amount)+'</td>'+
+
+      '<td>'+
+      '<select data-assign="'+esc(o.id)+'">'+
+      '<option value="">Rider নির্বাচন</option>'+
+
+      riders.filter(r=>r.status==='active').map(r=>
+        '<option value="'+esc(r.id)+'" '+
+        (r.id===o.assigned_rider_id?'selected':'')+'>'+
+        esc(r.name)+' - '+esc(r.phone)+
+        '</option>'
+      ).join('')+
+
+      '</select>'+
+
+      '<button data-save-rider="'+esc(o.id)+'">Assign</button>'+
+
+      (rider
+        ?'<div class="small">বর্তমান: '+esc(rider.name)+'</div>'
+        :'')+
+
+      '</td>'+
+
+      '<td><select data-status="'+esc(o.id)+'">'+
+
+      ['new','confirmed','assigned','on_the_way','delivered','cancelled']
+      .map(s=>
+        '<option value="'+s+'" '+
+        (o.status===s?'selected':'')+'>'+s+'</option>'
+      ).join('')+
+
+      '</select></td>'+
+
+      '</tr>';
+
+  }).join('')+
+
+  '</tbody></table>';
 }
 
 async function assignRider(id){
-const select=document.querySelector('[data-assign="'+id+'"]');
-const riderId=select&&select.value;
-if(!riderId)throw Error('প্রথমে Rider নির্বাচন করুন।');
-await api('customer_orders?id=eq.'+encodeURIComponent(id),{
-method:'PATCH',
-headers:{Prefer:'return=minimal'},
-body:JSON.stringify({
-assigned_rider_id:riderId,
-assigned_at:new Date().toISOString(),
-status:'assigned',
-tracking_stopped_at:null
-})
-});
-showMessage('orderMsg','Rider Assign সম্পন্ন হয়েছে।');
-await loadAll();
+
+  const select=document.querySelector('[data-assign="'+id+'"]');
+  const riderId=select&&select.value;
+
+  if(!riderId){
+    throw Error('প্রথমে Rider নির্বাচন করুন।');
+  }
+
+  await api('customer_orders?id=eq.'+encodeURIComponent(id),{
+    method:'PATCH',
+    headers:{Prefer:'return=minimal'},
+    body:JSON.stringify({
+      assigned_rider_id:riderId,
+      assigned_at:new Date().toISOString(),
+      status:'assigned',
+      tracking_stopped_at:null
+    })
+  });
+
+  showMessage('orderMsg','Rider Assign সম্পন্ন হয়েছে।');
+  await loadAll();
 }
 
 async function changeOrderStatus(id,status){
-const update={status};
-if(status==='delivered'||status==='cancelled')update.tracking_stopped_at=new Date().toISOString();
-if(status==='on_the_way')update.tracking_started_at=new Date().toISOString();
-if(status==='delivered')update.delivered_at=new Date().toISOString();
-await api('customer_orders?id=eq.'+encodeURIComponent(id),{
-method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify(update)
-});
-await loadAll();
+
+  const update={status};
+
+  if(status==='delivered'||status==='cancelled'){
+    update.tracking_stopped_at=new Date().toISOString();
+  }
+
+  if(status==='on_the_way'){
+    update.tracking_started_at=new Date().toISOString();
+  }
+
+  if(status==='delivered'){
+    update.delivered_at=new Date().toISOString();
+  }
+
+  await api('customer_orders?id=eq.'+encodeURIComponent(id),{
+    method:'PATCH',
+    headers:{Prefer:'return=minimal'},
+    body:JSON.stringify(update)
+  });
+
+  await loadAll();
 }
 
 $('orderTable').addEventListener('click',async e=>{
-if(!e.target.dataset.saveRider)return;
-try{await assignRider(e.target.dataset.saveRider);}
-catch(error){showMessage('orderMsg',error.message,'error');}
+
+  const id=e.target.dataset.saveRider;
+  if(!id)return;
+
+  try{
+    await assignRider(id);
+  }catch(error){
+    showMessage('orderMsg',error.message,'error');
+  }
 });
 
 $('orderTable').addEventListener('change',async e=>{
-if(!e.target.dataset.status)return;
-try{await changeOrderStatus(e.target.dataset.status,e.target.value);}
-catch(error){showMessage('orderMsg',error.message,'error');}
+
+  const id=e.target.dataset.status;
+  if(!id)return;
+
+  try{
+    await changeOrderStatus(id,e.target.value);
+  }catch(error){
+    showMessage('orderMsg',error.message,'error');
+  }
 });
 
-/* Rider Account তৈরি */
+/* ==============================
+   RIDER ACCOUNT CREATION
+============================== */
+
+async function createRiderAccount(payload){
+
+  const response=await fetch(API+'/functions/v1/admin-create-rider',{
+    method:'POST',
+    headers:{
+      apikey:KEY,
+      Authorization:'Bearer '+token,
+      'Content-Type':'application/json'
+    },
+    body:JSON.stringify(payload)
+  });
+
+  const raw=await response.text();
+
+  let result={};
+
+  try{
+    result=raw?JSON.parse(raw):{};
+  }catch(e){}
+
+  if(!response.ok){
+    throw Error(
+      result.error||
+      result.message||
+      ('Rider Account তৈরি হয়নি। HTTP '+response.status+' '+raw)
+    );
+  }
+
+  if(!result.success||!result.rider){
+    throw Error(result.error||'Rider তৈরি হয়েছে কি না নিশ্চিত হওয়া যায়নি।');
+  }
+
+  return result.rider;
+}
+
 $('riderForm').addEventListener('submit',async e=>{
-e.preventDefault();
 
-const form=e.target;
-const f=new FormData(form);
+  e.preventDefault();
 
-const payload={
-name:String(f.get('name')||'').trim(),
-phone:String(f.get('phone')||'').trim(),
-email:String(f.get('email')||'').trim().toLowerCase(),
-password:String(f.get('password')||''),
-vehicle_type:String(f.get('vehicle_type')||'motorcycle')
-};
+  const form=e.target;
+  const f=new FormData(form);
 
-if(!payload.name||!payload.phone||!payload.email){
-showMessage('riderMsg','সব তথ্য পূরণ করুন।','error');
-return;
-}
+  const payload={
+    name:String(f.get('name')||'').trim(),
+    phone:String(f.get('phone')||'').trim(),
+    email:String(f.get('email')||'').trim().toLowerCase(),
+    password:String(f.get('password')||''),
+    vehicle_type:String(f.get('vehicle_type')||'motorcycle')
+  };
 
-if(!/^01[3-9][0-9]{8}$/.test(payload.phone)){
-showMessage('riderMsg','সঠিক ১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর দিন।','error');
-return;
-}
+  if(!payload.name||!payload.phone||!payload.email){
+    showMessage('riderMsg','সব তথ্য পূরণ করুন।','error');
+    return;
+  }
 
-if(payload.password.length<8){
-showMessage('riderMsg','Password কমপক্ষে ৮ অক্ষরের হতে হবে।','error');
-return;
-}
+  if(!/^01[3-9][0-9]{8}$/.test(payload.phone)){
+    showMessage('riderMsg','সঠিক ১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর দিন।','error');
+    return;
+  }
 
-const button=$('createRiderBtn');
-button.disabled=true;
-button.textContent='Account তৈরি হচ্ছে...';
-showMessage('riderMsg','Rider Account তৈরি হচ্ছে। অপেক্ষা করুন...','success');
+  if(payload.password.length<8){
+    showMessage('riderMsg','Password কমপক্ষে ৮ অক্ষরের হতে হবে।','error');
+    return;
+  }
 
-try{
-const rider=await createRiderAccount(payload);
-form.reset();
-showMessage('riderMsg',
-'সফলভাবে Rider Account তৈরি হয়েছে। নাম: '+rider.name+' | Email: '+rider.email,
-'success');
-await loadAll();
-}catch(error){
-showMessage('riderMsg',error.message,'error');
-}finally{
-button.disabled=false;
-button.textContent='নতুন Rider Account তৈরি করুন';
-}
+  const button=$('createRiderBtn');
+
+  button.disabled=true;
+  button.textContent='Account তৈরি হচ্ছে...';
+
+  showMessage('riderMsg','Rider Account তৈরি হচ্ছে। অপেক্ষা করুন...');
+
+  try{
+
+    const rider=await createRiderAccount(payload);
+
+    form.reset();
+
+    showMessage(
+      'riderMsg',
+      'সফলভাবে Rider Account তৈরি হয়েছে। নাম: '+
+      rider.name+' | Email: '+rider.email,
+      'success'
+    );
+
+    await loadAll();
+
+  }catch(error){
+
+    showMessage('riderMsg',error.message,'error');
+
+  }finally{
+
+    button.disabled=false;
+    button.textContent='নতুন Rider Account তৈরি করুন';
+  }
 });
+
+/* ==============================
+   RIDER MANAGEMENT
+============================== */
 
 function renderRiders(){
-if(!riders.length){
-$('riderTable').innerHTML='এখনো Rider যোগ করা হয়নি।';
-return;
-}
 
-$('riderTable').innerHTML='<table><thead><tr>'+
-'<th>নাম</th><th>ফোন</th><th>Email</th><th>Auth UID</th><th>অবস্থা</th>'+
-'</tr></thead><tbody>'+
-riders.map(r=>'<tr>'+
-'<td><b>'+esc(r.name)+'</b></td>'+
-'<td>'+phoneLink(r.phone)+'</td>'+
-'<td>'+esc(r.email||'Email নেই')+'</td>'+
-'<td class="small">'+esc(r.auth_user_id||'সংযুক্ত নয়')+'</td>'+
-'<td><select data-rider-status="'+esc(r.id)+'">'+
-['active','inactive','suspended'].map(s=>'<option value="'+s+'" '+(r.status===s?'selected':'')+'>'+s+'</option>').join('')+
-'</select></td></tr>').join('')+
-'</tbody></table>';
+  if(!riders.length){
+    $('riderTable').innerHTML='এখনো Rider যোগ করা হয়নি।';
+    return;
+  }
+
+  $('riderTable').innerHTML=
+  '<table><thead><tr>'+
+  '<th>নাম</th>'+
+  '<th>ফোন</th>'+
+  '<th>Email</th>'+
+  '<th>যানবাহন</th>'+
+  '<th>GPS</th>'+
+  '<th>অবস্থা</th>'+
+  '</tr></thead><tbody>'+
+
+  riders.map(r=>{
+
+    const loc=locations.find(l=>l.rider_id===r.id);
+
+    return '<tr>'+
+
+      '<td><b>'+esc(r.name)+'</b></td>'+
+
+      '<td>'+phoneLink(r.phone)+'</td>'+
+
+      '<td>'+esc(r.email||'Email নেই')+'</td>'+
+
+      '<td>'+esc(r.vehicle_type||'')+'</td>'+
+
+      '<td>'+(loc
+        ?'<span class="small">সর্বশেষ: '+esc(loc.updated_at)+'</span>'
+        :'GPS নেই')+'</td>'+
+
+      '<td><select data-rider-status="'+esc(r.id)+'">'+
+
+      ['active','inactive','suspended'].map(s=>
+        '<option value="'+s+'" '+
+        (r.status===s?'selected':'')+'>'+s+'</option>'
+      ).join('')+
+
+      '</select></td>'+
+
+      '</tr>';
+
+  }).join('')+
+
+  '</tbody></table>';
 }
 
 $('riderTable').addEventListener('change',async e=>{
-const id=e.target.dataset.riderStatus;
-if(!id)return;
-try{
-await api('riders?id=eq.'+encodeURIComponent(id),{
-method:'PATCH',headers:{Prefer:'return=minimal'},
-body:JSON.stringify({status:e.target.value})
+
+  const id=e.target.dataset.riderStatus;
+  if(!id)return;
+
+  try{
+
+    await api('riders?id=eq.'+encodeURIComponent(id),{
+      method:'PATCH',
+      headers:{Prefer:'return=minimal'},
+      body:JSON.stringify({status:e.target.value})
+    });
+
+    showMessage('riderMsg','Rider-এর অবস্থা পরিবর্তন হয়েছে।','success');
+
+    await loadAll();
+
+  }catch(error){
+
+    showMessage('riderMsg',error.message,'error');
+  }
 });
-showMessage('riderMsg','Rider-এর অবস্থা পরিবর্তন হয়েছে।','success');
-await loadAll();
-}catch(error){
-showMessage('riderMsg',error.message,'error');
+
+/* ==============================
+   LIVE MAP
+============================== */
+
+function initLiveMap(){
+
+  if(liveMap){
+    setTimeout(()=>liveMap.invalidateSize(),200);
+    return;
+  }
+
+  if(typeof L==='undefined'){
+    showMessage(
+      'trackingMsg',
+      'Map library লোড হয়নি। ইন্টারনেট সংযোগ পরীক্ষা করুন।',
+      'error'
+    );
+    return;
+  }
+
+  liveMap=L.map('liveMap').setView([23.685,90.3563],8);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    maxZoom:19,
+    attribution:'© OpenStreetMap'
+  }).addTo(liveMap);
+
+  riderLayer=L.layerGroup().addTo(liveMap);
+  customerLayer=L.layerGroup().addTo(liveMap);
+
+  setTimeout(()=>liveMap.invalidateSize(),300);
 }
-});
+
+function validCoordinate(lat,lon){
+
+  return lat!==null &&
+    lat!==undefined &&
+    lon!==null &&
+    lon!==undefined &&
+    Number.isFinite(Number(lat)) &&
+    Number.isFinite(Number(lon)) &&
+    Math.abs(Number(lat))<=90 &&
+    Math.abs(Number(lon))<=180;
+}
 
 function renderTracking(){
-const active=orders.filter(o=>o.assigned_rider_id&&!['delivered','cancelled'].includes(o.status));
-const rows=active.map(o=>({
-order:o,
-rider:riders.find(r=>r.id===o.assigned_rider_id),
-location:locations.find(l=>l.rider_id===o.assigned_rider_id)
-}));
-const withLocation=rows.filter(x=>x.location);
 
-$('mapLinks').innerHTML=withLocation.map(x=>
-'<p><a target="_blank" href="https://maps.google.com/?q='+encodeURIComponent(x.location.latitude+','+x.location.longitude)+'">📍 '+esc(x.rider?.name||'Rider')+' — '+esc(x.order.ref)+' — ম্যাপে দেখুন</a></p>'
-).join('')||'<p class="small">এখনো কোনো সক্রিয় Rider GPS পাঠায়নি।</p>';
+  if(!liveMap || !riderLayer || !customerLayer)return;
 
-$('trackingTable').innerHTML='<table><thead><tr><th>Order</th><th>Rider</th><th>GPS</th><th>আপডেট</th></tr></thead><tbody>'+
-rows.map(x=>'<tr><td>'+esc(x.order.ref)+'</td><td>'+esc(x.rider?.name||'')+'</td>'+
-'<td>'+(x.location?esc(x.location.latitude+', '+x.location.longitude):'GPS নেই')+'</td>'+
-'<td>'+(x.location?esc(x.location.updated_at):'-')+'</td></tr>').join('')+
-'</tbody></table>';
+  riderLayer.clearLayers();
+  customerLayer.clearLayers();
+
+  const active=orders.filter(o=>
+    o.assigned_rider_id &&
+    !['delivered','cancelled'].includes(o.status)
+  );
+
+  const groups={};
+
+  active.forEach(order=>{
+
+    const riderId=order.assigned_rider_id;
+
+    if(!groups[riderId]){
+      groups[riderId]={
+        rider:riders.find(r=>r.id===riderId),
+        location:locations.find(l=>l.rider_id===riderId),
+        orders:[]
+      };
+    }
+
+    groups[riderId].orders.push(order);
+  });
+
+  const bounds=[];
+
+  let riderCount=0;
+  let customerCount=0;
+
+  Object.values(groups).forEach(group=>{
+
+    const rider=group.rider;
+    const location=group.location;
+
+    /* RIDER MARKER */
+
+    if(location && validCoordinate(location.latitude,location.longitude)){
+
+      const lat=Number(location.latitude);
+      const lon=Number(location.longitude);
+
+      const orderHTML=group.orders.map(o=>
+        '<hr>'+
+        '<b>Order: '+esc(o.ref)+'</b><br>'+
+        'Customer: '+esc(o.customer_name||'')+'<br>'+
+        'Phone: '+esc(o.customer_phone||'')+'<br>'+
+        'Status: '+esc(o.status||'')
+      ).join('');
+
+      const popup=
+        '<div style="min-width:190px">'+
+        '<b>🛵 '+esc(rider?.name||'Rider')+'</b><br>'+
+        'Phone: '+esc(rider?.phone||'')+
+        orderHTML+
+        '<hr><small>GPS Updated: '+esc(location.updated_at||'')+'</small>'+
+        '</div>';
+
+      L.circleMarker([lat,lon],{
+        radius:10,
+        color:'#08734f',
+        fillColor:'#16a34a',
+        fillOpacity:.95,
+        weight:3
+      }).bindPopup(popup).addTo(riderLayer);
+
+      bounds.push([lat,lon]);
+      riderCount++;
+    }
+
+    /* CUSTOMER MARKER */
+
+    group.orders.forEach(order=>{
+
+      if(!validCoordinate(
+        order.customer_latitude,
+        order.customer_longitude
+      ))return;
+
+      const lat=Number(order.customer_latitude);
+      const lon=Number(order.customer_longitude);
+
+      const popup=
+        '<b>🔵 Customer Location</b><br>'+
+        'Order: '+esc(order.ref||'')+'<br>'+
+        'Customer: '+esc(order.customer_name||'')+'<br>'+
+        'Phone: '+esc(order.customer_phone||'')+'<br>'+
+        'Address: '+esc(order.delivery_address||'');
+
+      L.circleMarker([lat,lon],{
+        radius:8,
+        color:'#1d4ed8',
+        fillColor:'#3b82f6',
+        fillOpacity:.95,
+        weight:2
+      }).bindPopup(popup).addTo(customerLayer);
+
+      bounds.push([lat,lon]);
+      customerCount++;
+    });
+
+  });
+
+  if(bounds.length && !mapHasCentered){
+
+    liveMap.fitBounds(bounds,{
+      padding:[35,35],
+      maxZoom:15
+    });
+
+    mapHasCentered=true;
+  }
+
+  $('trackingMsg').innerHTML=
+    '<div class="msg success">'+
+    'চলমান Order: '+bn(active.length)+
+    ' | GPS পাওয়া Rider: '+bn(riderCount)+
+    ' | Customer GPS: '+bn(customerCount)+
+    '</div>';
+
+  $('lastMapUpdate').textContent=new Date().toLocaleTimeString('bn-BD');
+
+  renderTrackingTable(active);
 }
 
+function renderTrackingTable(active){
+
+  if(!active.length){
+    $('trackingTable').innerHTML='কোনো চলমান Assigned Order নেই।';
+    return;
+  }
+
+  $('trackingTable').innerHTML=
+  '<table><thead><tr>'+
+  '<th>Order</th>'+
+  '<th>Customer</th>'+
+  '<th>Rider</th>'+
+  '<th>Rider GPS</th>'+
+  '<th>Customer GPS</th>'+
+  '<th>সর্বশেষ আপডেট</th>'+
+  '</tr></thead><tbody>'+
+
+  active.map(order=>{
+
+    const rider=riders.find(r=>r.id===order.assigned_rider_id);
+
+    const location=locations.find(l=>
+      l.rider_id===order.assigned_rider_id
+    );
+
+    const riderGPS=location &&
+      validCoordinate(location.latitude,location.longitude)
+
+      ?'<a target="_blank" rel="noopener" href="https://maps.google.com/?q='+
+       encodeURIComponent(location.latitude+','+location.longitude)+
+       '">Rider Map</a>'
+
+      :'<span style="color:#b42318">GPS নেই</span>';
+
+    const customerGPS=validCoordinate(
+      order.customer_latitude,
+      order.customer_longitude
+    )
+
+      ?'<a target="_blank" rel="noopener" href="https://maps.google.com/?q='+
+       encodeURIComponent(order.customer_latitude+','+order.customer_longitude)+
+       '">Customer Map</a>'
+
+      :'GPS নেই';
+
+    return '<tr>'+
+
+      '<td><b>'+esc(order.ref||'')+'</b>'+
+      '<div class="small">'+esc(order.status||'')+'</div></td>'+
+
+      '<td>'+esc(order.customer_name||'')+'<br>'+
+      phoneLink(order.customer_phone)+'</td>'+
+
+      '<td>'+esc(rider?.name||'Rider')+'<br>'+
+      phoneLink(rider?.phone)+'</td>'+
+
+      '<td>'+riderGPS+'</td>'+
+
+      '<td>'+customerGPS+'</td>'+
+
+      '<td>'+esc(location?.updated_at||'GPS পাওয়া যায়নি')+'</td>'+
+
+      '</tr>';
+
+  }).join('')+
+
+  '</tbody></table>';
+}
+
+async function refreshTracking(){
+
+  if(mapBusy)return;
+
+  mapBusy=true;
+
+  try{
+
+    const result=await Promise.all([
+
+      api('customer_orders?select=*&order=created_at.desc&limit=300'),
+
+      api('rider_locations?select=*')
+
+    ]);
+
+    orders=result[0]||[];
+    locations=result[1]||[];
+
+    updateStats();
+    renderOrders();
+    renderTracking();
+
+  }finally{
+    mapBusy=false;
+  }
+}
+
+function startMapRefresh(){
+
+  stopMapRefresh();
+
+  refreshTracking().catch(error=>
+    showMessage('trackingMsg',error.message,'error')
+  );
+
+  mapTimer=setInterval(()=>{
+
+    if(document.hidden)return;
+
+    if($('tracking').classList.contains('hidden'))return;
+
+    refreshTracking().catch(error=>
+      showMessage('trackingMsg',error.message,'error')
+    );
+
+  },10000);
+}
+
+function stopMapRefresh(){
+
+  if(mapTimer){
+    clearInterval(mapTimer);
+    mapTimer=null;
+  }
+}
+
+/* ==============================
+   APPROVAL MANAGEMENT
+============================== */
+
 const tableNames={
-products:'products',
-shops:'shops',
-rent:'rent_listings',
-providers:'provider_profiles'
+  products:'products',
+  shops:'shops',
+  rent:'rent_listings',
+  providers:'provider_profiles'
 };
 
 const approvalNames={
-products:'product_name',
-shops:'shop_name',
-rent:'title',
-providers:'name'
+  products:'product_name',
+  shops:'shop_name',
+  rent:'title',
+  providers:'name'
 };
 
 const approvalStatuses={
-products:['pending','published','rejected','hidden'],
-shops:['pending','approved','rejected','hidden'],
-rent:['pending','published','rented','hidden'],
-providers:['pending','approved','rejected','hidden']
+  products:['pending','published','rejected','hidden'],
+  shops:['pending','approved','rejected','hidden'],
+  rent:['pending','published','rented','hidden'],
+  providers:['pending','approved','rejected','hidden']
 };
 
 const statusLabels={
-pending:'অপেক্ষমাণ',
-published:'প্রকাশিত',
-approved:'অনুমোদিত',
-rejected:'বাতিল',
-hidden:'লুকানো',
-rented:'ভাড়া হয়েছে'
+  pending:'অপেক্ষমাণ',
+  published:'প্রকাশিত',
+  approved:'অনুমোদিত',
+  rejected:'বাতিল',
+  hidden:'লুকানো',
+  rented:'ভাড়া হয়েছে'
 };
 
 function renderApproval(kind,items){
-const targetIds={
-products:'productTable',
-shops:'shopTable',
-rent:'rentTable',
-providers:'providerTable'
-};
-const target=$(targetIds[kind]);
-if(!target)return;
 
-const nameField=approvalNames[kind];
-if(!items.length){
-target.innerHTML='কোনো তথ্য পাওয়া যায়নি।';
-return;
-}
-target.innerHTML='<table><thead><tr><th>তথ্য</th><th>যোগাযোগ</th><th>অবস্থা</th></tr></thead><tbody>'+
-items.map(x=>'<tr><td><b>'+esc(x[nameField])+'</b><div class="small">'+esc(x.description||x.category||x.type||'')+'</div></td>'+
-'<td>'+esc(x.seller_name||x.owner_name||x.name||'')+'<br>'+phoneLink(x.seller_phone||x.owner_phone||x.phone)+'</td>'+
-'<td><select data-approval="'+kind+':'+esc(x.id)+'">'+
-approvalStatuses[kind].map(s=>'<option value="'+s+'" '+(x.status===s?'selected':'')+'>'+statusLabels[s]+'</option>').join('')+
-'</select></td></tr>').join('')+'</tbody></table>';
+  const targetIds={
+    products:'productTable',
+    shops:'shopTable',
+    rent:'rentTable',
+    providers:'providerTable'
+  };
+
+  const target=$(targetIds[kind]);
+  if(!target)return;
+
+  const nameField=approvalNames[kind];
+
+  if(!items.length){
+    target.innerHTML='কোনো তথ্য পাওয়া যায়নি।';
+    return;
+  }
+
+  target.innerHTML=
+  '<table><thead><tr>'+
+  '<th>তথ্য</th>'+
+  '<th>যোগাযোগ</th>'+
+  '<th>অবস্থা</th>'+
+  '</tr></thead><tbody>'+
+
+  items.map(x=>
+
+    '<tr>'+
+
+    '<td><b>'+esc(x[nameField])+'</b>'+
+    '<div class="small">'+
+    esc(x.description||x.category||x.type||'')+
+    '</div></td>'+
+
+    '<td>'+
+    esc(x.seller_name||x.owner_name||x.name||'')+'<br>'+
+    phoneLink(x.seller_phone||x.owner_phone||x.phone)+
+    '</td>'+
+
+    '<td><select data-approval="'+kind+':'+esc(x.id)+'">'+
+
+    approvalStatuses[kind].map(s=>
+      '<option value="'+s+'" '+
+      (x.status===s?'selected':'')+'>'+
+      (statusLabels[s]||s)+
+      '</option>'
+    ).join('')+
+
+    '</select></td>'+
+
+    '</tr>'
+
+  ).join('')+
+
+  '</tbody></table>';
 }
 
 ['products','shops','rent','providers'].forEach(kind=>{
-const targetId={
-products:'productTable',
-shops:'shopTable',
-rent:'rentTable',
-providers:'providerTable'
-}[kind];
 
-$(targetId).addEventListener('change',async e=>{
-const value=e.target.dataset.approval;
-if(!value)return;
-const [table,id]=value.split(':');
-try{
-await api(tableNames[table]+'?id=eq.'+encodeURIComponent(id),{
-method:'PATCH',headers:{Prefer:'return=minimal'},
-body:JSON.stringify({status:e.target.value})
+  const targetId={
+    products:'productTable',
+    shops:'shopTable',
+    rent:'rentTable',
+    providers:'providerTable'
+  }[kind];
+
+  $(targetId).addEventListener('change',async e=>{
+
+    const value=e.target.dataset.approval;
+    if(!value)return;
+
+    const [table,id]=value.split(':');
+
+    try{
+
+      await api(tableNames[table]+'?id=eq.'+encodeURIComponent(id),{
+        method:'PATCH',
+        headers:{Prefer:'return=minimal'},
+        body:JSON.stringify({
+          status:e.target.value
+        })
+      });
+
+      await loadAll();
+
+    }catch(error){
+
+      alert('অনুমোদন পরিবর্তন হয়নি: '+error.message);
+    }
+
+  });
 });
-await loadAll();
-}catch(error){
-alert('অনুমোদন পরিবর্তন হয়নি: '+error.message);
-}
-});
-});
+
+/* ==============================
+   SERVICE REQUESTS
+============================== */
 
 function renderRequests(){
-if(!requests.length){
-$('requestTable').innerHTML='কোনো অনুরোধ নেই।';
-return;
+
+  if(!requests.length){
+    $('requestTable').innerHTML='কোনো অনুরোধ নেই।';
+    return;
+  }
+
+  $('requestTable').innerHTML=
+  '<table><thead><tr>'+
+  '<th>নম্বর</th>'+
+  '<th>সেবা</th>'+
+  '<th>Customer</th>'+
+  '<th>বিবরণ</th>'+
+  '<th>অবস্থা</th>'+
+  '</tr></thead><tbody>'+
+
+  requests.map(x=>{
+
+    const house=rents.find(r=>r.id===x.extra?.listing_id);
+
+    return '<tr>'+
+
+      '<td>'+esc(x.ref)+'</td>'+
+
+      '<td>'+esc(x.service)+'</td>'+
+
+      '<td>'+esc(x.name)+'<br>'+phoneLink(x.phone)+'</td>'+
+
+      '<td>'+
+
+      (house
+        ?'🏠 '+esc(house.title)+' — '+
+         esc(house.area)+' — ৳'+esc(house.rent)+'<br>'
+        :'')+
+
+      esc(x.details||'')+
+
+      '</td>'+
+
+      '<td>'+esc(x.status)+'</td>'+
+
+      '</tr>';
+
+  }).join('')+
+
+  '</tbody></table>';
 }
-$('requestTable').innerHTML='<table><thead><tr><th>নম্বর</th><th>সেবা</th><th>Customer</th><th>বিবরণ</th><th>অবস্থা</th></tr></thead><tbody>'+
-requests.map(x=>{
-const house=rents.find(r=>r.id===x.extra?.listing_id);
-return '<tr><td>'+esc(x.ref)+'</td><td>'+esc(x.service)+'</td>'+
-'<td>'+esc(x.name)+'<br>'+phoneLink(x.phone)+'</td>'+
-'<td>'+(house?'🏠 '+esc(house.title)+' — '+esc(house.area)+' — ৳'+esc(house.rent)+'<br>':'')+
-esc(x.details||'')+'</td><td>'+esc(x.status)+'</td></tr>';
-}).join('')+'</tbody></table>';
-}
+
+/* ==============================
+   TAB CONTROL
+============================== */
 
 document.querySelectorAll('.tab').forEach(button=>{
-button.addEventListener('click',()=>{
-document.querySelectorAll('.pane').forEach(p=>p.classList.add('hidden'));
-document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
-$(button.dataset.tab).classList.remove('hidden');
-button.classList.add('active');
+
+  button.addEventListener('click',async ()=>{
+
+    document.querySelectorAll('.pane').forEach(p=>
+      p.classList.add('hidden')
+    );
+
+    document.querySelectorAll('.tab').forEach(b=>
+      b.classList.remove('active')
+    );
+
+    $(button.dataset.tab).classList.remove('hidden');
+    button.classList.add('active');
+
+    if(button.dataset.tab==='tracking'){
+
+      initLiveMap();
+      startMapRefresh();
+
+      setTimeout(()=>{
+        if(liveMap)liveMap.invalidateSize();
+      },300);
+
+    }else{
+
+      stopMapRefresh();
+    }
+
+  });
+
 });
-});
+
+/* ==============================
+   BUTTON EVENTS
+============================== */
 
 $('loginForm').addEventListener('submit',loginHandler);
+
 $('logoutBtn').addEventListener('click',logout);
+
 $('refreshBtn').addEventListener('click',loadAll);
 
+/* ==============================
+   SESSION RESTORE
+============================== */
+
 async function init(){
-if(!API||!KEY){
-showMessage('loginMsg','config.js-এ Supabase URL অথবা Publishable Key নেই।','error');
-return;
+
+  if(!API||!KEY){
+
+    showMessage(
+      'loginMsg',
+      'config.js-এ Supabase URL অথবা Publishable Key নেই।',
+      'error'
+    );
+
+    return;
+  }
+
+  const saved=localStorage.getItem('uex_admin_token');
+  const savedRefresh=localStorage.getItem('uex_admin_refresh');
+
+  if(!saved||!savedRefresh)return;
+
+  token=saved;
+  refreshTokenValue=savedRefresh;
+
+  try{
+
+    if(!(await rpc('is_admin'))){
+
+      if(!(await refreshSession()) || !(await rpc('is_admin'))){
+        throw Error('আবার Login করুন।');
+      }
+
+      saveSession();
+    }
+
+    showDashboard();
+    await loadAll();
+
+  }catch(error){
+
+    logout();
+
+    showMessage('loginMsg',error.message,'error');
+  }
 }
 
-const saved=localStorage.getItem('uex_admin_token');
-const savedRefresh=localStorage.getItem('uex_admin_refresh');
-if(!saved||!savedRefresh)return;
-
-token=saved;
-refreshTokenValue=savedRefresh;
-
-try{
-if(!(await rpc('is_admin'))){
-if(!(await refreshSession())||!(await rpc('is_admin')))throw Error('আবার Login করুন।');
-saveSession();
-}
-showDashboard();
-await loadAll();
-}catch(error){
-logout();
-showMessage('loginMsg',error.message,'error');
-}
-}
-
+/* Dashboard data auto refresh: ৩০ সেকেন্ড */
 setInterval(()=>{
-if(token&&!document.hidden&&!$('dashboard').classList.contains('hidden'))loadAll();
+
+  if(
+    token &&
+    !document.hidden &&
+    !$('dashboard').classList.contains('hidden') &&
+    $('tracking').classList.contains('hidden')
+  ){
+    loadAll();
+  }
+
 },30000);
+
+document.addEventListener('visibilitychange',()=>{
+
+  if(document.hidden){
+    return;
+  }
+
+  if(
+    token &&
+    !$('tracking').classList.contains('hidden')
+  ){
+    refreshTracking().catch(error=>
+      showMessage('trackingMsg',error.message,'error')
+    );
+  }
+
+});
 
 init();
 
 })();
 </script>
+
 </body>
 </html>
