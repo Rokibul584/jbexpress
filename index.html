@@ -811,9 +811,12 @@ function updateCart(){
   const box = document.getElementById('cartItems');
   if(!cart.length){
     box.innerHTML = '<div class="empty">আপনার কার্ট খালি।</div>';
+    const charge=selectedAreaCharge();
     document.getElementById('cartTotal').textContent = 'পণ্যের মূল্য: ৳০';
-    document.getElementById('cartGrandTotal').textContent = 'সর্বমোট: ৳০';
-    document.getElementById('deliveryFeeInfo').textContent = 'এলাকা নির্বাচন করলে Rider Charge দেখা যাবে।';
+    document.getElementById('deliveryFeeInfo').textContent =
+      charge===null ? 'এলাকা নির্বাচন করলে Rider Charge দেখা যাবে।' : 'Rider Charge: '+money(charge);
+    document.getElementById('cartGrandTotal').textContent =
+      'সর্বমোট: '+money(charge===null?0:charge);
     return;
   }
 
@@ -864,25 +867,61 @@ function openCart(){
 /* ================================
    AREA-BASED RIDER CHARGE
 ================================ */
+function normalizeAreaName(value){
+  return String(value||'').trim().replace(/\s+/g,' ').toLocaleLowerCase();
+}
 async function loadDeliveryCharges(){
   const select=document.getElementById('customerArea');
+  const info=document.getElementById('deliveryFeeInfo');
   if(!select)return;
+
+  // Keep the configured local areas visible even when the fee table is empty
+  // or temporarily unavailable. The actual fee is always read from Supabase.
+  const configuredAreas=Array.isArray(CFG.AREAS)?CFG.AREAS:[];
+  let rows=[];
+  let loadError=null;
   try{
-    const {data,error}=await db.from('area_delivery_charges').select('area_name,charge').eq('is_active',true).order('area_name');
+    const {data,error}=await db.from('area_delivery_charges')
+      .select('area_name,charge,is_active')
+      .eq('is_active',true)
+      .order('area_name');
     if(error)throw error;
-    deliveryCharges=data||[];
-    select.innerHTML='<option value="">এলাকা নির্বাচন করুন</option>'+deliveryCharges.map(x=>'<option value="'+esc(x.area_name)+'">'+esc(x.area_name)+'</option>').join('');
-    select.addEventListener('change',updateCart);
-    updateCart();
+    rows=Array.isArray(data)?data:[];
   }catch(error){
+    loadError=error;
     console.error('Delivery charge load:',error);
-    select.innerHTML='<option value="">ডেলিভারি এলাকা লোড হয়নি</option>';
-    document.getElementById('deliveryFeeInfo').textContent='Rider Charge লোড করা যায়নি। পরে আবার চেষ্টা করুন।';
   }
+
+  deliveryCharges=rows;
+  const areaNames=[...new Set([
+    ...configuredAreas,
+    ...rows.map(x=>x.area_name).filter(Boolean)
+  ])];
+
+  const previous=select.value;
+  select.innerHTML='<option value="">এলাকা নির্বাচন করুন</option>'+
+    areaNames.map(name=>'<option value="'+esc(name)+'">'+esc(name)+'</option>').join('');
+
+  // Restore a previously selected area where possible.
+  if(previous && areaNames.some(x=>normalizeAreaName(x)===normalizeAreaName(previous))){
+    const match=areaNames.find(x=>normalizeAreaName(x)===normalizeAreaName(previous));
+    select.value=match;
+  }
+  select.onchange=updateCart;
+
+  if(loadError){
+    info.textContent='এলাকার নাম দেখানো হচ্ছে, কিন্তু Rider Charge লোড হয়নি। Admin-এর Delivery Charge সেটিংস ও Supabase RLS পরীক্ষা করুন।';
+  }else if(!rows.length){
+    info.textContent='এলাকার তালিকা প্রস্তুত। Admin Panel → Delivery Charge থেকে প্রতিটি এলাকার চার্জ যোগ করতে হবে।';
+  }else{
+    info.textContent='এলাকা নির্বাচন করলে নির্ধারিত Rider Charge যোগ হবে।';
+  }
+  updateCart();
 }
 function selectedAreaCharge(){
   const area=document.getElementById('customerArea')?.value||'';
-  const row=deliveryCharges.find(x=>x.area_name===area);
+  const key=normalizeAreaName(area);
+  const row=deliveryCharges.find(x=>normalizeAreaName(x.area_name)===key);
   currentDeliveryCharge=row?Number(row.charge):null;
   return currentDeliveryCharge;
 }
@@ -902,7 +941,7 @@ document.getElementById('checkoutForm').addEventListener('submit',async e=>{
   const area=document.getElementById('customerArea').value;
   const charge=selectedAreaCharge();
   if(!area){showMessage('ডেলিভারি এলাকা নির্বাচন করুন।');return;}
-  if(charge===null||!Number.isFinite(charge)){showMessage('এই এলাকার Rider Charge এখনো নির্ধারণ করা হয়নি। Admin-এর সঙ্গে যোগাযোগ করুন।');return;}
+  if(charge===null||!Number.isFinite(charge)){showMessage('এই এলাকার Rider Charge নির্ধারণ করা হয়নি। Admin Panel → Delivery Charge থেকে "'+area+'" এলাকার চার্জ যোগ করুন।');return;}
 
   const btn = document.getElementById('checkoutBtn');
   btn.disabled = true;

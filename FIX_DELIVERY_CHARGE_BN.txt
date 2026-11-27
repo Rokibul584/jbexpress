@@ -1,0 +1,20 @@
+UPAZILA EXPRESS — Delivery Charge visibility fix
+
+এই আপডেটে Customer Panel-এর এলাকা dropdown আর area_delivery_charges টেবিলের ডেটার ওপর একা নির্ভর করে না।
+config.js-এর AREAS তালিকা থেকেও এলাকার নাম দেখাবে। তবে চার্জের অঙ্ক কেবল Supabase-এর
+area_delivery_charges টেবিল থেকে আসবে—কোনো চার্জ অনুমান করে বসানো হয়নি।
+
+যা করবেন:
+1. ZIP Extract করে সব ফাইল Hosting-এ আগের ফাইলগুলোর জায়গায় আপলোড করুন।
+2. Supabase SQL Editor-এ delivery_charge_migration.sql আবার Run করতে পারেন।
+   এটি public read policy সহজ করে এবং PostgREST schema reload করে।
+3. Admin Panel > Delivery Charge-এ গিয়ে প্রতিটি এলাকার সঠিক চার্জ যোগ করুন।
+   এলাকার নাম config.js-এর নামের সঙ্গে মিলিয়ে দিন:
+   জীবননগর বাজার, উথলী, হাসাদাহ, বাঁকা, অন্য এলাকা
+4. Customer Panel-এ Ctrl+F5 দিয়ে Hard Refresh করুন। Cart খুলে এলাকা নির্বাচন করুন।
+
+নোট:
+- Live Supabase schema-তে create_customer_order function ও customer_orders-এর
+  প্রকৃত কলাম এই ZIP থেকে দেখা যায় না; এগুলো live project থেকে যাচাই করা হয়নি।
+- Checkout trigger-এর column mapping নিশ্চিত করতে Supabase থেকে table/function definition
+  প্রয়োজন হতে পারে।
