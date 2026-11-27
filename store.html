@@ -2,288 +2,1056 @@
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#08734f">
-<title>দোকান | UPAZILA EXPRESS</title>
+<title>UPAZILA EXPRESS | Provider Panel</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-:root{--green:#08734f;--dark:#075b3e;--light:#e9f7f0;--orange:#f59e0b;--bg:#f5f7f6;--text:#202923;--muted:#6b7770;--border:#e5ebe7;--star:#e6a100}
 *{box-sizing:border-box}
-body{margin:0;font-family:'Hind Siliguri',sans-serif;background:var(--bg);color:var(--text)}
-button,input,textarea{font-family:inherit}
-button{cursor:pointer}
-a{text-decoration:none;color:inherit}
-header{background:var(--green);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 3px 12px #0002}
-.nav{max-width:1200px;margin:auto;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.nav b{font-size:19px}
-.nav-btn{border:1px solid #ffffff55;background:#ffffff18;color:#fff;border-radius:9px;padding:8px 12px;font-size:14px}
-.container{max-width:1200px;margin:auto;padding:20px 18px}
-.store-head{background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
-.logo{width:96px;height:96px;border-radius:18px;object-fit:cover;background:var(--light);display:grid;place-items:center;color:var(--green);font-size:40px;flex:none}
-.store-head h1{margin:0 0 4px;font-size:27px}
-.muted{color:var(--muted);font-size:14px}
-.stars{color:var(--star);letter-spacing:1px;font-size:17px}
-.store-info{flex:1;min-width:220px}
-.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
-.pill{background:var(--light);color:var(--green);border-radius:20px;padding:4px 12px;font-size:13px;font-weight:600}
-.btn{border:0;border-radius:9px;padding:9px 14px;font-size:14px;font-weight:600;background:var(--green);color:#fff;display:inline-flex;gap:6px;align-items:center}
-.btn.alt{background:var(--light);color:var(--green)}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-h2.sec{font-size:22px;margin:26px 0 14px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-h2.sec small{font-size:13px;color:var(--muted);font-weight:500}
-.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
-.card{background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
-.card img,.noimg{width:100%;height:180px;object-fit:cover;background:#e9efeb}
-.noimg{display:grid;place-items:center;color:var(--green);font-size:40px;background:var(--light)}
-.card-body{padding:14px;display:flex;flex-direction:column;flex:1}
-.card h3{margin:0 0 4px;font-size:18px}
-.desc{color:var(--muted);font-size:14px;line-height:1.6;margin:4px 0 8px;white-space:pre-line}
-.price{font-size:18px;font-weight:700;color:var(--green);margin:2px 0 6px}
-.stock{font-size:13px;font-weight:700;border-radius:20px;display:inline-block;padding:3px 10px;margin-bottom:10px}
-.stock.in{background:#dff5e6;color:#176b3c}
-.stock.low{background:#fff0cf;color:#8a5700}
-.stock.out{background:#fee4e2;color:#b42318}
-.actions{display:flex;gap:8px;margin-top:auto}
-.actions .btn{flex:1;justify-content:center}
-.empty{background:#fff;border:1px dashed #cbd8d0;border-radius:13px;padding:30px;text-align:center;color:var(--muted);grid-column:1/-1}
-.review-wrap{display:grid;grid-template-columns:1fr 1.3fr;gap:18px;align-items:start}
-.panel{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px}
-.field{margin-bottom:12px}
-.field label{display:block;font-weight:600;margin-bottom:5px}
-.field input,.field textarea{width:100%;border:1px solid #dce5df;border-radius:9px;padding:10px;font-size:15px;outline:none}
-.field textarea{min-height:85px;resize:vertical}
-.field input:focus,.field textarea:focus{border-color:var(--green)}
-.star-pick{display:flex;gap:4px;direction:rtl;justify-content:flex-end}
-.star-pick input{display:none}
-.star-pick label{font-size:34px;color:#cfd8d2;cursor:pointer;margin:0;line-height:1;transition:.1s}
-.star-pick input:checked ~ label,.star-pick label:hover,.star-pick label:hover ~ label{color:var(--star)}
-.star-pick-wrap{display:flex;justify-content:flex-start}
-.review{border-bottom:1px solid var(--border);padding:12px 0}
-.review:last-child{border-bottom:0}
-.review .who{font-weight:700}
-.review p{margin:5px 0 3px;line-height:1.6;white-space:pre-line;overflow-wrap:anywhere}
-.msg{padding:10px 12px;border-radius:9px;margin:10px 0;font-size:14px}
-.msg.ok{background:#e1f5e8;color:#176b3c}
-.msg.err{background:#fee4e2;color:#b42318}
-.big-rate{font-size:44px;font-weight:800;color:var(--green);line-height:1}
-.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#123c2d;color:#fff;padding:11px 18px;border-radius:30px;font-size:14px;z-index:300;display:none}
-.float-cart{position:fixed;right:20px;bottom:20px;z-index:120;background:var(--orange);color:#222;border:0;border-radius:50px;padding:13px 19px;font-weight:700;box-shadow:0 5px 20px #0003}
-.cart-count{background:#d62828;color:#fff;padding:2px 7px;border-radius:20px;margin-left:5px}
-@media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.review-wrap{grid-template-columns:1fr}}
-@media(max-width:520px){.grid{grid-template-columns:1fr}.container{padding:14px 12px}.store-head h1{font-size:22px}.logo{width:72px;height:72px}.float-cart{right:12px;bottom:12px}}
+body{margin:0;background:#f3f7f4;color:#18251e;font-family:'Hind Siliguri',sans-serif}
+header{background:#08734f;color:white;padding:14px 4%;display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+header h2{margin:0;font-size:21px}
+main{max-width:1100px;margin:22px auto;padding:0 14px}
+.card{background:white;border:1px solid #dce7df;border-radius:14px;padding:17px;margin-bottom:15px}
+.authbox{max-width:480px;margin:55px auto}
+input,select,textarea{width:100%;padding:11px;border:1px solid #d6e1d9;border-radius:9px;font:inherit;background:white}
+textarea{min-height:100px;resize:vertical}
+label{display:block;font-weight:600;margin:11px 0 5px}
+button{border:0;border-radius:9px;padding:10px 15px;background:#08734f;color:white;font:inherit;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+.secondary{background:#e8f2eb;color:#08734f}
+.danger{background:#b42318}
+.warning{background:#a15c00}
+.hidden{display:none!important}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}
+.tab{background:white;color:#24352a;border:1px solid #dce7df}
+.tab.active{background:#08734f;color:white}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0 14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.stat{background:#f3f8f4;padding:13px;border-radius:10px}
+.stat strong{display:block;font-size:24px;color:#08734f}
+.small{font-size:12px;color:#66756b}
+.msg{padding:11px;border-radius:9px;background:#fff2d8;margin:10px 0;overflow-wrap:anywhere}
+.error{background:#fee4e2;color:#b42318}
+.success{background:#e1f5e8;color:#176b3c}
+.ad{border:1px solid #e0e8e2;border-radius:12px;padding:13px;margin:12px 0;display:grid;grid-template-columns:100px 1fr;gap:13px}
+.ad img{width:100px;height:100px;object-fit:cover;border-radius:9px;background:#edf2ee}
+.ad h3{margin:0 0 5px}
+.badge{display:inline-block;border-radius:20px;padding:3px 9px;font-size:12px;background:#fff0cf;color:#8a5700}
+.approved{background:#dff5e6;color:#176b3c}
+.rejected{background:#fee4e2;color:#b42318}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.preview{max-width:180px;max-height:150px;object-fit:cover;border-radius:9px;margin-top:8px}
+.stockrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0}
+.stockrow input{width:90px;padding:7px}
+.review{border-bottom:1px solid #e6ece7;padding:10px 0}
+hr{border:0;border-top:1px solid #e6ece7;margin:15px 0}
+@media(max-width:520px){.ad{grid-template-columns:75px 1fr}.ad img{width:75px;height:85px}.card{padding:13px}}
 </style>
 </head>
+
 <body>
 
 <header>
-  <div class="nav">
-    <a class="nav-btn" href="index.html"><i class="fa-solid fa-arrow-left"></i> হোম</a>
-    <b>UPAZILA EXPRESS</b>
-    <a class="nav-btn" href="index.html#cart"><i class="fa-solid fa-cart-shopping"></i> কার্ট</a>
+  <div>
+    <h2>🛍️ UPAZILA EXPRESS</h2>
+    <small>Service Provider Panel | জীবননগর</small>
+  </div>
+  <div>
+    <button id="logoutBtn" class="danger hidden">Logout</button>
   </div>
 </header>
 
-<main class="container" id="app">
-  <div class="empty"><i class="fa-solid fa-spinner fa-spin"></i><br>দোকান লোড হচ্ছে...</div>
+<main>
+
+<!-- AUTH -->
+<section id="authSection" class="card authbox">
+  <h2 id="authTitle">Provider Registration</h2>
+  <p class="small">নিজের সার্ভিসের বিজ্ঞাপন দিতে Account খুলুন।</p>
+
+  <div class="tabs">
+    <button class="tab active" id="registerTab">Registration</button>
+    <button class="tab" id="loginTab">Login</button>
+  </div>
+
+  <form id="registerForm">
+    <label>আপনার নাম / প্রতিষ্ঠানের মালিকের নাম</label>
+    <input name="name" required maxlength="100">
+
+    <label>আপনার দোকান / প্রতিষ্ঠানের নাম</label>
+    <input name="store_name" required minlength="2" maxlength="100" placeholder="যেমন: মেসার্স রহমান স্টোর">
+    <p class="small" style="margin:4px 0 0">এই নামে Customer-দের জন্য আপনার আলাদা Store পেজ তৈরি হবে।</p>
+
+    <label>মোবাইল নম্বর</label>
+    <input name="phone" required type="tel" placeholder="01XXXXXXXXX" pattern="01[3-9][0-9]{8}">
+
+    <label>Email</label>
+    <input name="email" required type="email" autocomplete="email">
+
+    <label>Password (কমপক্ষে ৮ অক্ষর)</label>
+    <input name="password" required type="password" minlength="8" autocomplete="new-password">
+
+    <label>Password আবার লিখুন</label>
+    <input name="confirm_password" required type="password" minlength="8" autocomplete="new-password">
+
+    <div id="registerMsg"></div>
+    <button id="registerBtn" type="submit" style="width:100%;margin-top:14px">Account তৈরি করুন</button>
+  </form>
+
+  <form id="loginForm" class="hidden">
+    <label>Email</label>
+    <input name="email" required type="email" autocomplete="username">
+
+    <label>Password</label>
+    <input name="password" required type="password" autocomplete="current-password">
+
+    <div id="loginMsg"></div>
+    <button id="loginBtn" type="submit" style="width:100%;margin-top:14px">Login করুন</button>
+  </form>
+</section>
+
+<!-- APP -->
+<section id="appSection" class="hidden">
+
+  <div class="card">
+    <h2>স্বাগতম, <span id="providerName">Provider</span></h2>
+    <div class="small" id="providerInfo"></div>
+    <div class="stats" style="margin-top:15px">
+      <div class="stat">মোট বিজ্ঞাপন<strong id="totalAds">০</strong></div>
+      <div class="stat">Pending<strong id="pendingAds">০</strong></div>
+      <div class="stat">Approved<strong id="approvedAds">০</strong></div>
+      <div class="stat">Rejected<strong id="rejectedAds">০</strong></div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" data-page="newAd">➕ বিজ্ঞাপন দিন</button>
+    <button class="tab" data-page="myAds">📋 আমার বিজ্ঞাপন</button>
+    <button class="tab" data-page="store">🏪 আমার দোকান</button>
+    <button class="tab" data-page="profile">👤 Profile</button>
+  </div>
+
+  <!-- NEW AD -->
+  <section id="newAd" class="card page">
+    <h2 id="formTitle">নতুন বিজ্ঞাপন যোগ করুন</h2>
+    <p class="small">আপনার সেবার সঠিক তথ্য ও ছবি দিন। Admin অনুমোদনের পর Customer দেখতে পাবে।</p>
+
+    <form id="adForm">
+      <input type="hidden" name="id">
+
+      <label>সেবার ক্যাটাগরি</label>
+      <select name="category" id="category" required>
+        <option value="">ক্যাটাগরি নির্বাচন করুন</option>
+        <option value="shop_product">🛍️ দোকান ও পণ্য</option>
+        <option value="rent">🏠 বাড়ি ভাড়া</option>
+        <option value="worker">👷 শ্রমিক</option>
+        <option value="technician">🔧 টেকনিশিয়ান</option>
+        <option value="pickup">🚚 পিকআপ ডেলিভারি</option>
+        <option value="support">☎️ সাপোর্ট</option>
+      </select>
+
+      <label id="titleLabel">বিজ্ঞাপনের শিরোনাম</label>
+      <input name="title" id="adTitle" required maxlength="150" placeholder="যেমন: মেসার্স রহমান স্টোর">
+
+      <label>বিস্তারিত বিবরণ</label>
+      <textarea name="description" required maxlength="3000" placeholder="সেবা, পণ্যের বিবরণ, সুযোগ-সুবিধা ইত্যাদি লিখুন"></textarea>
+
+      <div class="grid">
+        <div>
+          <label>মূল্য / ভাড়া (টাকা)</label>
+          <input name="price" type="number" min="0" step="0.01" placeholder="যেমন: ৫০০">
+        </div>
+        <div>
+          <label>মূল্যের ধরন</label>
+          <select name="price_unit">
+            <option value="">নির্দিষ্ট নয়</option>
+            <option value="এককালীন">এককালীন</option>
+            <option value="প্রতি মাস">প্রতি মাস</option>
+            <option value="প্রতিদিন">প্রতিদিন</option>
+            <option value="প্রতি ঘণ্টা">প্রতি ঘণ্টা</option>
+            <option value="প্রতি ট্রিপ">প্রতি ট্রিপ</option>
+            <option value="আলোচনা সাপেক্ষে">আলোচনা সাপেক্ষে</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="stockBox" class="hidden">
+        <label>স্টকে কতটি আছে? (শুধু পণ্যের জন্য)</label>
+        <input name="stock" id="adStock" type="number" min="0" step="1" placeholder="যেমন: ২০ (ফাঁকা রাখলে স্টক দেখানো হবে না)">
+        <p class="small">অর্ডার হলে স্টক নিজে নিজে কমবে। ০ হলে Customer "স্টক শেষ" দেখবে।</p>
+      </div>
+
+      <div class="grid">
+        <div>
+          <label>এলাকা / ঠিকানা</label>
+          <input name="area" required maxlength="200" placeholder="যেমন: জীবননগর বাজার">
+        </div>
+        <div>
+          <label>যোগাযোগ নম্বর</label>
+          <input name="phone" required type="tel" pattern="01[3-9][0-9]{8}" placeholder="01XXXXXXXXX">
+        </div>
+      </div>
+
+      <label>বিজ্ঞাপনের ছবি</label>
+      <input id="adImage" type="file" accept="image/jpeg,image/png,image/webp">
+      <p class="small">JPG, PNG অথবা WebP। সর্বোচ্চ ৫ MB। পরিষ্কার ও আসল ছবি দিন।</p>
+      <img id="imagePreview" class="preview hidden" alt="ছবির Preview">
+
+      <div id="adMsg"></div>
+
+      <div class="actions">
+        <button id="submitAdBtn" type="submit">Admin-এর কাছে জমা দিন</button>
+        <button type="button" id="cancelEditBtn" class="secondary hidden">Edit বাতিল</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- MY ADS -->
+  <section id="myAds" class="card page hidden">
+    <h2>📋 আমার বিজ্ঞাপনসমূহ</h2>
+    <p class="small">Pending বিজ্ঞাপন Admin যাচাই করছেন। Approved বিজ্ঞাপন Customer দেখতে পাবে।</p>
+    <div id="myAdsList">লোড হচ্ছে...</div>
+  </section>
+
+  <!-- STORE -->
+  <section id="store" class="card page hidden">
+    <h2>🏪 আমার দোকান</h2>
+    <p class="small">Customer আপনার দোকানের আলাদা পেজে ঢুকে আপনার সব পণ্য, স্টক ও Review দেখতে পারবে।</p>
+    <div id="storeSummary"></div>
+
+    <form id="storeForm">
+      <label>দোকানের নাম</label>
+      <input name="name" required minlength="2" maxlength="100">
+      <label>দোকান সম্পর্কে</label>
+      <textarea name="description" maxlength="1000" placeholder="কী কী পাওয়া যায়, খোলার সময় ইত্যাদি"></textarea>
+      <div class="grid">
+        <div>
+          <label>এলাকা / ঠিকানা</label>
+          <input name="area" maxlength="200">
+        </div>
+        <div>
+          <label>দোকানের ফোন</label>
+          <input name="phone" type="tel" pattern="01[3-9][0-9]{8}" placeholder="01XXXXXXXXX">
+        </div>
+      </div>
+      <label>দোকানের লোগো / ছবি</label>
+      <input id="storeLogo" type="file" accept="image/jpeg,image/png,image/webp">
+      <img id="storeLogoPreview" class="preview hidden" alt="লোগো">
+      <div id="storeMsg"></div>
+      <button type="submit" style="margin-top:12px">দোকানের তথ্য সংরক্ষণ</button>
+    </form>
+
+    <hr>
+    <h3>⭐ Customer Review</h3>
+    <div id="storeReviews">লোড হচ্ছে...</div>
+  </section>
+
+  <!-- PROFILE -->
+  <section id="profile" class="card page hidden">
+    <h2>👤 আমার Profile</h2>
+    <div id="profileDetails"></div>
+    <p class="small">Account-এর নাম ও ফোন পরিবর্তনের জন্য নিচের ফর্ম ব্যবহার করুন। Email পরিবর্তন Auth Settings থেকে করতে হবে।</p>
+
+    <form id="profileForm">
+      <label>নাম</label>
+      <input name="name" required maxlength="100">
+      <label>মোবাইল নম্বর</label>
+      <input name="phone" required pattern="01[3-9][0-9]{8}">
+      <div id="profileMsg"></div>
+      <button type="submit">Profile Update</button>
+    </form>
+  </section>
+
+</section>
 </main>
 
-<a class="float-cart" href="index.html#cart"><i class="fa-solid fa-cart-shopping"></i> কার্ট <span class="cart-count" id="cartCount">0</span></a>
-<div class="toast" id="toast"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
+(function(){
+'use strict';
+
 const CFG = window.UEX_CONFIG || {};
-const $ = id => document.getElementById(id);
-const esc = v => String(v ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-const bn = v => String(v ?? 0).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
-const money = n => '৳' + bn(Number(n).toLocaleString('en-IN'));
-const stars = n => { n = Math.round(Number(n)||0); return '★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n); };
+const SB_URL = CFG.SUPABASE_URL;
+const SB_KEY = CFG.SUPABASE_ANON_KEY;
 
-const CATEGORY_NAMES = {shop_product:'দোকান ও পণ্য',rent:'বাড়ি ভাড়া',worker:'শ্রমিক',technician:'টেকনিশিয়ান',pickup:'পিকআপ ডেলিভারি',support:'সাপোর্ট'};
-const CATEGORY_ICONS = {shop_product:'fa-store',rent:'fa-house',worker:'fa-people-carry-box',technician:'fa-screwdriver-wrench',pickup:'fa-truck',support:'fa-headset'};
-
-const CART_KEY = 'uex_cart_v1';
-const storeId = new URLSearchParams(location.search).get('id');
-
-let db, store, ads = [], reviews = [], stats = {avg_rating:0,review_count:0};
-
-function toast(text){
-  const t = $('toast'); t.textContent = text; t.style.display = 'block';
-  clearTimeout(toast.t); toast.t = setTimeout(()=>t.style.display='none',2200);
+if(!SB_URL || !SB_KEY){
+  alert('config.js-এ Supabase URL অথবা Publishable Key নেই।');
+  return;
 }
 
-/* ---------- CART (index.html-এর সাথে localStorage-এ শেয়ার করা) ---------- */
-function getCart(){ try{ return JSON.parse(localStorage.getItem(CART_KEY)||'[]'); }catch(_){ return []; } }
-function saveCart(c){ try{ localStorage.setItem(CART_KEY,JSON.stringify(c)); }catch(_){} updateCartCount(); }
-function updateCartCount(){ $('cartCount').textContent = bn(getCart().reduce((s,i)=>s+i.qty,0)); }
+const db = window.supabase.createClient(SB_URL,SB_KEY);
 
-function addToCart(adId){
-  const ad = ads.find(x=>x.id===adId);
-  if(!ad) return;
-  const price = Number(ad.price);
-  if(ad.price===null || !Number.isFinite(price) || price<0){ toast('এই পণ্যের নির্দিষ্ট মূল্য নেই। কল করে জেনে নিন।'); return; }
+const $ = id => document.getElementById(id);
 
-  const cart = getCart();
-  const item = cart.find(x=>x.provider_ad_id===ad.id);
-  const have = item ? item.qty : 0;
-  if(ad.stock!==null && ad.stock!==undefined && have+1>ad.stock){
-    toast(ad.stock===0 ? 'স্টক শেষ' : 'স্টকে মাত্র '+bn(ad.stock)+'টি আছে');
+let user = null;
+let profile = null;
+let store = null;
+let ads = [];
+let editingImageUrl = '';
+let storeLogoUrl = '';
+
+/* ছবির public URL থেকে storage path বের করা (মুছে storage খালি রাখার জন্য) */
+function storagePath(url){
+  const marker = '/provider-ads/';
+  const i = String(url||'').indexOf(marker);
+  return i<0 ? null : decodeURIComponent(String(url).slice(i+marker.length).split('?')[0]);
+}
+
+async function removeImage(url){
+  const p = storagePath(url);
+  if(p) await db.storage.from('provider-ads').remove([p]);
+}
+
+const categories = {
+  shop_product:'দোকান ও পণ্য',
+  rent:'বাড়ি ভাড়া',
+  worker:'শ্রমিক',
+  technician:'টেকনিশিয়ান',
+  pickup:'পিকআপ ডেলিভারি',
+  support:'সাপোর্ট'
+};
+
+const statusNames = {
+  pending:'Admin অনুমোদনের অপেক্ষায়',
+  approved:'অনুমোদিত',
+  rejected:'Admin বাতিল করেছেন',
+  hidden:'লুকানো'
+};
+
+function esc(v){
+  return String(v??'').replace(/[&<>"']/g,c=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+function message(id,text,type){
+  const el = $(id);
+  el.innerHTML = text
+    ? '<div class="msg '+(type||'success')+'">'+esc(text)+'</div>'
+    : '';
+}
+
+function bn(v){
+  return String(v??0).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+}
+
+function switchAuth(mode){
+  const reg = mode==='register';
+
+  $('registerForm').classList.toggle('hidden',!reg);
+  $('loginForm').classList.toggle('hidden',reg);
+
+  $('registerTab').classList.toggle('active',reg);
+  $('loginTab').classList.toggle('active',!reg);
+
+  $('authTitle').textContent = reg?'Provider Registration':'Provider Login';
+  message('registerMsg','');
+  message('loginMsg','');
+}
+
+$('registerTab').onclick = ()=>switchAuth('register');
+$('loginTab').onclick = ()=>switchAuth('login');
+
+async function ensureProfile(){
+  const {data:{user:current},error:authError} = await db.auth.getUser();
+
+  if(authError || !current) throw Error('Login Session পাওয়া যায়নি।');
+
+  user = current;
+
+  const {data:existing,error:readError} = await db
+    .from('provider_accounts')
+    .select('*')
+    .eq('auth_user_id',user.id)
+    .maybeSingle();
+
+  if(readError) throw readError;
+
+  if(existing){
+    profile = existing;
+  }else{
+    const meta = user.user_metadata || {};
+
+    const {data:newProfile,error:insertError} = await db
+      .from('provider_accounts')
+      .insert({
+        auth_user_id:user.id,
+        name:meta.full_name || 'Provider',
+        phone:meta.phone || '',
+        email:user.email
+      })
+      .select()
+      .single();
+
+    if(insertError) throw insertError;
+    profile = newProfile;
+  }
+
+  if(profile.status!=='active'){
+    await db.auth.signOut();
+    throw Error('আপনার Provider Account বর্তমানে Suspended। Admin-এর সঙ্গে যোগাযোগ করুন।');
+  }
+
+  $('providerName').textContent = profile.name;
+  $('providerInfo').textContent = profile.email+' | '+profile.phone;
+
+  await ensureStore();
+
+  showApp();
+  await loadAds();
+}
+
+/* প্রতিটি Provider-এর একটি নিজস্ব Store থাকবে — না থাকলে এখানে তৈরি হয় */
+async function ensureStore(){
+  const {data:existing,error:readError} = await db
+    .from('stores')
+    .select('*')
+    .eq('provider_id',profile.id)
+    .maybeSingle();
+
+  if(readError) throw readError;
+
+  if(existing){
+    store = existing;
     return;
   }
-  if(item) item.qty++;
-  else cart.push({provider_ad_id:ad.id,name:ad.title,price,qty:1,stock:ad.stock ?? null});
-  saveCart(cart);
-  toast('কার্টে যোগ হয়েছে ✓');
+
+  const meta = (user && user.user_metadata) || {};
+  const {data,error} = await db
+    .from('stores')
+    .insert({
+      provider_id:profile.id,
+      name:(meta.store_name || (profile.name+' এর দোকান')).slice(0,100),
+      phone:profile.phone || null
+    })
+    .select()
+    .single();
+
+  if(error) throw error;
+  store = data;
 }
 
-/* ---------- LOAD ---------- */
-async function load(){
-  if(!CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY){ fail('config.js পাওয়া যায়নি।'); return; }
-  if(!storeId){ fail('দোকান নির্বাচন করা হয়নি।'); return; }
-  db = window.supabase.createClient(CFG.SUPABASE_URL,CFG.SUPABASE_ANON_KEY);
-
-  const {data:s,error:se} = await db.from('stores').select('*').eq('id',storeId).maybeSingle();
-  if(se){ fail(se.message); return; }
-  if(!s){ fail('দোকানটি পাওয়া যায়নি।'); return; }
-  store = s;
-  document.title = store.name+' | UPAZILA EXPRESS';
-
-  await Promise.all([loadAds(),loadReviews()]);
-  render();
+function showApp(){
+  $('authSection').classList.add('hidden');
+  $('appSection').classList.remove('hidden');
+  $('logoutBtn').classList.remove('hidden');
 }
+
+async function register(event){
+  event.preventDefault();
+
+  const form = new FormData(event.target);
+  const name = String(form.get('name')||'').trim();
+  const storeName = String(form.get('store_name')||'').trim();
+  const phone = String(form.get('phone')||'').trim();
+  const email = String(form.get('email')||'').trim().toLowerCase();
+  const password = String(form.get('password')||'');
+  const confirm = String(form.get('confirm_password')||'');
+
+  if(!/^01[3-9][0-9]{8}$/.test(phone)){
+    message('registerMsg','সঠিক ১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর দিন।','error');
+    return;
+  }
+
+  if(password.length<8 || password!==confirm){
+    message('registerMsg','Password মিলছে না অথবা ৮ অক্ষরের কম।','error');
+    return;
+  }
+
+  $('registerBtn').disabled = true;
+  message('registerMsg','Account তৈরি হচ্ছে...');
+
+  try{
+    const {data,error} = await db.auth.signUp({
+      email,
+      password,
+      options:{
+        data:{
+          full_name:name,
+          store_name:storeName,
+          phone:phone,
+          account_type:'provider'
+        }
+      }
+    });
+
+    if(error) throw error;
+
+    if(data.session){
+      await ensureProfile();
+    }else{
+      message(
+        'registerMsg',
+        'Registration সম্পন্ন হয়েছে। Email-এ Verification Link পাঠানো হয়েছে। Email Verify করে Login করুন।',
+        'success'
+      );
+      switchAuth('login');
+    }
+
+  }catch(error){
+    message('registerMsg',error.message,'error');
+  }finally{
+    $('registerBtn').disabled = false;
+  }
+}
+
+async function login(event){
+  event.preventDefault();
+
+  const form = new FormData(event.target);
+  const email = String(form.get('email')||'').trim().toLowerCase();
+  const password = String(form.get('password')||'');
+
+  $('loginBtn').disabled = true;
+  message('loginMsg','Login হচ্ছে...');
+
+  try{
+    const {error} = await db.auth.signInWithPassword({email,password});
+    if(error) throw error;
+
+    await ensureProfile();
+
+  }catch(error){
+    message('loginMsg',error.message,'error');
+  }finally{
+    $('loginBtn').disabled = false;
+  }
+}
+
+$('registerForm').addEventListener('submit',register);
+$('loginForm').addEventListener('submit',login);
+
+async function logout(){
+  await db.auth.signOut();
+  user = null;
+  profile = null;
+  store = null;
+  ads = [];
+
+  $('appSection').classList.add('hidden');
+  $('authSection').classList.remove('hidden');
+  $('logoutBtn').classList.add('hidden');
+
+  switchAuth('login');
+}
+
+$('logoutBtn').addEventListener('click',logout);
+
+/* ================= ADS ================= */
 
 async function loadAds(){
-  const {data} = await db.from('provider_ads')
-    .select('id,provider_id,category,title,description,price,price_unit,phone,area,image_url,stock,created_at')
-    .eq('provider_id',store.provider_id).eq('status','approved')
-    .order('created_at',{ascending:false}).limit(300);
+  if(!profile) return;
+
+  $('myAdsList').textContent = 'লোড হচ্ছে...';
+
+  const {data,error} = await db
+    .from('provider_ads')
+    .select('*')
+    .eq('provider_id',profile.id)
+    .order('created_at',{ascending:false});
+
+  if(error){
+    $('myAdsList').textContent = error.message;
+    return;
+  }
+
   ads = data || [];
+  renderAds();
+  updateStats();
 }
 
-async function loadReviews(){
-  const [{data:r},{data:st}] = await Promise.all([
-    db.from('store_reviews').select('id,reviewer_name,rating,comment,created_at')
-      .eq('store_id',store.id).order('created_at',{ascending:false}).limit(100),
+function updateStats(){
+  $('totalAds').textContent = bn(ads.length);
+  $('pendingAds').textContent = bn(ads.filter(a=>a.status==='pending').length);
+  $('approvedAds').textContent = bn(ads.filter(a=>a.status==='approved').length);
+  $('rejectedAds').textContent = bn(ads.filter(a=>a.status==='rejected').length);
+}
+
+function renderAds(){
+  if(!ads.length){
+    $('myAdsList').innerHTML = '<div class="msg">আপনি এখনো কোনো বিজ্ঞাপন দেননি। নতুন বিজ্ঞাপন যোগ করুন।</div>';
+    return;
+  }
+
+  $('myAdsList').innerHTML = ads.map(ad=>{
+    const badgeClass = ad.status==='approved'?'approved':
+      ad.status==='rejected'?'rejected':'';
+
+    return '<article class="ad">'+
+      (ad.image_url
+        ? '<img src="'+esc(ad.image_url)+'" alt="বিজ্ঞাপনের ছবি">'
+        : '<div style="background:#edf2ee;border-radius:9px;display:grid;place-items:center">ছবি নেই</div>')+
+      '<div>'+
+        '<h3>'+esc(ad.title)+'</h3>'+
+        '<div class="small">'+esc(categories[ad.category]||ad.category)+'</div>'+
+        '<p>'+esc(ad.description||'')+'</p>'+
+        '<div><b>৳ '+bn(ad.price||'আলোচনা সাপেক্ষে')+'</b> '+esc(ad.price_unit||'')+'</div>'+
+        '<div class="small">এলাকা: '+esc(ad.area)+' | ফোন: '+esc(ad.phone)+'</div>'+
+        '<p><span class="badge '+badgeClass+'">'+esc(statusNames[ad.status]||ad.status)+'</span></p>'+
+        (ad.admin_note?'<div class="msg">Admin Note: '+esc(ad.admin_note)+'</div>':'')+
+        (ad.category==='shop_product'
+          ? '<div class="stockrow"><b>স্টক:</b> '+
+              '<input type="number" min="0" step="1" data-stock-input="'+esc(ad.id)+'" value="'+esc(ad.stock??'')+'" placeholder="নেই">'+
+              '<button class="secondary" data-stock-save="'+esc(ad.id)+'">স্টক আপডেট</button>'+
+              (ad.stock===0?' <span class="badge rejected">স্টক শেষ</span>':'')+
+            '</div>'
+          : '')+
+        '<div class="actions">'+
+          '<button class="secondary" data-edit="'+esc(ad.id)+'">Edit</button>'+
+          '<button class="danger" data-delete="'+esc(ad.id)+'">🗑 মুছুন</button>'+
+        '</div>'+
+      '</div>'+
+    '</article>';
+  }).join('');
+}
+
+function toggleStockBox(){
+  $('stockBox').classList.toggle('hidden',$('category').value!=='shop_product');
+}
+$('category').addEventListener('change',toggleStockBox);
+
+function resetForm(){
+  $('adForm').reset();
+  toggleStockBox();
+  $('adForm').elements.id.value = '';
+  editingImageUrl = '';
+  $('imagePreview').src = '';
+  $('imagePreview').classList.add('hidden');
+  $('formTitle').textContent = 'নতুন বিজ্ঞাপন যোগ করুন';
+  $('submitAdBtn').textContent = 'Admin-এর কাছে জমা দিন';
+  $('cancelEditBtn').classList.add('hidden');
+  message('adMsg','');
+}
+
+$('cancelEditBtn').addEventListener('click',resetForm);
+
+/* স্টক আপডেট ও বিজ্ঞাপন মোছা */
+$('myAdsList').addEventListener('click',async e=>{
+  const stockId = e.target.dataset.stockSave;
+  const delId = e.target.dataset.delete;
+
+  if(stockId){
+    const input = document.querySelector('[data-stock-input="'+stockId+'"]');
+    const raw = input.value.trim();
+    const stock = raw==='' ? null : Math.max(0,Math.floor(Number(raw)));
+    if(stock!==null && !Number.isFinite(stock)){ alert('সঠিক সংখ্যা দিন।'); return; }
+
+    e.target.disabled = true;
+    const {error} = await db.from('provider_ads')
+      .update({stock,updated_at:new Date().toISOString()})
+      .eq('id',stockId).eq('provider_id',profile.id);
+    e.target.disabled = false;
+
+    if(error){ alert('স্টক আপডেট হয়নি: '+error.message); return; }
+    await loadAds();
+    return;
+  }
+
+  if(delId){
+    const ad = ads.find(x=>x.id===delId);
+    if(!ad) return;
+    if(!confirm('"'+ad.title+'" স্থায়ীভাবে মুছে ফেলবেন? ছবিসহ সব মুছে যাবে।')) return;
+
+    e.target.disabled = true;
+    const {error} = await db.from('provider_ads')
+      .delete().eq('id',delId).eq('provider_id',profile.id);
+
+    if(error){ e.target.disabled = false; alert('মোছা যায়নি: '+error.message); return; }
+
+    try{ await removeImage(ad.image_url); }catch(_){}
+    await loadAds();
+  }
+});
+
+$('myAdsList').addEventListener('click',e=>{
+  const id = e.target.dataset.edit;
+  if(!id) return;
+
+  const ad = ads.find(x=>x.id===id);
+  if(!ad) return;
+
+  const form = $('adForm');
+  form.elements.id.value = ad.id;
+  form.elements.category.value = ad.category;
+  form.elements.title.value = ad.title;
+  form.elements.description.value = ad.description || '';
+  form.elements.price.value = ad.price ?? '';
+  form.elements.price_unit.value = ad.price_unit || '';
+  form.elements.area.value = ad.area;
+  form.elements.phone.value = ad.phone;
+  form.elements.stock.value = ad.stock ?? '';
+  toggleStockBox();
+
+  editingImageUrl = ad.image_url || '';
+
+  if(editingImageUrl){
+    $('imagePreview').src = editingImageUrl;
+    $('imagePreview').classList.remove('hidden');
+  }
+
+  $('formTitle').textContent = 'বিজ্ঞাপন Edit করুন';
+  $('submitAdBtn').textContent = 'পরিবর্তন জমা দিন';
+  $('cancelEditBtn').classList.remove('hidden');
+
+  openPage('newAd');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+/* Image preview */
+$('adImage').addEventListener('change',()=>{
+  const file = $('adImage').files[0];
+
+  if(!file) return;
+
+  if(file.size>5*1024*1024){
+    message('adMsg','ছবির সাইজ ৫ MB-এর বেশি হতে পারবে না।','error');
+    $('adImage').value = '';
+    return;
+  }
+
+  const allowed = ['image/jpeg','image/png','image/webp'];
+
+  if(!allowed.includes(file.type)){
+    message('adMsg','শুধু JPG, PNG অথবা WebP ছবি দেওয়া যাবে।','error');
+    $('adImage').value = '';
+    return;
+  }
+
+  $('imagePreview').src = URL.createObjectURL(file);
+  $('imagePreview').classList.remove('hidden');
+});
+
+async function uploadImage(file,keepUrl){
+  if(!file) return keepUrl===undefined ? (editingImageUrl || null) : (keepUrl || null);
+
+  const allowed = ['image/jpeg','image/png','image/webp'];
+
+  if(!allowed.includes(file.type)) throw Error('ছবির Format সঠিক নয়।');
+  if(file.size>5*1024*1024) throw Error('ছবির সাইজ ৫ MB-এর বেশি।');
+
+  const ext = file.type==='image/png'?'png':
+              file.type==='image/webp'?'webp':'jpg';
+
+  const path = user.id+'/'+crypto.randomUUID()+'.'+ext;
+
+  const {error} = await db.storage
+    .from('provider-ads')
+    .upload(path,file,{
+      contentType:file.type,
+      upsert:false
+    });
+
+  if(error) throw error;
+
+  const {data} = db.storage.from('provider-ads').getPublicUrl(path);
+  return data.publicUrl;
+}
+
+async function submitAd(event){
+  event.preventDefault();
+
+  if(!profile || profile.status!=='active'){
+    message('adMsg','আপনার Provider Account সক্রিয় নয়।','error');
+    return;
+  }
+
+  const form = event.target;
+  const f = new FormData(form);
+
+  const id = String(f.get('id')||'');
+  const category = String(f.get('category')||'');
+  const title = String(f.get('title')||'').trim();
+  const description = String(f.get('description')||'').trim();
+  const area = String(f.get('area')||'').trim();
+  const phone = String(f.get('phone')||'').trim();
+  const priceText = String(f.get('price')||'').trim();
+
+  if(!categories[category]){
+    message('adMsg','সঠিক ক্যাটাগরি নির্বাচন করুন।','error');
+    return;
+  }
+
+  if(!/^01[3-9][0-9]{8}$/.test(phone)){
+    message('adMsg','সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন।','error');
+    return;
+  }
+
+  if(!title || !description || !area){
+    message('adMsg','সব প্রয়োজনীয় তথ্য পূরণ করুন।','error');
+    return;
+  }
+
+  const btn = $('submitAdBtn');
+  btn.disabled = true;
+  message('adMsg','বিজ্ঞাপন জমা হচ্ছে...');
+
+  try{
+    const file = $('adImage').files[0];
+    const image_url = await uploadImage(file);
+
+    const stockText = String(f.get('stock')||'').trim();
+    const stock = (category==='shop_product' && stockText!=='')
+      ? Math.max(0,Math.floor(Number(stockText)))
+      : null;
+
+    const payload = {
+      category,
+      title,
+      description,
+      stock,
+      price:priceText===''?null:Number(priceText),
+      price_unit:String(f.get('price_unit')||''),
+      area,
+      phone,
+      image_url,
+      status:'pending',
+      admin_note:null
+    };
+
+    let result;
+
+    if(id){
+      result = await db
+        .from('provider_ads')
+        .update(payload)
+        .eq('id',id)
+        .eq('provider_id',profile.id)
+        .select()
+        .single();
+    }else{
+      result = await db
+        .from('provider_ads')
+        .insert({
+          ...payload,
+          provider_id:profile.id
+        })
+        .select()
+        .single();
+    }
+
+    if(result.error) throw result.error;
+
+    /* ছবি বদলালে পুরোনো ছবি storage থেকে মুছে ফেলা */
+    if(id && file && editingImageUrl && editingImageUrl!==image_url){
+      try{ await removeImage(editingImageUrl); }catch(_){}
+    }
+
+    resetForm();
+    message('adMsg','বিজ্ঞাপন Admin-এর কাছে জমা হয়েছে। অনুমোদনের পর Customer দেখতে পাবে।','success');
+
+    await loadAds();
+    openPage('myAds');
+
+  }catch(error){
+    message('adMsg',error.message,'error');
+  }finally{
+    btn.disabled = false;
+  }
+}
+
+$('adForm').addEventListener('submit',submitAd);
+
+/* ================= PROFILE ================= */
+
+function renderProfile(){
+  $('profileDetails').innerHTML =
+    '<div class="msg">Email: '+esc(profile.email)+
+    '<br>Account Status: '+esc(profile.status)+
+    '<br>Registration: '+esc(profile.created_at||'')+'</div>';
+
+  $('profileForm').elements.name.value = profile.name;
+  $('profileForm').elements.phone.value = profile.phone;
+}
+
+$('profileForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+
+  const f = new FormData(e.target);
+  const name = String(f.get('name')||'').trim();
+  const phone = String(f.get('phone')||'').trim();
+
+  if(!/^01[3-9][0-9]{8}$/.test(phone)){
+    message('profileMsg','সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন।','error');
+    return;
+  }
+
+  const {data,error} = await db
+    .from('provider_accounts')
+    .update({name,phone})
+    .eq('id',profile.id)
+    .select()
+    .single();
+
+  if(error){
+    message('profileMsg',error.message,'error');
+    return;
+  }
+
+  profile = data;
+  $('providerName').textContent = profile.name;
+  $('providerInfo').textContent = profile.email+' | '+profile.phone;
+  renderProfile();
+
+  message('profileMsg','Profile Update হয়েছে।','success');
+});
+
+/* ================= STORE ================= */
+
+function stars(n){
+  n = Math.round(Number(n)||0);
+  return '★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n);
+}
+
+async function renderStore(){
+  if(!store) return;
+
+  const f = $('storeForm').elements;
+  f.name.value = store.name || '';
+  f.description.value = store.description || '';
+  f.area.value = store.area || '';
+  f.phone.value = store.phone || '';
+
+  storeLogoUrl = store.logo_url || '';
+  if(storeLogoUrl){
+    $('storeLogoPreview').src = storeLogoUrl;
+    $('storeLogoPreview').classList.remove('hidden');
+  }
+
+  $('storeReviews').textContent = 'লোড হচ্ছে...';
+
+  const [{data:reviews,error},{data:stats}] = await Promise.all([
+    db.from('store_reviews').select('*').eq('store_id',store.id).order('created_at',{ascending:false}).limit(100),
     db.from('store_stats').select('*').eq('store_id',store.id).maybeSingle()
   ]);
-  reviews = r || [];
-  stats = st || {avg_rating:0,review_count:0};
+
+  if(error){ $('storeReviews').textContent = error.message; return; }
+
+  $('storeSummary').innerHTML =
+    '<div class="msg success">আপনার দোকান: <b>'+esc(store.name)+'</b> — '+
+    '<span style="color:#d98a00">'+stars(stats?.avg_rating)+'</span> '+
+    bn(stats?.avg_rating||0)+' ('+bn(stats?.review_count||0)+'টি Review) | '+
+    'অনুমোদিত পণ্য/সেবা: '+bn(stats?.ad_count||0)+'<br>'+
+    '<a href="store.html?id='+encodeURIComponent(store.id)+'" target="_blank" rel="noopener">Customer যেভাবে দেখে →</a></div>';
+
+  $('storeReviews').innerHTML = (reviews&&reviews.length)
+    ? reviews.map(r=>
+        '<div class="review"><b>'+esc(r.reviewer_name)+'</b> '+
+        '<span style="color:#d98a00">'+stars(r.rating)+'</span>'+
+        '<div>'+esc(r.comment||'')+'</div>'+
+        '<div class="small">'+esc(new Date(r.created_at).toLocaleString('bn-BD'))+'</div></div>'
+      ).join('')
+    : '<div class="msg">এখনো কোনো Review আসেনি।</div>';
 }
 
-function fail(text){
-  $('app').innerHTML = '<div class="empty"><i class="fa-solid fa-circle-exclamation"></i><br>'+esc(text)+'<br><br><a class="btn" href="index.html">হোমে ফিরুন</a></div>';
-}
+$('storeLogo').addEventListener('change',()=>{
+  const file = $('storeLogo').files[0];
+  if(!file) return;
+  if(file.size>5*1024*1024 || !['image/jpeg','image/png','image/webp'].includes(file.type)){
+    message('storeMsg','JPG/PNG/WebP, সর্বোচ্চ ৫ MB ছবি দিন।','error');
+    $('storeLogo').value = '';
+    return;
+  }
+  $('storeLogoPreview').src = URL.createObjectURL(file);
+  $('storeLogoPreview').classList.remove('hidden');
+});
 
-/* ---------- RENDER ---------- */
-function stockBadge(ad){
-  if(ad.category!=='shop_product' || ad.stock===null || ad.stock===undefined) return '';
-  if(ad.stock<=0) return '<span class="stock out">স্টক শেষ</span>';
-  if(ad.stock<=5) return '<span class="stock low">মাত্র '+bn(ad.stock)+'টি বাকি</span>';
-  return '<span class="stock in">স্টকে আছে: '+bn(ad.stock)+'টি</span>';
-}
-
-function render(){
-  const logo = store.logo_url
-    ? '<img class="logo" src="'+esc(store.logo_url)+'" alt="" onerror="this.outerHTML=\'<div class=logo><i class=\\\'fa-solid fa-store\\\'></i></div>\'">'
-    : '<div class="logo"><i class="fa-solid fa-store"></i></div>';
-
-  const productsHtml = ads.length ? ads.map(ad=>{
-    const icon = CATEGORY_ICONS[ad.category] || 'fa-bullhorn';
-    const img = ad.image_url ? '<img src="'+esc(ad.image_url)+'" alt="'+esc(ad.title)+'" loading="lazy">' : '<div class="noimg"><i class="fa-solid '+icon+'"></i></div>';
-    const price = (ad.price!==null && ad.price!=='') ? money(ad.price)+(ad.price_unit?' / '+esc(ad.price_unit):'') : 'দাম আলোচনা সাপেক্ষে';
-    const out = ad.category==='shop_product' && ad.stock!==null && ad.stock!==undefined && ad.stock<=0;
-    const main = ad.category==='shop_product'
-      ? '<button class="btn" '+(out?'disabled':'')+' onclick="addToCart(\''+esc(ad.id)+'\')"><i class="fa-solid fa-cart-plus"></i> '+(out?'স্টক শেষ':'কার্টে যোগ')+'</button>'
-      : '';
-    return '<article class="card">'+img+'<div class="card-body">'+
-      '<h3>'+esc(ad.title)+'</h3>'+
-      '<div class="muted"><i class="fa-solid '+icon+'"></i> '+esc(CATEGORY_NAMES[ad.category]||'')+' · <i class="fa-solid fa-location-dot"></i> '+esc(ad.area||'')+'</div>'+
-      '<div class="desc">'+esc(ad.description||'')+'</div>'+
-      '<div class="price">'+price+'</div>'+stockBadge(ad)+
-      '<div class="actions">'+main+(ad.phone?'<a class="btn alt" href="tel:'+esc(ad.phone)+'"><i class="fa-solid fa-phone"></i> কল</a>':'')+'</div>'+
-    '</div></article>';
-  }).join('') : '<div class="empty">এই দোকানে এখনো কোনো অনুমোদিত পণ্য নেই।</div>';
-
-  $('app').innerHTML =
-    '<section class="store-head">'+logo+
-      '<div class="store-info"><h1>'+esc(store.name)+'</h1>'+
-        '<div><span class="stars">'+stars(stats.avg_rating)+'</span> <b>'+bn(stats.avg_rating||0)+'</b> <span class="muted">('+bn(stats.review_count||0)+'টি Review)</span></div>'+
-        '<div class="muted" style="margin-top:6px">'+esc(store.description||'')+'</div>'+
-        '<div class="row">'+
-          (store.area?'<span class="pill"><i class="fa-solid fa-location-dot"></i> '+esc(store.area)+'</span>':'')+
-          '<span class="pill"><i class="fa-solid fa-box"></i> '+bn(ads.length)+'টি পণ্য/সেবা</span>'+
-          (store.phone?'<a class="btn" href="tel:'+esc(store.phone)+'"><i class="fa-solid fa-phone"></i> কল করুন</a>':'')+
-        '</div></div>'+
-    '</section>'+
-
-    '<h2 class="sec">পণ্য ও সেবা <small>'+bn(ads.length)+'টি</small></h2>'+
-    '<div class="grid">'+productsHtml+'</div>'+
-
-    '<h2 class="sec">⭐ Customer Review <small>'+bn(stats.review_count||0)+'টি</small></h2>'+
-    '<div class="review-wrap">'+
-      '<div class="panel">'+
-        '<div style="display:flex;gap:14px;align-items:center;margin-bottom:12px"><div class="big-rate">'+bn(stats.avg_rating||0)+'</div><div><div class="stars">'+stars(stats.avg_rating)+'</div><div class="muted">৫ এর মধ্যে</div></div></div>'+
-        '<form id="reviewForm">'+
-          '<div class="field"><label>আপনার নাম *</label><input id="rvName" required maxlength="60"></div>'+
-          '<div class="field"><label>আপনার রেটিং *</label><div class="star-pick-wrap"><div class="star-pick">'+
-            [5,4,3,2,1].map(n=>'<input type="radio" name="rating" id="st'+n+'" value="'+n+'"><label for="st'+n+'" title="'+bn(n)+' স্টার">★</label>').join('')+
-          '</div></div></div>'+
-          '<div class="field"><label>মন্তব্য</label><textarea id="rvComment" maxlength="1000" placeholder="দোকান ও পণ্য সম্পর্কে আপনার অভিজ্ঞতা লিখুন"></textarea></div>'+
-          '<div id="rvMsg"></div>'+
-          '<button class="btn" id="rvBtn" type="submit" style="width:100%;justify-content:center">Review জমা দিন</button>'+
-        '</form>'+
-      '</div>'+
-      '<div class="panel">'+
-        (reviews.length ? reviews.map(r=>
-          '<div class="review"><span class="who">'+esc(r.reviewer_name)+'</span> <span class="stars">'+stars(r.rating)+'</span>'+
-          (r.comment?'<p>'+esc(r.comment)+'</p>':'')+
-          '<div class="muted">'+esc(new Date(r.created_at).toLocaleDateString('bn-BD'))+'</div></div>'
-        ).join('') : '<div class="muted">এখনো কোনো Review নেই। আপনিই প্রথম Review দিন!</div>')+
-      '</div>'+
-    '</div>';
-
-  $('reviewForm').addEventListener('submit',submitReview);
-  try{ const n = localStorage.getItem('uex_rv_name'); if(n) $('rvName').value = n; }catch(_){}
-}
-
-async function submitReview(e){
+$('storeForm').addEventListener('submit',async e=>{
   e.preventDefault();
-  const rating = Number((document.querySelector('input[name="rating"]:checked')||{}).value);
-  const name = $('rvName').value.trim();
-  const comment = $('rvComment').value.trim();
-  const msg = (t,c)=>$('rvMsg').innerHTML = t ? '<div class="msg '+c+'">'+esc(t)+'</div>' : '';
 
-  if(!rating){ msg('স্টার দিয়ে রেটিং নির্বাচন করুন।','err'); return; }
-  if(!name){ msg('আপনার নাম লিখুন।','err'); return; }
+  const f = new FormData(e.target);
+  const name = String(f.get('name')||'').trim();
+  const phone = String(f.get('phone')||'').trim();
 
-  const key = 'uex_rv_'+store.id;
-  try{ if(localStorage.getItem(key)){ msg('আপনি এই দোকানে ইতিমধ্যে Review দিয়েছেন। ধন্যবাদ!','err'); return; } }catch(_){}
+  if(name.length<2){ message('storeMsg','দোকানের নাম দিন।','error'); return; }
+  if(phone && !/^01[3-9][0-9]{8}$/.test(phone)){
+    message('storeMsg','সঠিক ১১ সংখ্যার মোবাইল নম্বর দিন।','error');
+    return;
+  }
 
-  $('rvBtn').disabled = true;
-  const {error} = await db.from('store_reviews').insert({store_id:store.id,reviewer_name:name,rating,comment:comment||null});
-  $('rvBtn').disabled = false;
+  message('storeMsg','সংরক্ষণ হচ্ছে...');
 
-  if(error){ msg('Review জমা হয়নি: '+error.message,'err'); return; }
+  try{
+    const file = $('storeLogo').files[0];
+    const oldLogo = storeLogoUrl;
+    const logo_url = await uploadImage(file,storeLogoUrl);
 
-  try{ localStorage.setItem(key,'1'); localStorage.setItem('uex_rv_name',name); }catch(_){}
-  await loadReviews();
-  render();
-  toast('আপনার Review জমা হয়েছে। ধন্যবাদ!');
+    const {data,error} = await db.from('stores')
+      .update({
+        name,
+        description:String(f.get('description')||'').trim()||null,
+        area:String(f.get('area')||'').trim()||null,
+        phone:phone||null,
+        logo_url,
+        updated_at:new Date().toISOString()
+      })
+      .eq('id',store.id)
+      .select().single();
+
+    if(error) throw error;
+
+    if(file && oldLogo && oldLogo!==logo_url){
+      try{ await removeImage(oldLogo); }catch(_){}
+    }
+
+    store = data;
+    $('storeLogo').value = '';
+    message('storeMsg','দোকানের তথ্য সংরক্ষণ হয়েছে।','success');
+    renderStore();
+  }catch(error){
+    message('storeMsg',error.message,'error');
+  }
+});
+
+/* ================= PAGE NAVIGATION ================= */
+
+function openPage(page){
+  document.querySelectorAll('.page').forEach(x=>x.classList.add('hidden'));
+  document.querySelectorAll('[data-page]').forEach(x=>x.classList.remove('active'));
+
+  $(page).classList.remove('hidden');
+
+  const tab = document.querySelector('[data-page="'+page+'"]');
+  if(tab) tab.classList.add('active');
+
+  if(page==='profile') renderProfile();
+  if(page==='store') renderStore();
+  if(page==='myAds') loadAds();
 }
 
-updateCartCount();
-load();
-/* স্টক হালনাগাদ রাখতে প্রতি ১ মিনিটে পণ্য রিফ্রেশ — Review ফর্মে কিছু লিখতে থাকলে রিফ্রেশ হবে না */
-setInterval(async()=>{
-  if(!store || document.hidden) return;
-  const typing = $('rvComment') && ($('rvComment').value.trim() || document.querySelector('input[name="rating"]:checked'));
-  if(typing) return;
-  await loadAds(); render();
-},60000);
+document.querySelectorAll('[data-page]').forEach(btn=>{
+  btn.addEventListener('click',()=>openPage(btn.dataset.page));
+});
+
+/* ================= SESSION RESTORE ================= */
+
+async function start(){
+  try{
+    const {data:{session}} = await db.auth.getSession();
+
+    if(session){
+      await ensureProfile();
+    }
+  }catch(error){
+    $('authSection').classList.remove('hidden');
+    $('appSection').classList.add('hidden');
+    message('loginMsg',error.message,'error');
+  }
+}
+
+db.auth.onAuthStateChange((event,session)=>{
+  if(event==='SIGNED_OUT'){
+    user = null;
+    profile = null;
+  }
+});
+
+start();
+
+})();
 </script>
 </body>
 </html>
