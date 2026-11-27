@@ -49,6 +49,10 @@ a{color:#08734f}
 .mapstat b{color:#08734f}
 .pane h2{margin-top:0}
 .actionrow{display:flex;gap:7px;flex-wrap:wrap}
+.archbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}
+.archbar label{display:inline-flex;gap:6px;align-items:center;margin:0;font-weight:600}
+.archbar input[type=checkbox],td input[type=checkbox]{width:auto}
+.itemlist{margin:6px 0 0;padding-left:18px;font-size:13px}
 .adimage{width:90px;height:75px;object-fit:cover;border-radius:8px;border:1px solid #ddd}
 @media(max-width:600px){#liveMap{height:380px}.card{padding:12px}header h2{font-size:19px}}
 </style>
@@ -100,6 +104,8 @@ a{color:#08734f}
     <button class="tab" data-tab="rent">🏠 বাসা ভাড়া</button>
     <button class="tab" data-tab="providers">👷 কর্মী/টেকনিশিয়ান</button>
     <button class="tab" data-tab="providerAds">📢 Provider বিজ্ঞাপন</button>
+    <button class="tab" data-tab="archive">🗄️ Delivery আর্কাইভ</button>
+    <button class="tab" data-tab="reviews">⭐ Review</button>
     <button class="tab" data-tab="requests">📞 অন্যান্য অনুরোধ</button>
   </div>
 
@@ -199,6 +205,37 @@ a{color:#08734f}
     <div id="providerAdsTable" class="tablewrap">লোড হচ্ছে...</div>
   </section>
 
+  <section id="archive" class="card pane hidden">
+    <h2>🗄️ Delivery আর্কাইভ (PDF ও মুছে ফেলা)</h2>
+    <p class="small">Delivered / Cancelled Order-এর সম্পূর্ণ বিবরণ (Customer, পণ্য, Rider, সময়) PDF করে রাখুন, তারপর মুছে ফেলুন — এতে Database ও Hosting Storage খালি থাকবে। PDF বাটনে চাপলে Print Window খুলবে; সেখানে <b>"Save as PDF"</b> নির্বাচন করুন।</p>
+    <div class="stats">
+      <div class="stat">Delivered<strong id="arDelivered">০</strong></div>
+      <div class="stat">Cancelled<strong id="arCancelled">০</strong></div>
+      <div class="stat">Delivered মোট টাকা<strong id="arTotal">৳০</strong></div>
+      <div class="stat">নির্বাচিত<strong id="arSelected">০</strong></div>
+    </div>
+    <div class="archbar">
+      <label><input type="checkbox" id="arAll"> সব নির্বাচন</label>
+      <select id="arFilter" style="width:auto">
+        <option value="all">Delivered + Cancelled</option>
+        <option value="delivered">শুধু Delivered</option>
+        <option value="cancelled">শুধু Cancelled</option>
+      </select>
+      <button id="arPdfBtn" class="secondary">📄 নির্বাচিতগুলোর PDF</button>
+      <button id="arPdfDelBtn" class="warning">📄 PDF করে মুছুন</button>
+      <button id="arDelBtn" class="danger">🗑 শুধু মুছুন</button>
+    </div>
+    <div id="archiveMsg"></div>
+    <div id="archiveTable" class="tablewrap">লোড হচ্ছে...</div>
+  </section>
+
+  <section id="reviews" class="card pane hidden">
+    <h2>⭐ Customer Review</h2>
+    <p class="small">অনুপযুক্ত বা ভুয়া Review এখান থেকে মুছে ফেলতে পারবেন।</p>
+    <div id="reviewMsg"></div>
+    <div id="reviewTable" class="tablewrap">লোড হচ্ছে...</div>
+  </section>
+
   <section id="requests" class="card pane hidden">
     <h2>📞 অন্যান্য সার্ভিস অনুরোধ</h2>
     <div id="requestTable" class="tablewrap"></div>
@@ -225,6 +262,8 @@ let refreshTokenValue=null;
 let loading=false;
 
 let orders=[],riders=[],locations=[],products=[],shops=[],rents=[],providers=[],requests=[],providerAds=[];
+let orderItems=[],stores=[],reviews=[];
+const selectedOrders=new Set();
 let liveMap=null,riderLayer=null,customerLayer=null,mapHasCentered=false;
 let activeTab='orders';
 let providerAdsFilter='all';
@@ -382,10 +421,13 @@ async function loadAll(){
       api('rent_listings?select=*&order=created_at.desc&limit=200'),
       api('provider_profiles?select=*&order=created_at.desc&limit=200'),
       api('service_requests?select=*&order=created_at.desc&limit=200'),
-      api('provider_ads?select=*&order=created_at.desc&limit=500')
+      api('provider_ads?select=*&order=created_at.desc&limit=500'),
+      api('order_items?select=*&limit=5000'),
+      api('stores?select=id,provider_id,name&limit=500'),
+      api('store_reviews?select=*&order=created_at.desc&limit=500')
     ]);
 
-    [orders,riders,locations,products,shops,rents,providers,requests,providerAds]=result;
+    [orders,riders,locations,products,shops,rents,providers,requests,providerAds,orderItems,stores,reviews]=result;
 
     updateStats();
     renderOrders();
@@ -397,6 +439,8 @@ async function loadAll(){
     renderApproval('providers',providers);
     renderProviderAds();
     renderRequests();
+    renderArchive();
+    renderReviews();
 
   }catch(error){
     showMessage('orderMsg',error.message,'error');
@@ -780,7 +824,8 @@ function renderProviderAds(){
       ).join('')+'</select>'+
       '<label>Admin Note</label>'+
       '<textarea data-pa-note="'+esc(ad.id)+'" rows="2" placeholder="কারণ বা মন্তব্য লিখুন">'+esc(ad.admin_note||'')+'</textarea>'+
-      '<button data-pa-save="'+esc(ad.id)+'" style="margin-top:7px">সিদ্ধান্ত সংরক্ষণ</button></td>'+
+      '<button data-pa-save="'+esc(ad.id)+'" style="margin-top:7px">সিদ্ধান্ত সংরক্ষণ</button> '+
+      '<button class="danger" data-pa-del="'+esc(ad.id)+'" style="margin-top:7px">🗑 মুছুন</button></td>'+
       '</tr>';
   }).join('')+'</tbody></table>';
 }
@@ -811,6 +856,19 @@ async function saveProviderAd(id){
 }
 
 $('providerAdsTable').addEventListener('click',async e=>{
+  const delId=e.target.dataset.paDel;
+  if(delId){
+    const ad=providerAds.find(x=>String(x.id)===String(delId));
+    if(!ad||!confirm('"'+(ad.title||'')+'" বিজ্ঞাপনটি ছবিসহ স্থায়ীভাবে মুছে ফেলবেন?'))return;
+    e.target.disabled=true;
+    try{
+      await api('provider_ads?id=eq.'+encodeURIComponent(delId),{method:'DELETE',headers:{Prefer:'return=minimal'}});
+      await deleteStorageImage(ad.image_url);
+      showMessage('providerAdsMsg','বিজ্ঞাপন ও ছবি মুছে ফেলা হয়েছে।','success');
+      await loadAll();
+    }catch(error){e.target.disabled=false;showMessage('providerAdsMsg',error.message,'error');}
+    return;
+  }
   const id=e.target.dataset.paSave;
   if(!id)return;
   const btn=e.target;
@@ -829,6 +887,236 @@ $('pendingAdsBtn').addEventListener('click',()=>{
 $('allAdsBtn').addEventListener('click',()=>{
   providerAdsFilter='all';
   renderProviderAds();
+});
+
+/* STORAGE IMAGE DELETE */
+async function deleteStorageImage(url){
+  const marker='/provider-ads/';
+  const i=String(url||'').indexOf(marker);
+  if(i<0)return;
+  const path=decodeURIComponent(String(url).slice(i+marker.length).split('?')[0]);
+  try{
+    await fetch(API+'/storage/v1/object/provider-ads/'+path.split('/').map(encodeURIComponent).join('/'),{
+      method:'DELETE',headers:{apikey:KEY,Authorization:'Bearer '+token}
+    });
+  }catch(_){}
+}
+
+/* DELIVERY ARCHIVE — PDF + DELETE */
+const statusBn={new:'নতুন',confirmed:'Confirm',assigned:'Rider Assigned',on_the_way:'পথে',delivered:'Delivered',cancelled:'Cancelled'};
+const fmtDate=v=>v?new Date(v).toLocaleString('bn-BD',{dateStyle:'medium',timeStyle:'short'}):'-';
+
+function archiveOrders(){
+  const f=$('arFilter').value;
+  return orders.filter(o=>f==='all'?['delivered','cancelled'].includes(o.status):o.status===f);
+}
+
+function itemsOf(o){
+  return orderItems.filter(i=>String(i.order_id)===String(o.id));
+}
+
+function storeNameOfItem(i){
+  const ad=providerAds.find(a=>String(a.id)===String(i.provider_ad_id));
+  if(!ad)return '';
+  const st=stores.find(s=>String(s.provider_id)===String(ad.provider_id));
+  return st?st.name:'';
+}
+
+function orderTotal(o){
+  const t=Number(o.total_amount);
+  if(Number.isFinite(t)&&t>0)return t;
+  return itemsOf(o).reduce((s,i)=>s+Number(i.unit_price||0)*Number(i.quantity||1),0);
+}
+
+function renderArchive(){
+  const list=archiveOrders();
+  const delivered=orders.filter(o=>o.status==='delivered');
+  $('arDelivered').textContent=bn(delivered.length);
+  $('arCancelled').textContent=bn(orders.filter(o=>o.status==='cancelled').length);
+  $('arTotal').textContent='৳'+bn(delivered.reduce((s,o)=>s+orderTotal(o),0));
+
+  [...selectedOrders].forEach(id=>{if(!list.some(o=>String(o.id)===id))selectedOrders.delete(id);});
+  $('arSelected').textContent=bn(selectedOrders.size);
+  $('arAll').checked=list.length>0&&list.every(o=>selectedOrders.has(String(o.id)));
+
+  if(!list.length){$('archiveTable').innerHTML='আর্কাইভ করার মতো Delivered / Cancelled Order নেই।';return;}
+
+  $('archiveTable').innerHTML=
+  '<table><thead><tr><th></th><th>Order</th><th>Customer</th><th>পণ্য</th><th>Rider ও সময়</th><th>টাকা</th><th>কাজ</th></tr></thead><tbody>'+
+  list.map(o=>{
+    const rider=riders.find(r=>String(r.id)===String(o.assigned_rider_id));
+    const items=itemsOf(o);
+    return '<tr>'+
+      '<td><input type="checkbox" data-ar-check="'+esc(o.id)+'" '+(selectedOrders.has(String(o.id))?'checked':'')+'></td>'+
+      '<td><b>'+esc(o.ref||o.id)+'</b><div class="small">'+esc(statusBn[o.status]||o.status)+'</div></td>'+
+      '<td>'+esc(o.customer_name)+'<br>'+phoneLink(o.customer_phone)+'<div class="small">'+esc(o.delivery_address||'')+' '+esc(o.area||'')+'</div></td>'+
+      '<td>'+(items.length?'<ul class="itemlist">'+items.map(i=>'<li>'+esc(i.product_name||'পণ্য')+' × '+bn(i.quantity||1)+'</li>').join('')+'</ul>':'-')+'</td>'+
+      '<td>'+(rider?esc(rider.name)+'<br>'+phoneLink(rider.phone):'Rider নেই')+
+        '<div class="small">অর্ডার: '+esc(fmtDate(o.created_at))+'<br>ডেলিভারি: '+esc(fmtDate(o.delivered_at))+'</div></td>'+
+      '<td>৳'+bn(orderTotal(o))+'</td>'+
+      '<td><div class="actionrow"><button class="secondary" data-ar-pdf="'+esc(o.id)+'">📄 PDF</button>'+
+        '<button class="danger" data-ar-del="'+esc(o.id)+'">🗑</button></div></td>'+
+    '</tr>';
+  }).join('')+'</tbody></table>';
+}
+
+function orderSection(o,index){
+  const rider=riders.find(r=>String(r.id)===String(o.assigned_rider_id));
+  const items=itemsOf(o);
+  const rows=items.map((i,n)=>{
+    const q=Number(i.quantity||1),u=Number(i.unit_price||0);
+    return '<tr><td>'+bn(n+1)+'</td><td>'+esc(i.product_name||'পণ্য')+'</td><td>'+esc(storeNameOfItem(i)||'-')+'</td>'+
+      '<td class="r">'+bn(q)+'</td><td class="r">৳'+bn(u)+'</td><td class="r">৳'+bn(q*u)+'</td></tr>';
+  }).join('')||'<tr><td colspan="6">পণ্যের তালিকা পাওয়া যায়নি</td></tr>';
+
+  return '<section class="order">'+
+    '<h2>Order: '+esc(o.ref||o.id)+' <span class="tag '+esc(o.status)+'">'+esc(statusBn[o.status]||o.status)+'</span></h2>'+
+    '<table class="kv">'+
+      '<tr><th>Customer</th><td>'+esc(o.customer_name||'')+'</td><th>মোবাইল</th><td>'+esc(o.customer_phone||'')+'</td></tr>'+
+      '<tr><th>ঠিকানা</th><td colspan="3">'+esc(o.delivery_address||'')+(o.area?' — '+esc(o.area):'')+'</td></tr>'+
+      (o.customer_note?'<tr><th>নির্দেশনা</th><td colspan="3">'+esc(o.customer_note)+'</td></tr>':'')+
+      '<tr><th>Rider</th><td>'+esc(rider?rider.name:'Assign করা হয়নি')+'</td><th>Rider ফোন</th><td>'+esc(rider?rider.phone:'-')+'</td></tr>'+
+      '<tr><th>অর্ডার সময়</th><td>'+esc(fmtDate(o.created_at))+'</td><th>Rider Assign</th><td>'+esc(fmtDate(o.assigned_at))+'</td></tr>'+
+      '<tr><th>ডেলিভারি সময়</th><td>'+esc(fmtDate(o.delivered_at))+'</td><th>অবস্থা</th><td>'+esc(statusBn[o.status]||o.status)+'</td></tr>'+
+    '</table>'+
+    '<table class="items"><thead><tr><th>#</th><th>পণ্য</th><th>দোকান</th><th class="r">পরিমাণ</th><th class="r">একক দাম</th><th class="r">মোট</th></tr></thead><tbody>'+rows+
+    '<tr class="sum"><td colspan="5" class="r">সর্বমোট</td><td class="r">৳'+bn(orderTotal(o))+'</td></tr></tbody></table>'+
+  '</section>';
+}
+
+function buildReportHtml(list){
+  const delivered=list.filter(o=>o.status==='delivered');
+  const summary=list.length>1
+    ?'<section class="order"><h2>সারসংক্ষেপ</h2><p>মোট Order: <b>'+bn(list.length)+'</b> | Delivered: <b>'+bn(delivered.length)+'</b> | Delivered টাকা: <b>৳'+bn(delivered.reduce((s,o)=>s+orderTotal(o),0))+'</b></p>'+
+      '<table class="items"><thead><tr><th>Order</th><th>Customer</th><th>তারিখ</th><th>অবস্থা</th><th class="r">টাকা</th></tr></thead><tbody>'+
+      list.map(o=>'<tr><td>'+esc(o.ref||o.id)+'</td><td>'+esc(o.customer_name||'')+'</td><td>'+esc(fmtDate(o.delivered_at||o.created_at))+'</td><td>'+esc(statusBn[o.status]||o.status)+'</td><td class="r">৳'+bn(orderTotal(o))+'</td></tr>').join('')+
+      '</tbody></table></section>'
+    :'';
+
+  return '<!DOCTYPE html><html lang="bn"><head><meta charset="UTF-8"><title>Delivery Report</title>'+
+  '<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">'+
+  '<style>@page{size:A4;margin:14mm}*{box-sizing:border-box}body{font-family:"Hind Siliguri",sans-serif;color:#111;font-size:13px;margin:0}'+
+  '.head{border-bottom:3px solid #08734f;padding-bottom:8px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:end}'+
+  '.head h1{margin:0;color:#08734f;font-size:22px}.head small{color:#555}'+
+  '.order{page-break-after:always;margin-bottom:20px}.order:last-child{page-break-after:auto}'+
+  'h2{font-size:17px;margin:0 0 10px}.tag{font-size:12px;padding:2px 9px;border-radius:12px;background:#e1f5e8;color:#176b3c;margin-left:8px}.tag.cancelled{background:#fee4e2;color:#b42318}'+
+  'table{width:100%;border-collapse:collapse;margin-bottom:12px}th,td{border:1px solid #cfd8d2;padding:6px 8px;text-align:left;vertical-align:top}'+
+  'th{background:#f1f6f3;font-weight:600}.kv th{width:17%}.r{text-align:right}.sum td{font-weight:700;background:#f8faf9}'+
+  '.foot{margin-top:10px;font-size:11px;color:#666}</style></head><body>'+
+  '<div class="head"><div><h1>UPAZILA EXPRESS</h1><small>Delivery Report | '+esc((window.UEX_CONFIG||{}).UPAZILA_NAME||'')+'</small></div>'+
+  '<small>তৈরি: '+esc(fmtDate(new Date().toISOString()))+'</small></div>'+
+  summary+list.map(orderSection).join('')+
+  '<div class="foot">এই Report Admin Panel থেকে তৈরি। Print Window-এ "Save as PDF" নির্বাচন করুন।</div></body></html>';
+}
+
+function printReport(list,afterPrint){
+  const w=window.open('','_blank');
+  if(!w){alert('Browser Popup বন্ধ করে রেখেছে। এই সাইটের জন্য Popup অনুমতি দিয়ে আবার চেষ্টা করুন।');return false;}
+  w.document.open();w.document.write(buildReportHtml(list));w.document.close();
+  w.addEventListener('afterprint',()=>{if(afterPrint)setTimeout(afterPrint,300);});
+  const go=()=>{w.focus();w.print();};
+  const ready=w.document.fonts&&w.document.fonts.ready?w.document.fonts.ready:Promise.resolve();
+  ready.then(()=>setTimeout(go,400)).catch(go);
+  return true;
+}
+
+async function deleteOrders(ids){
+  const response=await fetch(API+'/rest/v1/rpc/admin_delete_orders',{
+    method:'POST',headers:headers(),body:JSON.stringify({p_ids:ids.map(String)})
+  });
+  const raw=await response.text();
+  if(!response.ok)throw Error('মোছা যায়নি: '+raw+' (supabase_update.sql Run করা হয়েছে কি?)');
+  ids.forEach(id=>selectedOrders.delete(String(id)));
+  showMessage('archiveMsg',bn(raw||ids.length)+'টি Order সম্পূর্ণ মুছে ফেলা হয়েছে।','success');
+  await loadAll();
+}
+
+function chosenOrders(){
+  return archiveOrders().filter(o=>selectedOrders.has(String(o.id)));
+}
+
+function confirmDelete(list){
+  return confirm(bn(list.length)+'টি Order স্থায়ীভাবে মুছে ফেলবেন? এটি আর ফেরানো যাবে না।\n\nআগে PDF সংরক্ষণ করেছেন তো?');
+}
+
+$('archiveTable').addEventListener('change',e=>{
+  const id=e.target.dataset.arCheck;
+  if(!id)return;
+  e.target.checked?selectedOrders.add(String(id)):selectedOrders.delete(String(id));
+  renderArchive();
+});
+
+$('arAll').addEventListener('change',e=>{
+  archiveOrders().forEach(o=>e.target.checked?selectedOrders.add(String(o.id)):selectedOrders.delete(String(o.id)));
+  renderArchive();
+});
+
+$('arFilter').addEventListener('change',renderArchive);
+
+$('archiveTable').addEventListener('click',async e=>{
+  const pdfId=e.target.dataset.arPdf,delId=e.target.dataset.arDel;
+  try{
+    if(pdfId){
+      const o=orders.find(x=>String(x.id)===String(pdfId));
+      if(o)printReport([o]);
+    }
+    if(delId){
+      const o=orders.find(x=>String(x.id)===String(delId));
+      if(!o)return;
+      if(!confirmDelete([o]))return;
+      await deleteOrders([o.id]);
+    }
+  }catch(error){showMessage('archiveMsg',error.message,'error');}
+});
+
+$('arPdfBtn').addEventListener('click',()=>{
+  const list=chosenOrders();
+  if(!list.length){showMessage('archiveMsg','প্রথমে Order নির্বাচন করুন।','error');return;}
+  showMessage('archiveMsg','');
+  printReport(list);
+});
+
+$('arPdfDelBtn').addEventListener('click',()=>{
+  const list=chosenOrders();
+  if(!list.length){showMessage('archiveMsg','প্রথমে Order নির্বাচন করুন।','error');return;}
+  showMessage('archiveMsg','');
+  printReport(list,async()=>{
+    if(!confirm('PDF সংরক্ষণ হয়েছে তো? এখন '+bn(list.length)+'টি Order স্থায়ীভাবে মুছে ফেলবেন?'))return;
+    try{await deleteOrders(list.map(o=>o.id));}
+    catch(error){showMessage('archiveMsg',error.message,'error');}
+  });
+});
+
+$('arDelBtn').addEventListener('click',async()=>{
+  const list=chosenOrders();
+  if(!list.length){showMessage('archiveMsg','প্রথমে Order নির্বাচন করুন।','error');return;}
+  if(!confirmDelete(list))return;
+  try{await deleteOrders(list.map(o=>o.id));}
+  catch(error){showMessage('archiveMsg',error.message,'error');}
+});
+
+/* REVIEWS */
+function renderReviews(){
+  if(!reviews.length){$('reviewTable').innerHTML='এখনো কোনো Review নেই।';return;}
+  $('reviewTable').innerHTML=
+  '<table><thead><tr><th>দোকান</th><th>Customer</th><th>Rating</th><th>মন্তব্য</th><th>সময়</th><th></th></tr></thead><tbody>'+
+  reviews.map(r=>{
+    const st=stores.find(s=>String(s.id)===String(r.store_id));
+    return '<tr><td>'+esc(st?st.name:'(মুছে গেছে)')+'</td><td>'+esc(r.reviewer_name)+'</td>'+
+      '<td style="color:#d98a00;white-space:nowrap">'+'★'.repeat(r.rating)+'☆'.repeat(5-r.rating)+'</td>'+
+      '<td style="white-space:pre-wrap">'+esc(r.comment||'')+'</td><td class="small">'+esc(fmtDate(r.created_at))+'</td>'+
+      '<td><button class="danger" data-rv-del="'+esc(r.id)+'">🗑</button></td></tr>';
+  }).join('')+'</tbody></table>';
+}
+
+$('reviewTable').addEventListener('click',async e=>{
+  const id=e.target.dataset.rvDel;
+  if(!id||!confirm('এই Review মুছে ফেলবেন?'))return;
+  try{
+    await api('store_reviews?id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{Prefer:'return=minimal'}});
+    showMessage('reviewMsg','Review মুছে ফেলা হয়েছে।','success');
+    await loadAll();
+  }catch(error){showMessage('reviewMsg',error.message,'error');}
 });
 
 /* SERVICE REQUESTS */
