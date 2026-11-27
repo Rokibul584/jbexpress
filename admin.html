@@ -98,12 +98,7 @@ a{color:#08734f}
   <div class="tabs">
     <button class="tab active" data-tab="orders">📦 অর্ডার</button>
     <button class="tab" data-tab="riders">🛵 Rider</button>
-    <button class="tab" data-tab="tracking">📍 Live Location</button>
-    <button class="tab" data-tab="products">🛍️ পণ্য</button>
-    <button class="tab" data-tab="shops">🏪 দোকান</button>
-    <button class="tab" data-tab="rent">🏠 বাসা ভাড়া</button>
-    <button class="tab" data-tab="providers">👷 কর্মী/টেকনিশিয়ান</button>
-    <button class="tab" data-tab="providerAds">📢 Provider বিজ্ঞাপন</button>
+    <button class="tab" data-tab="providerAds">👷 Provider</button>
     <button class="tab" data-tab="archive">🗄️ Delivery আর্কাইভ</button>
     <button class="tab" data-tab="reviews">⭐ Review</button>
     <button class="tab" data-tab="requests">📞 অন্যান্য অনুরোধ</button>
@@ -144,11 +139,9 @@ a{color:#08734f}
     <h3>Rider তালিকা</h3>
     <p class="small">কাজ না করা Rider-কে Inactive করুন। এতে তার Login ও GPS কার্যক্রম বন্ধ হবে।</p>
     <div id="riderTable" class="tablewrap">লোড হচ্ছে...</div>
-  </section>
 
-  <section id="tracking" class="card pane hidden">
-    <h2>📍 Rider Live Location Map</h2>
-    <p class="small">সব Active Rider-এর সর্বশেষ GPS এখানে দেখা যাবে।</p>
+    <h3>📍 Live Location Map</h3>
+    <p class="small">উপরের তালিকায় প্রতিটি Rider-এর নামের পাশে GPS দেখানো আছে। "ম্যাপে দেখুন" চাপলে এখানে তার অবস্থান খুলবে।</p>
     <div id="trackingMsg"></div>
     <div class="mapstats">
       <div class="mapstat">Active Rider: <b id="mapActiveCount">০</b></div>
@@ -161,32 +154,18 @@ a{color:#08734f}
       <button id="mapRefreshBtn">↻ GPS Refresh</button>
       <button id="fitMapBtn" class="secondary">সব Rider দেখুন</button>
     </div>
-    <h3>Rider GPS তালিকা</h3>
-    <div id="trackingTable" class="tablewrap"></div>
-  </section>
-
-  <section id="products" class="card pane hidden">
-    <h2>🛍️ পণ্য অনুমোদন</h2>
-    <div id="productTable" class="tablewrap"></div>
-  </section>
-
-  <section id="shops" class="card pane hidden">
-    <h2>🏪 দোকান অনুমোদন</h2>
-    <div id="shopTable" class="tablewrap"></div>
-  </section>
-
-  <section id="rent" class="card pane hidden">
-    <h2>🏠 বাসা ভাড়ার বিজ্ঞাপন</h2>
-    <div id="rentTable" class="tablewrap"></div>
-  </section>
-
-  <section id="providers" class="card pane hidden">
-    <h2>👷 কর্মী ও টেকনিশিয়ান (পুরোনো Provider তালিকা)</h2>
-    <div id="providerTable" class="tablewrap"></div>
+    
+    <div id="trackingTable" class="tablewrap hidden"></div>
+  
   </section>
 
   <section id="providerAds" class="card pane hidden">
-    <h2>📢 Provider বিজ্ঞাপন অনুমোদন</h2>
+    <h2>👷 Provider</h2>
+    <div id="providerMsg"></div>
+    <h3>Provider ও তাদের দোকান</h3>
+    <div id="providerAccTable" class="tablewrap">লোড হচ্ছে...</div>
+    <hr>
+    <h3>📢 বিজ্ঞাপন অনুমোদন</h3>
     <p class="small">Provider নিজের অ্যাকাউন্ট থেকে বিজ্ঞাপন জমা দেবে। Admin অনুমোদন না করা পর্যন্ত Customer বিজ্ঞাপন দেখতে পাবে না।</p>
 
     <div class="stats">
@@ -262,7 +241,7 @@ let refreshTokenValue=null;
 let loading=false;
 
 let orders=[],riders=[],locations=[],products=[],shops=[],rents=[],providers=[],requests=[],providerAds=[];
-let orderItems=[],stores=[],reviews=[];
+let orderItems=[],stores=[],reviews=[],providerAccounts=[],storeStats=[],riderMarkers={};
 const selectedOrders=new Set();
 let liveMap=null,riderLayer=null,customerLayer=null,mapHasCentered=false;
 let activeTab='orders';
@@ -416,27 +395,22 @@ async function loadAll(){
       api('customer_orders?select=*&order=created_at.desc&limit=300'),
       api('riders?select=*&order=created_at.desc'),
       api('rider_locations?select=*'),
-      api('products?select=*&order=created_at.desc&limit=200'),
-      api('shops?select=*&order=created_at.desc&limit=200'),
-      api('rent_listings?select=*&order=created_at.desc&limit=200'),
-      api('provider_profiles?select=*&order=created_at.desc&limit=200'),
       api('service_requests?select=*&order=created_at.desc&limit=200'),
       api('provider_ads?select=*&order=created_at.desc&limit=500'),
       api('order_items?select=*&limit=5000'),
-      api('stores?select=id,provider_id,name&limit=500'),
-      api('store_reviews?select=*&order=created_at.desc&limit=500')
+      api('stores?select=*&limit=500'),
+      api('store_reviews?select=*&order=created_at.desc&limit=500'),
+      api('provider_accounts?select=*&order=created_at.desc&limit=500'),
+      api('store_stats?select=*&limit=500')
     ]);
 
-    [orders,riders,locations,products,shops,rents,providers,requests,providerAds,orderItems,stores,reviews]=result;
+    [orders,riders,locations,requests,providerAds,orderItems,stores,reviews,providerAccounts,storeStats]=result;
 
     updateStats();
     renderOrders();
     renderRiders();
     renderTracking();
-    renderApproval('products',products);
-    renderApproval('shops',shops);
-    renderApproval('rent',rents);
-    renderApproval('providers',providers);
+    renderProviders();
     renderProviderAds();
     renderRequests();
     renderArchive();
@@ -589,21 +563,39 @@ function renderRiders(){
   if(!riders.length){$('riderTable').innerHTML='এখনো Rider যোগ করা হয়নি।';return;}
 
   $('riderTable').innerHTML=
-  '<table><thead><tr><th>নাম</th><th>ফোন</th><th>Email</th><th>Auth UID</th><th>GPS</th><th>অবস্থা</th></tr></thead><tbody>'+
+  '<table><thead><tr><th>নাম ও Live Location</th><th>ফোন</th><th>Email</th><th>চলমান Order</th><th>অবস্থা</th></tr></thead><tbody>'+
   riders.map(r=>{
     const loc=locations.find(l=>String(l.rider_id)===String(r.id));
     const hasGPS=loc&&validCoordinate(loc.latitude,loc.longitude);
+    const active=orders.filter(o=>String(o.assigned_rider_id)===String(r.id)&&!['delivered','cancelled'].includes(o.status));
     return '<tr>'+
-      '<td><b>'+esc(r.name)+'</b><div class="small">'+esc(r.vehicle_type||'')+'</div></td>'+
+      '<td><b>'+esc(r.name)+'</b> '+(hasGPS?'<span style="color:#08734f">● GPS চালু</span>':'<span style="color:#b42318">● GPS নেই</span>')+
+      '<div class="small">'+esc(r.vehicle_type||'')+'</div>'+
+      (hasGPS?'<div class="small">সর্বশেষ: '+esc(fmtDate(loc.updated_at))+'</div>'+
+        '<div class="actionrow" style="margin-top:5px"><button class="secondary" data-focus="'+esc(r.id)+'">📍 ম্যাপে দেখুন</button>'+
+        '<a target="_blank" rel="noopener" href="https://maps.google.com/?q='+encodeURIComponent(loc.latitude+','+loc.longitude)+'">Google Maps</a></div>':'')+'</td>'+
       '<td>'+phoneLink(r.phone)+'</td>'+
       '<td>'+esc(r.email||'Email নেই')+'</td>'+
-      '<td class="small">'+esc(r.auth_user_id||'সংযুক্ত নয়')+'</td>'+
-      '<td>'+(hasGPS?'<span style="color:#08734f">GPS আছে</span>':'<span style="color:#b42318">GPS নেই</span>')+'</td>'+
+      '<td>'+(active.length?active.map(o=>esc(o.ref||o.id)).join('<br>'):'নেই')+'</td>'+
       '<td><select data-rider-status="'+esc(r.id)+'">'+
       ['active','inactive','suspended'].map(s=>'<option value="'+s+'" '+(r.status===s?'selected':'')+'>'+s+'</option>').join('')+
       '</select></td></tr>';
   }).join('')+'</tbody></table>';
 }
+
+$('riderTable').addEventListener('click',e=>{
+  const id=e.target.dataset.focus;
+  if(!id)return;
+  initMap();
+  const loc=locations.find(l=>String(l.rider_id)===String(id));
+  if(!loc||!validCoordinate(loc.latitude,loc.longitude))return;
+  $('liveMap').scrollIntoView({behavior:'smooth',block:'center'});
+  setTimeout(()=>{
+    liveMap.invalidateSize();
+    liveMap.setView([Number(loc.latitude),Number(loc.longitude)],16);
+    if(riderMarkers[id])riderMarkers[id].openPopup();
+  },350);
+});
 
 $('riderTable').addEventListener('change',async e=>{
   const id=e.target.dataset.riderStatus;
@@ -641,6 +633,7 @@ function renderTracking(){
 
   riderLayer.clearLayers();
   customerLayer.clearLayers();
+  riderMarkers={};
 
   activeRiders.forEach(rider=>{
     const loc=locations.find(l=>String(l.rider_id)===String(rider.id));
@@ -659,7 +652,7 @@ function renderTracking(){
       '<hr>Latitude: '+lat+'<br>Longitude: '+lon+'<br>Accuracy: '+esc(loc.accuracy||'')+'<br>GPS Update: '+esc(loc.updated_at||'')+
       '<br><a target="_blank" rel="noopener" href="https://maps.google.com/?q='+lat+','+lon+'">Google Maps-এ খুলুন</a></div>';
 
-    L.circleMarker([lat,lon],{
+    riderMarkers[rider.id]=L.circleMarker([lat,lon],{
       radius:10,color:'#08734f',fillColor:'#16a34a',fillOpacity:.95,weight:3
     }).bindPopup(popup).addTo(riderLayer);
 
@@ -716,48 +709,6 @@ $('fitMapBtn').addEventListener('click',()=>{
   });
   if(points.length)liveMap.fitBounds(points,{padding:[35,35],maxZoom:15});
   else alert('কোনো Active Rider GPS পাওয়া যায়নি।');
-});
-
-/* OLD APPROVAL TABLES */
-const tableNames={products:'products',shops:'shops',rent:'rent_listings',providers:'provider_profiles'};
-const approvalNames={products:'product_name',shops:'shop_name',rent:'title',providers:'name'};
-const approvalStatuses={
-  products:['pending','published','rejected','hidden'],
-  shops:['pending','approved','rejected','hidden'],
-  rent:['pending','published','rented','hidden'],
-  providers:['pending','approved','rejected','hidden']
-};
-const statusLabels={pending:'অপেক্ষমাণ',published:'প্রকাশিত',approved:'অনুমোদিত',rejected:'বাতিল',hidden:'লুকানো',rented:'ভাড়া হয়েছে'};
-const approvalTarget={products:'productTable',shops:'shopTable',rent:'rentTable',providers:'providerTable'};
-
-function renderApproval(kind,items){
-  const target=$(approvalTarget[kind]);
-  if(!target)return;
-  if(!items.length){target.innerHTML='কোনো তথ্য পাওয়া যায়নি।';return;}
-  const nameField=approvalNames[kind];
-
-  target.innerHTML='<table><thead><tr><th>তথ্য</th><th>যোগাযোগ</th><th>অবস্থা</th></tr></thead><tbody>'+
-  items.map(x=>'<tr><td><b>'+esc(x[nameField]||x.title||x.name||'')+'</b><div class="small">'+esc(x.description||x.category||x.type||'')+'</div></td>'+
-    '<td>'+esc(x.seller_name||x.owner_name||x.name||'')+'<br>'+phoneLink(x.seller_phone||x.owner_phone||x.phone)+'</td>'+
-    '<td><select data-approval="'+kind+':'+esc(x.id)+'">'+approvalStatuses[kind].map(s=>
-      '<option value="'+s+'" '+(x.status===s?'selected':'')+'>'+(statusLabels[s]||s)+'</option>'
-    ).join('')+'</select></td></tr>'
-  ).join('')+'</tbody></table>';
-}
-
-['products','shops','rent','providers'].forEach(kind=>{
-  $(approvalTarget[kind]).addEventListener('change',async e=>{
-    const value=e.target.dataset.approval;
-    if(!value)return;
-    const [table,id]=value.split(':');
-    try{
-      await api(tableNames[table]+'?id=eq.'+encodeURIComponent(id),{
-        method:'PATCH',headers:{Prefer:'return=minimal'},
-        body:JSON.stringify({status:e.target.value})
-      });
-      await loadAll();
-    }catch(error){alert('অবস্থা পরিবর্তন হয়নি: '+error.message);}
-  });
 });
 
 /* NEW PROVIDER ADS MANAGEMENT */
@@ -887,6 +838,33 @@ $('pendingAdsBtn').addEventListener('click',()=>{
 $('allAdsBtn').addEventListener('click',()=>{
   providerAdsFilter='all';
   renderProviderAds();
+});
+
+/* PROVIDER ACCOUNTS */
+function renderProviders(){
+  const t=$('providerAccTable');
+  if(!providerAccounts.length){t.innerHTML='এখনো কোনো Provider Account নেই।';return;}
+  t.innerHTML='<table><thead><tr><th>Provider</th><th>দোকান</th><th>Rating</th><th>বিজ্ঞাপন</th><th>অবস্থা</th></tr></thead><tbody>'+
+  providerAccounts.map(a=>{
+    const st=stores.find(x=>String(x.provider_id)===String(a.id));
+    const stat=st&&storeStats.find(x=>String(x.store_id)===String(st.id));
+    const ads=providerAds.filter(x=>String(x.provider_id)===String(a.id));
+    return '<tr><td><b>'+esc(a.name)+'</b><br>'+phoneLink(a.phone)+'<div class="small">'+esc(a.email||'')+'</div><div class="small">নিবন্ধন: '+esc(fmtDate(a.created_at))+'</div></td>'+
+      '<td>'+(st?'<b>'+esc(st.name)+'</b><div class="small">'+esc(st.area||'')+'</div>':'-')+'</td>'+
+      '<td style="white-space:nowrap">'+(stat&&Number(stat.review_count)?'<span style="color:#d98a00">★</span> '+bn(stat.avg_rating)+' ('+bn(stat.review_count)+')':'-')+'</td>'+
+      '<td>মোট '+bn(ads.length)+'<div class="small">Approved '+bn(ads.filter(x=>x.status==='approved').length)+' | Pending '+bn(ads.filter(x=>x.status==='pending').length)+'</div></td>'+
+      '<td><select data-acc-status="'+esc(a.id)+'">'+['active','suspended'].map(v=>'<option value="'+v+'" '+(a.status===v?'selected':'')+'>'+v+'</option>').join('')+'</select></td></tr>';
+  }).join('')+'</tbody></table>';
+}
+
+$('providerAccTable').addEventListener('change',async e=>{
+  const id=e.target.dataset.accStatus;
+  if(!id)return;
+  try{
+    await api('provider_accounts?id=eq.'+encodeURIComponent(id),{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({status:e.target.value})});
+    showMessage('providerMsg','Provider-এর অবস্থা পরিবর্তন হয়েছে।','success');
+    await loadAll();
+  }catch(error){showMessage('providerMsg',error.message,'error');}
 });
 
 /* STORAGE IMAGE DELETE */
@@ -1126,7 +1104,7 @@ function renderRequests(){
   $('requestTable').innerHTML=
   '<table><thead><tr><th>নম্বর</th><th>সেবা</th><th>Customer</th><th>বিবরণ</th><th>অবস্থা</th></tr></thead><tbody>'+
   requests.map(x=>{
-    const house=rents.find(r=>r.id===x.extra?.listing_id);
+    const house=null;
     return '<tr><td>'+esc(x.ref||x.id)+'</td><td>'+esc(x.service)+'</td>'+
       '<td>'+esc(x.name)+'<br>'+phoneLink(x.phone)+'</td><td>'+
       (house?'🏠 '+esc(house.title)+' — '+esc(house.area)+' — ৳'+esc(house.rent)+'<br>':'')+
@@ -1144,7 +1122,7 @@ document.querySelectorAll('.tab').forEach(button=>{
     button.classList.add('active');
     activeTab=tab;
 
-    if(tab==='tracking'){
+    if(tab==='riders'){
       initMap();
       setTimeout(()=>{
         liveMap.invalidateSize();
