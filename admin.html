@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -33,7 +32,7 @@ button:disabled{opacity:.5;cursor:not-allowed}
 .stat{background:white;padding:14px;border:1px solid #dce5df;border-radius:12px}
 .stat strong{display:block;font-size:26px;color:#08734f}
 .tablewrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:720px;font-size:14px}
+table{width:100%;border-collapse:collapse;min-width:780px;font-size:14px}
 th,td{padding:10px;border-bottom:1px solid #e1e9e3;text-align:left;vertical-align:top}
 th{background:#f5f8f6}
 .small{font-size:12px;color:#64736a;overflow-wrap:anywhere}
@@ -54,6 +53,10 @@ a{color:#08734f}
 .archbar input[type=checkbox],td input[type=checkbox]{width:auto}
 .itemlist{margin:6px 0 0;padding-left:18px;font-size:13px}
 .adimage{width:90px;height:75px;object-fit:cover;border-radius:8px;border:1px solid #ddd}
+.paybadge{display:inline-block;padding:2px 8px;border-radius:12px;font-size:12px;font-weight:700;margin-top:4px}
+.pay-cod{background:#dbeafe;color:#1e40af}
+.pay-pending{background:#fef3c7;color:#92400e}
+.pay-verified{background:#dcfce7;color:#166534}
 @media(max-width:600px){#liveMap{height:380px}.card{padding:12px}header h2{font-size:19px}}
 </style>
 </head>
@@ -89,6 +92,7 @@ a{color:#08734f}
   <div class="stats">
     <div class="stat">মোট Order<strong id="totalOrders">০</strong></div>
     <div class="stat">নতুন Order<strong id="newOrders">০</strong></div>
+    <div class="stat">পেমেন্ট যাচাই বাকি<strong id="pendingPayOrders">০</strong></div>
     <div class="stat">চলমান Order<strong id="activeOrders">০</strong></div>
     <div class="stat">মোট Rider<strong id="totalRiders">০</strong></div>
     <div class="stat">GPS পাওয়া Rider<strong id="gpsRiders">০</strong></div>
@@ -107,7 +111,7 @@ a{color:#08734f}
 
   <section id="orders" class="card pane">
     <h2>📦 সকল Customer Order</h2>
-    <p class="small">Admin প্রথমে Order যাচাই করবেন, তারপর Rider Assign করবেন।</p>
+    <p class="small">Cash on Delivery অর্ডার স্বয়ংক্রিয়ভাবে কনফার্ম থাকে; bKash / Nagad / Rocket পেমেন্টে TxnID যাচাই করে Order Confirm করুন, তারপর Rider Assign করুন।</p>
     <div id="orderMsg"></div>
     <div id="orderTable" class="tablewrap">লোড হচ্ছে...</div>
   </section>
@@ -264,7 +268,7 @@ let activeTab='orders';
 let providerAdsFilter='all';
 
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({
-'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
 }[c]));
 
 const bn=v=>String(v??0).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
@@ -285,6 +289,61 @@ function validCoordinate(lat,lon){
 function phoneLink(phone){
   if(!phone)return 'নেই';
   return '<a href="tel:'+esc(phone)+'">'+esc(phone)+'</a>';
+}
+
+/* PAYMENT INFO PARSER */
+function parseOrderPayment(order){
+  const rawNote=String(order.customer_note||order.details||'');
+  const methodMatch=rawNote.match(/\[PAYMENT=([A-Z0-9_]+)\]/i);
+  const txnMatch=rawNote.match(/\[TXN_ID=([^\]]+)\]/i);
+  const payToMatch=rawNote.match(/\[PAY_TO=([^\]]+)\]/i);
+  const senderMatch=rawNote.match(/\[SENDER=([^\]]+)\]/i);
+  const verifyMatch=rawNote.match(/\[VERIFY=([A-Z0-9_]+)\]/i);
+  const confirmMatch=rawNote.match(/\[CONFIRM=([A-Z0-9_]+)\]/i);
+
+  const method=(order.payment_method||(methodMatch?methodMatch[1]:'cod')).toLowerCase();
+  const txnId=order.txn_id||(txnMatch?txnMatch[1].trim():'');
+  const payTo=payToMatch?payToMatch[1].trim():'01409300070';
+  const sender=order.payment_number||(senderMatch?senderMatch[1].trim():'');
+
+  let verifyState=(order.payment_status||'').toLowerCase();
+  if(!verifyState){
+    if(method==='cod'){
+      verifyState='cod_auto_confirmed';
+    }else if(verifyMatch){
+      verifyState=verifyMatch[1].toLowerCase()==='verified'?'verified':'pending_verification';
+    }else if(order.status==='confirmed'||order.status==='assigned'||order.status==='on_the_way'||order.status==='delivered'){
+      verifyState='verified';
+    }else{
+      verifyState='pending_verification';
+    }
+  }
+
+  const cleanNote=rawNote
+    .replace(/\[PAYMENT=[^\]]*\]/gi,'')
+    .replace(/\[TXN_ID=[^\]]*\]/gi,'')
+    .replace(/\[PAY_TO=[^\]]*\]/gi,'')
+    .replace(/\[SENDER=[^\]]*\]/gi,'')
+    .replace(/\[VERIFY=[^\]]*\]/gi,'')
+    .replace(/\[CONFIRM=[^\]]*\]/gi,'')
+    .replace(/\[RIDER_CHARGE=[^\]]*\]/gi,'')
+    .trim();
+
+  return {
+    rawNote,
+    cleanNote,
+    method,
+    isCod:method==='cod'||(confirmMatch&&confirmMatch[1].toLowerCase()==='auto'&&!txnId),
+    txnId,
+    payTo,
+    sender,
+    verifyState
+  };
+}
+
+function isPendingPaymentVerification(order){
+  const p=parseOrderPayment(order);
+  return !p.isCod && p.verifyState==='pending_verification';
 }
 
 /* AUTH */
@@ -445,6 +504,7 @@ async function loadAll(){
 function updateStats(){
   $('totalOrders').textContent=bn(orders.length);
   $('newOrders').textContent=bn(orders.filter(x=>x.status==='new').length);
+  $('pendingPayOrders').textContent=bn(orders.filter(isPendingPaymentVerification).length);
   $('activeOrders').textContent=bn(orders.filter(x=>['confirmed','assigned','on_the_way'].includes(x.status)).length);
   $('totalRiders').textContent=bn(riders.length);
 
@@ -461,17 +521,37 @@ function renderOrders(){
   if(!orders.length){$('orderTable').innerHTML='কোনো Order পাওয়া যায়নি।';return;}
 
   $('orderTable').innerHTML=
-  '<table><thead><tr><th>Order</th><th>Customer</th><th>বিবরণ</th><th>টাকা</th><th>Rider Assign</th><th>অবস্থা</th></tr></thead><tbody>'+
+  '<table><thead><tr><th>Order</th><th>Customer</th><th>পেমেন্ট ও TxnID</th><th>বিবরণ ও টাকা</th><th>Rider Assign</th><th>অবস্থা</th></tr></thead><tbody>'+
   orders.map(o=>{
     const rider=riders.find(r=>String(r.id)===String(o.assigned_rider_id));
     const customerMap=validCoordinate(o.customer_latitude,o.customer_longitude)
       ?'<br><a target="_blank" rel="noopener" href="https://maps.google.com/?q='+encodeURIComponent(o.customer_latitude+','+o.customer_longitude)+'">Customer Map</a>':'';
 
+    const p=parseOrderPayment(o);
+    let paymentHtml='';
+    if(p.isCod){
+      paymentHtml='<div><b>Cash on Delivery (COD)</b></div>'+
+        '<span class="paybadge pay-cod">Auto Confirmed</span>'+
+        '<div class="small">ডেলিভারির সময় টাকা সংগ্রহ হবে</div>';
+    }else if(p.verifyState==='pending_verification'){
+      paymentHtml='<div><b>'+esc(p.method.toUpperCase())+'</b> → <code>'+esc(p.payTo)+'</code></div>'+
+        '<div class="small">TxnID: <b><code>'+esc(p.txnId||'নেই')+'</code></b></div>'+
+        (p.sender?'<div class="small">Sender: '+esc(p.sender)+'</div>':'')+
+        '<span class="paybadge pay-pending">যাচাই বাকি</span>'+
+        '<div style="margin-top:6px"><button data-verify-order="'+esc(o.id)+'">✅ পেমেন্ট যাচাই ও Confirm</button></div>';
+    }else{
+      paymentHtml='<div><b>'+esc(p.method.toUpperCase())+'</b> → <code>'+esc(p.payTo)+'</code></div>'+
+        (p.txnId?'<div class="small">TxnID: <b><code>'+esc(p.txnId)+'</code></b></div>':'')+
+        (p.sender?'<div class="small">Sender: '+esc(p.sender)+'</div>':'')+
+        '<span class="paybadge pay-verified">Verified</span>';
+    }
+
     return '<tr>'+
       '<td><b>'+esc(o.ref||o.id)+'</b><div class="small">'+esc(o.created_at)+'</div></td>'+
       '<td>'+esc(o.customer_name)+'<br>'+phoneLink(o.customer_phone)+'<br>'+esc(o.delivery_address)+'<br>'+esc(o.area||'')+customerMap+'</td>'+
-      '<td>'+esc(o.customer_note||o.details||'')+'</td>'+
-      '<td>পণ্য: ৳'+bn(o.total_amount||0)+'<br>Rider: ৳'+bn(o.delivery_charge||0)+'<br><b>সর্বমোট: ৳'+bn(o.grand_total||((Number(o.total_amount)||0)+(Number(o.delivery_charge)||0)))+'</b></td>'+
+      '<td>'+paymentHtml+'</td>'+
+      '<td>'+(p.cleanNote?'<div>'+esc(p.cleanNote)+'</div>':'')+
+      'পণ্য: ৳'+bn(o.total_amount||0)+'<br>Rider: ৳'+bn(o.delivery_charge||0)+'<br><b>সর্বমোট: ৳'+bn(o.grand_total||((Number(o.total_amount)||0)+(Number(o.delivery_charge)||0)))+'</b></td>'+
       '<td><select data-assign="'+esc(o.id)+'"><option value="">Rider নির্বাচন</option>'+
       riders.filter(r=>r.status==='active').map(r=>
         '<option value="'+esc(r.id)+'" '+(String(r.id)===String(o.assigned_rider_id)?'selected':'')+'>'+esc(r.name)+' - '+esc(r.phone)+'</option>'
@@ -479,14 +559,43 @@ function renderOrders(){
       '<button data-save-rider="'+esc(o.id)+'">Assign</button>'+
       (rider?'<div class="small">বর্তমান: '+esc(rider.name)+'</div>':'')+'</td>'+
       '<td><select data-status="'+esc(o.id)+'">'+
-      ['new','confirmed','assigned','on_the_way','delivered','cancelled'].map(s=>
+      ['new','pending_verification','confirmed','assigned','on_the_way','delivered','cancelled'].map(s=>
         '<option value="'+s+'" '+(o.status===s?'selected':'')+'>'+s+'</option>'
       ).join('')+'</select></td>'+
     '</tr>';
   }).join('')+'</tbody></table>';
 }
 
+async function verifyAndConfirmOrder(id){
+  const order=orders.find(o=>String(o.id)===String(id));
+  if(!order)throw Error('Order পাওয়া যায়নি।');
+  const p=parseOrderPayment(order);
+  const ok=confirm('TxnID: '+(p.txnId||'N/A')+' ('+p.method.toUpperCase()+') কি আপনি চেক করেছেন? Confirm করলে Order "confirmed" হয়ে যাবে।');
+  if(!ok)return;
+
+  const updatedNote=p.rawNote
+    ? (p.rawNote.includes('[VERIFY=') ? p.rawNote.replace(/\[VERIFY=[^\]]*\]/gi,'[VERIFY=VERIFIED]') : p.rawNote+' [VERIFY=VERIFIED]')
+    : '[VERIFY=VERIFIED]';
+
+  await api('customer_orders?id=eq.'+encodeURIComponent(id),{
+    method:'PATCH',
+    headers:{Prefer:'return=minimal'},
+    body:JSON.stringify({
+      status:'confirmed',
+      customer_note:updatedNote
+    })
+  });
+
+  showMessage('orderMsg','পেমেন্ট যাচাই হয়েছে এবং Order Confirm করা হয়েছে। এখন Rider Assign করতে পারবেন।','success');
+  await loadAll();
+}
+
 async function assignRider(id){
+  const order=orders.find(o=>String(o.id)===String(id));
+  if(order&&isPendingPaymentVerification(order)){
+    throw Error('আগে মোবাইল ওয়ালেট পেমেন্ট যাচাই করে Order Confirm করুন।');
+  }
+
   const select=document.querySelector('[data-assign="'+id+'"]');
   const riderId=select&&select.value;
   if(!riderId)throw Error('প্রথমে Rider নির্বাচন করুন।');
@@ -517,6 +626,15 @@ async function changeOrderStatus(id,status){
 }
 
 $('orderTable').addEventListener('click',async e=>{
+  const verifyId=e.target.dataset.verifyOrder;
+  if(verifyId){
+    e.target.disabled=true;
+    try{await verifyAndConfirmOrder(verifyId);}
+    catch(error){showMessage('orderMsg',error.message,'error');}
+    finally{e.target.disabled=false;}
+    return;
+  }
+
   const id=e.target.dataset.saveRider;
   if(!id)return;
   try{await assignRider(id);}
@@ -899,7 +1017,7 @@ async function deleteStorageImage(url){
 }
 
 /* DELIVERY ARCHIVE — PDF + DELETE */
-const statusBn={new:'নতুন',confirmed:'Confirm',assigned:'Rider Assigned',on_the_way:'পথে',delivered:'Delivered',cancelled:'Cancelled'};
+const statusBn={new:'নতুন',pending_verification:'পেমেন্ট যাচাই বাকি',confirmed:'Confirm',assigned:'Rider Assigned',on_the_way:'পথে',delivered:'Delivered',cancelled:'Cancelled'};
 const fmtDate=v=>v?new Date(v).toLocaleString('bn-BD',{dateStyle:'medium',timeStyle:'short'}):'-';
 
 function archiveOrders(){
@@ -961,6 +1079,7 @@ function renderArchive(){
 function orderSection(o,index){
   const rider=riders.find(r=>String(r.id)===String(o.assigned_rider_id));
   const items=itemsOf(o);
+  const p=parseOrderPayment(o);
   const rows=items.map((i,n)=>{
     const q=Number(i.quantity||1),u=Number(i.unit_price||0);
     return '<tr><td>'+bn(n+1)+'</td><td>'+esc(i.product_name||'পণ্য')+'</td><td>'+esc(storeNameOfItem(i)||'-')+'</td>'+
@@ -972,7 +1091,8 @@ function orderSection(o,index){
     '<table class="kv">'+
       '<tr><th>Customer</th><td>'+esc(o.customer_name||'')+'</td><th>মোবাইল</th><td>'+esc(o.customer_phone||'')+'</td></tr>'+
       '<tr><th>ঠিকানা</th><td colspan="3">'+esc(o.delivery_address||'')+(o.area?' — '+esc(o.area):'')+'</td></tr>'+
-      (o.customer_note?'<tr><th>নির্দেশনা</th><td colspan="3">'+esc(o.customer_note)+'</td></tr>':'')+
+      '<tr><th>পেমেন্ট</th><td colspan="3">'+esc(p.isCod?'Cash on Delivery':p.method.toUpperCase()+' (TxnID: '+(p.txnId||'N/A')+')')+'</td></tr>'+
+      (p.cleanNote?'<tr><th>নির্দেশনা</th><td colspan="3">'+esc(p.cleanNote)+'</td></tr>':'')+
       '<tr><th>Rider</th><td>'+esc(rider?rider.name:'Assign করা হয়নি')+'</td><th>Rider ফোন</th><td>'+esc(rider?rider.phone:'-')+'</td></tr>'+
       '<tr><th>অর্ডার সময়</th><td>'+esc(fmtDate(o.created_at))+'</td><th>Rider Assign</th><td>'+esc(fmtDate(o.assigned_at))+'</td></tr>'+
       '<tr><th>ডেলিভারি সময়</th><td>'+esc(fmtDate(o.delivered_at))+'</td><th>অবস্থা</th><td>'+esc(statusBn[o.status]||o.status)+'</td></tr>'+
