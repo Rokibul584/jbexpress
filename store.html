@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#08734f">
+<title>দোকান | UPAZILA EXPRESS</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{--green:#08734f;--dark:#075b3e;--light:#e9f7f0;--orange:#f59e0b;--bg:#f5f7f6;--text:#202923;--muted:#6b7770;--border:#e5ebe7;--star:#e6a100}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Hind Siliguri',sans-serif;background:var(--bg);color:var(--text)}
+button,input,textarea{font-family:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+header{background:var(--green);color:#fff;position:sticky;top:0;z-index:100;box-shadow:0 3px 12px #0002}
+.nav{max-width:1200px;margin:auto;padding:12px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.nav b{font-size:19px}
+.nav-btn{border:1px solid #ffffff55;background:#ffffff18;color:#fff;border-radius:9px;padding:8px 12px;font-size:14px}
+.container{max-width:1200px;margin:auto;padding:20px 18px}
+.store-head{background:#fff;border:1px solid var(--border);border-radius:16px;padding:20px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.logo{width:96px;height:96px;border-radius:18px;object-fit:cover;background:var(--light);display:grid;place-items:center;color:var(--green);font-size:40px;flex:none}
+.store-head h1{margin:0 0 4px;font-size:27px}
+.muted{color:var(--muted);font-size:14px}
+.stars{color:var(--star);letter-spacing:1px;font-size:17px}
+.store-info{flex:1;min-width:220px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:8px}
+.pill{background:var(--light);color:var(--green);border-radius:20px;padding:4px 12px;font-size:13px;font-weight:600}
+.btn{border:0;border-radius:9px;padding:9px 14px;font-size:14px;font-weight:600;background:var(--green);color:#fff;display:inline-flex;gap:6px;align-items:center}
+.btn.alt{background:var(--light);color:var(--green)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+h2.sec{font-size:22px;margin:26px 0 14px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+h2.sec small{font-size:13px;color:var(--muted);font-weight:500}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.card{background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.card img,.noimg{width:100%;height:180px;object-fit:cover;background:#e9efeb}
+.noimg{display:grid;place-items:center;color:var(--green);font-size:40px;background:var(--light)}
+.card-body{padding:14px;display:flex;flex-direction:column;flex:1}
+.card h3{margin:0 0 4px;font-size:18px}
+.desc{color:var(--muted);font-size:14px;line-height:1.6;margin:4px 0 8px;white-space:pre-line}
+.price{font-size:18px;font-weight:700;color:var(--green);margin:2px 0 6px}
+.stock{font-size:13px;font-weight:700;border-radius:20px;display:inline-block;padding:3px 10px;margin-bottom:10px}
+.stock.in{background:#dff5e6;color:#176b3c}
+.stock.low{background:#fff0cf;color:#8a5700}
+.stock.out{background:#fee4e2;color:#b42318}
+.actions{display:flex;gap:8px;margin-top:auto}
+.actions .btn{flex:1;justify-content:center}
+.empty{background:#fff;border:1px dashed #cbd8d0;border-radius:13px;padding:30px;text-align:center;color:var(--muted);grid-column:1/-1}
+.review-wrap{display:grid;grid-template-columns:1fr 1.3fr;gap:18px;align-items:start}
+.panel{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px}
+.field{margin-bottom:12px}
+.field label{display:block;font-weight:600;margin-bottom:5px}
+.field input,.field textarea{width:100%;border:1px solid #dce5df;border-radius:9px;padding:10px;font-size:15px;outline:none}
+.field textarea{min-height:85px;resize:vertical}
+.field input:focus,.field textarea:focus{border-color:var(--green)}
+.star-pick{display:flex;gap:4px;direction:rtl;justify-content:flex-end}
+.star-pick input{display:none}
+.star-pick label{font-size:34px;color:#cfd8d2;cursor:pointer;margin:0;line-height:1;transition:.1s}
+.star-pick input:checked ~ label,.star-pick label:hover,.star-pick label:hover ~ label{color:var(--star)}
+.star-pick-wrap{display:flex;justify-content:flex-start}
+.review{border-bottom:1px solid var(--border);padding:12px 0}
+.review:last-child{border-bottom:0}
+.review .who{font-weight:700}
+.review p{margin:5px 0 3px;line-height:1.6;white-space:pre-line;overflow-wrap:anywhere}
+.msg{padding:10px 12px;border-radius:9px;margin:10px 0;font-size:14px}
+.msg.ok{background:#e1f5e8;color:#176b3c}
+.msg.err{background:#fee4e2;color:#b42318}
+.big-rate{font-size:44px;font-weight:800;color:var(--green);line-height:1}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#123c2d;color:#fff;padding:11px 18px;border-radius:30px;font-size:14px;z-index:300;display:none}
+.float-cart{position:fixed;right:20px;bottom:20px;z-index:120;background:var(--orange);color:#222;border:0;border-radius:50px;padding:13px 19px;font-weight:700;box-shadow:0 5px 20px #0003}
+.cart-count{background:#d62828;color:#fff;padding:2px 7px;border-radius:20px;margin-left:5px}
+@media(max-width:850px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.review-wrap{grid-template-columns:1fr}}
+@media(max-width:520px){.grid{grid-template-columns:1fr}.container{padding:14px 12px}.store-head h1{font-size:22px}.logo{width:72px;height:72px}.float-cart{right:12px;bottom:12px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a class="nav-btn" href="index.html"><i class="fa-solid fa-arrow-left"></i> হোম</a>
+    <b>UPAZILA EXPRESS</b>
+    <a class="nav-btn" href="index.html#cart"><i class="fa-solid fa-cart-shopping"></i> কার্ট</a>
+  </div>
+</header>
+
+<main class="container" id="app">
+  <div class="empty"><i class="fa-solid fa-spinner fa-spin"></i><br>দোকান লোড হচ্ছে...</div>
+</main>
+
+<a class="float-cart" href="index.html#cart"><i class="fa-solid fa-cart-shopping"></i> কার্ট <span class="cart-count" id="cartCount">0</span></a>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+const CFG = window.UEX_CONFIG || {};
+const $ = id => document.getElementById(id);
+const esc = v => String(v ?? '').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
+const bn = v => String(v ?? 0).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+const money = n => '৳' + bn(Number(n).toLocaleString('en-IN'));
+const stars = n => { n = Math.round(Number(n)||0); return '★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n); };
+
+const CATEGORY_NAMES = {shop_product:'দোকান ও পণ্য',rent:'বাড়ি ভাড়া',worker:'শ্রমিক',technician:'টেকনিশিয়ান',pickup:'পিকআপ ডেলিভারি',support:'সাপোর্ট'};
+const CATEGORY_ICONS = {shop_product:'fa-store',rent:'fa-house',worker:'fa-people-carry-box',technician:'fa-screwdriver-wrench',pickup:'fa-truck',support:'fa-headset'};
+
+const CART_KEY = 'uex_cart_v1';
+const storeId = new URLSearchParams(location.search).get('id');
+
+let db, store, ads = [], reviews = [], stats = {avg_rating:0,review_count:0};
+
+function toast(text){
+  const t = $('toast'); t.textContent = text; t.style.display = 'block';
+  clearTimeout(toast.t); toast.t = setTimeout(()=>t.style.display='none',2200);
+}
+
+/* ---------- CART (index.html-এর সাথে localStorage-এ শেয়ার করা) ---------- */
+function getCart(){ try{ return JSON.parse(localStorage.getItem(CART_KEY)||'[]'); }catch(_){ return []; } }
+function saveCart(c){ try{ localStorage.setItem(CART_KEY,JSON.stringify(c)); }catch(_){} updateCartCount(); }
+function updateCartCount(){ $('cartCount').textContent = bn(getCart().reduce((s,i)=>s+i.qty,0)); }
+
+function addToCart(adId){
+  const ad = ads.find(x=>x.id===adId);
+  if(!ad) return;
+  const price = Number(ad.price);
+  if(ad.price===null || !Number.isFinite(price) || price<0){ toast('এই পণ্যের নির্দিষ্ট মূল্য নেই। কল করে জেনে নিন।'); return; }
+
+  const cart = getCart();
+  const item = cart.find(x=>x.provider_ad_id===ad.id);
+  const have = item ? item.qty : 0;
+  if(ad.stock!==null && ad.stock!==undefined && have+1>ad.stock){
+    toast(ad.stock===0 ? 'স্টক শেষ' : 'স্টকে মাত্র '+bn(ad.stock)+'টি আছে');
+    return;
+  }
+  if(item) item.qty++;
+  else cart.push({provider_ad_id:ad.id,name:ad.title,price,qty:1,stock:ad.stock ?? null});
+  saveCart(cart);
+  toast('কার্টে যোগ হয়েছে ✓');
+}
+
+/* ---------- LOAD ---------- */
+async function load(){
+  if(!CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY){ fail('config.js পাওয়া যায়নি।'); return; }
+  if(!storeId){ fail('দোকান নির্বাচন করা হয়নি।'); return; }
+  db = window.supabase.createClient(CFG.SUPABASE_URL,CFG.SUPABASE_ANON_KEY);
+
+  const {data:s,error:se} = await db.from('stores').select('*').eq('id',storeId).maybeSingle();
+  if(se){ fail(se.message); return; }
+  if(!s){ fail('দোকানটি পাওয়া যায়নি।'); return; }
+  store = s;
+  document.title = store.name+' | UPAZILA EXPRESS';
+
+  await Promise.all([loadAds(),loadReviews()]);
+  render();
+}
+
+async function loadAds(){
+  const {data} = await db.from('provider_ads')
+    .select('id,provider_id,category,title,description,price,price_unit,phone,area,image_url,stock,created_at')
+    .eq('provider_id',store.provider_id).eq('status','approved')
+    .order('created_at',{ascending:false}).limit(300);
+  ads = data || [];
+}
+
+async function loadReviews(){
+  const [{data:r},{data:st}] = await Promise.all([
+    db.from('store_reviews').select('id,reviewer_name,rating,comment,created_at')
+      .eq('store_id',store.id).order('created_at',{ascending:false}).limit(100),
+    db.from('store_stats').select('*').eq('store_id',store.id).maybeSingle()
+  ]);
+  reviews = r || [];
+  stats = st || {avg_rating:0,review_count:0};
+}
+
+function fail(text){
+  $('app').innerHTML = '<div class="empty"><i class="fa-solid fa-circle-exclamation"></i><br>'+esc(text)+'<br><br><a class="btn" href="index.html">হোমে ফিরুন</a></div>';
+}
+
+/* ---------- RENDER ---------- */
+function stockBadge(ad){
+  if(ad.category!=='shop_product' || ad.stock===null || ad.stock===undefined) return '';
+  if(ad.stock<=0) return '<span class="stock out">স্টক শেষ</span>';
+  if(ad.stock<=5) return '<span class="stock low">মাত্র '+bn(ad.stock)+'টি বাকি</span>';
+  return '<span class="stock in">স্টকে আছে: '+bn(ad.stock)+'টি</span>';
+}
+
+function render(){
+  const logo = store.logo_url
+    ? '<img class="logo" src="'+esc(store.logo_url)+'" alt="" onerror="this.outerHTML=\'<div class=logo><i class=\\\'fa-solid fa-store\\\'></i></div>\'">'
+    : '<div class="logo"><i class="fa-solid fa-store"></i></div>';
+
+  const productsHtml = ads.length ? ads.map(ad=>{
+    const icon = CATEGORY_ICONS[ad.category] || 'fa-bullhorn';
+    const img = ad.image_url ? '<img src="'+esc(ad.image_url)+'" alt="'+esc(ad.title)+'" loading="lazy">' : '<div class="noimg"><i class="fa-solid '+icon+'"></i></div>';
+    const price = (ad.price!==null && ad.price!=='') ? money(ad.price)+(ad.price_unit?' / '+esc(ad.price_unit):'') : 'দাম আলোচনা সাপেক্ষে';
+    const out = ad.category==='shop_product' && ad.stock!==null && ad.stock!==undefined && ad.stock<=0;
+    const main = ad.category==='shop_product'
+      ? '<button class="btn" '+(out?'disabled':'')+' onclick="addToCart(\''+esc(ad.id)+'\')"><i class="fa-solid fa-cart-plus"></i> '+(out?'স্টক শেষ':'কার্টে যোগ')+'</button>'
+      : '';
+    return '<article class="card">'+img+'<div class="card-body">'+
+      '<h3>'+esc(ad.title)+'</h3>'+
+      '<div class="muted"><i class="fa-solid '+icon+'"></i> '+esc(CATEGORY_NAMES[ad.category]||'')+' · <i class="fa-solid fa-location-dot"></i> '+esc(ad.area||'')+'</div>'+
+      '<div class="desc">'+esc(ad.description||'')+'</div>'+
+      '<div class="price">'+price+'</div>'+stockBadge(ad)+
+      '<div class="actions">'+main+(ad.phone?'<a class="btn alt" href="tel:'+esc(ad.phone)+'"><i class="fa-solid fa-phone"></i> কল</a>':'')+'</div>'+
+    '</div></article>';
+  }).join('') : '<div class="empty">এই দোকানে এখনো কোনো অনুমোদিত পণ্য নেই।</div>';
+
+  $('app').innerHTML =
+    '<section class="store-head">'+logo+
+      '<div class="store-info"><h1>'+esc(store.name)+'</h1>'+
+        '<div><span class="stars">'+stars(stats.avg_rating)+'</span> <b>'+bn(stats.avg_rating||0)+'</b> <span class="muted">('+bn(stats.review_count||0)+'টি Review)</span></div>'+
+        '<div class="muted" style="margin-top:6px">'+esc(store.description||'')+'</div>'+
+        '<div class="row">'+
+          (store.area?'<span class="pill"><i class="fa-solid fa-location-dot"></i> '+esc(store.area)+'</span>':'')+
+          '<span class="pill"><i class="fa-solid fa-box"></i> '+bn(ads.length)+'টি পণ্য/সেবা</span>'+
+          (store.phone?'<a class="btn" href="tel:'+esc(store.phone)+'"><i class="fa-solid fa-phone"></i> কল করুন</a>':'')+
+        '</div></div>'+
+    '</section>'+
+
+    '<h2 class="sec">পণ্য ও সেবা <small>'+bn(ads.length)+'টি</small></h2>'+
+    '<div class="grid">'+productsHtml+'</div>'+
+
+    '<h2 class="sec">⭐ Customer Review <small>'+bn(stats.review_count||0)+'টি</small></h2>'+
+    '<div class="review-wrap">'+
+      '<div class="panel">'+
+        '<div style="display:flex;gap:14px;align-items:center;margin-bottom:12px"><div class="big-rate">'+bn(stats.avg_rating||0)+'</div><div><div class="stars">'+stars(stats.avg_rating)+'</div><div class="muted">৫ এর মধ্যে</div></div></div>'+
+        '<form id="reviewForm">'+
+          '<div class="field"><label>আপনার নাম *</label><input id="rvName" required maxlength="60"></div>'+
+          '<div class="field"><label>আপনার রেটিং *</label><div class="star-pick-wrap"><div class="star-pick">'+
+            [5,4,3,2,1].map(n=>'<input type="radio" name="rating" id="st'+n+'" value="'+n+'"><label for="st'+n+'" title="'+bn(n)+' স্টার">★</label>').join('')+
+          '</div></div></div>'+
+          '<div class="field"><label>মন্তব্য</label><textarea id="rvComment" maxlength="1000" placeholder="দোকান ও পণ্য সম্পর্কে আপনার অভিজ্ঞতা লিখুন"></textarea></div>'+
+          '<div id="rvMsg"></div>'+
+          '<button class="btn" id="rvBtn" type="submit" style="width:100%;justify-content:center">Review জমা দিন</button>'+
+        '</form>'+
+      '</div>'+
+      '<div class="panel">'+
+        (reviews.length ? reviews.map(r=>
+          '<div class="review"><span class="who">'+esc(r.reviewer_name)+'</span> <span class="stars">'+stars(r.rating)+'</span>'+
+          (r.comment?'<p>'+esc(r.comment)+'</p>':'')+
+          '<div class="muted">'+esc(new Date(r.created_at).toLocaleDateString('bn-BD'))+'</div></div>'
+        ).join('') : '<div class="muted">এখনো কোনো Review নেই। আপনিই প্রথম Review দিন!</div>')+
+      '</div>'+
+    '</div>';
+
+  $('reviewForm').addEventListener('submit',submitReview);
+  try{ const n = localStorage.getItem('uex_rv_name'); if(n) $('rvName').value = n; }catch(_){}
+}
+
+async function submitReview(e){
+  e.preventDefault();
+  const rating = Number((document.querySelector('input[name="rating"]:checked')||{}).value);
+  const name = $('rvName').value.trim();
+  const comment = $('rvComment').value.trim();
+  const msg = (t,c)=>$('rvMsg').innerHTML = t ? '<div class="msg '+c+'">'+esc(t)+'</div>' : '';
+
+  if(!rating){ msg('স্টার দিয়ে রেটিং নির্বাচন করুন।','err'); return; }
+  if(!name){ msg('আপনার নাম লিখুন।','err'); return; }
+
+  const key = 'uex_rv_'+store.id;
+  try{ if(localStorage.getItem(key)){ msg('আপনি এই দোকানে ইতিমধ্যে Review দিয়েছেন। ধন্যবাদ!','err'); return; } }catch(_){}
+
+  $('rvBtn').disabled = true;
+  const {error} = await db.from('store_reviews').insert({store_id:store.id,reviewer_name:name,rating,comment:comment||null});
+  $('rvBtn').disabled = false;
+
+  if(error){ msg('Review জমা হয়নি: '+error.message,'err'); return; }
+
+  try{ localStorage.setItem(key,'1'); localStorage.setItem('uex_rv_name',name); }catch(_){}
+  await loadReviews();
+  render();
+  toast('আপনার Review জমা হয়েছে। ধন্যবাদ!');
+}
+
+updateCartCount();
+load();
+/* স্টক হালনাগাদ রাখতে প্রতি ১ মিনিটে পণ্য রিফ্রেশ — Review ফর্মে কিছু লিখতে থাকলে রিফ্রেশ হবে না */
+setInterval(async()=>{
+  if(!store || document.hidden) return;
+  const typing = $('rvComment') && ($('rvComment').value.trim() || document.querySelector('input[name="rating"]:checked'));
+  if(typing) return;
+  await loadAds(); render();
+},60000);
+</script>
+</body>
+</html>
