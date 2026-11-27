@@ -305,6 +305,16 @@ footer a{color:#fff;text-decoration:underline}
   .section-title h2{font-size:20px}
   .float-cart{right:12px;bottom:12px}
 }
+
+.tracking-section{max-width:1200px;margin:22px auto;padding:0 18px}
+.tracking-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 3px 12px #00000008}
+.tracking-form{display:flex;gap:9px;max-width:650px;margin-top:12px;flex-wrap:wrap}
+.tracking-form input{flex:1;min-width:210px;padding:12px;border:1px solid var(--border);border-radius:9px;font:inherit}
+.tracking-form button{background:var(--green);color:#fff;border:0;border-radius:9px;padding:11px 18px;font:inherit;font-weight:700}
+.tracking-result{margin-top:14px;display:grid;gap:10px}
+.track-order{border:1px solid var(--border);border-radius:11px;padding:13px;background:#fbfdfb}
+.track-status{display:inline-block;background:var(--light);color:var(--dark);border-radius:20px;padding:3px 10px;font-weight:700;font-size:13px}
+.track-meta{color:var(--muted);font-size:13px;margin-top:6px}
 </style>
 </head>
 
@@ -338,6 +348,18 @@ footer a{color:#fff;text-decoration:underline}
       <input id="searchInput" type="search" placeholder="আপনি কী খুঁজছেন?">
       <button onclick="applySearch()"><i class="fa-solid fa-search"></i> খুঁজুন</button>
     </div>
+  </div>
+</section>
+
+<section class="tracking-section" aria-labelledby="trackingTitle">
+  <div class="tracking-card">
+    <h2 id="trackingTitle" style="margin:0 0 5px">📦 আপনার অর্ডার ট্র্যাক করুন</h2>
+    <p style="margin:0;color:var(--muted)">অর্ডার করার সময় যে মোবাইল নম্বর দিয়েছিলেন, সেটি লিখে অর্ডারের বর্তমান অবস্থা দেখুন।</p>
+    <form id="customerTrackingForm" class="tracking-form">
+      <input id="trackingPhone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="01XXXXXXXXX" required maxlength="14" aria-label="অর্ডারের মোবাইল নম্বর">
+      <button id="trackingSubmit" type="submit">অর্ডার খুঁজুন</button>
+    </form>
+    <div id="customerTrackingResult" class="tracking-result" aria-live="polite"></div>
   </div>
 </section>
 
@@ -863,6 +885,55 @@ function openCart(){
   updateCart();
   openModal('cartModal');
 }
+
+/* ================================
+   CUSTOMER ORDER TRACKING
+================================ */
+const trackingStatusBn={
+  new:'অর্ডার গ্রহণ করা হয়েছে',
+  confirmed:'অর্ডার নিশ্চিত হয়েছে',
+  assigned:'Rider Assign হয়েছে',
+  picked_up:'পণ্য সংগ্রহ করা হয়েছে',
+  on_the_way:'পথে রয়েছে',
+  delivered:'ডেলিভারি সম্পন্ন হয়েছে',
+  cancelled:'অর্ডার বাতিল হয়েছে'
+};
+document.getElementById('customerTrackingForm').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const phone=document.getElementById('trackingPhone').value.trim();
+  const digits=phone.replace(/\\D/g,'');
+  const normalized=digits.startsWith('880')?'0'+digits.slice(3):digits;
+  const result=document.getElementById('customerTrackingResult');
+  const button=document.getElementById('trackingSubmit');
+  if(!/^01[3-9]\\d{8}$/.test(normalized)){
+    result.innerHTML='<div class="track-order">সঠিক ১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর দিন।</div>';
+    return;
+  }
+  button.disabled=true;button.textContent='খোঁজা হচ্ছে...';
+  result.innerHTML='';
+  try{
+    const {data,error}=await db.rpc('track_customer_orders_by_phone',{p_phone:normalized});
+    if(error)throw error;
+    if(!Array.isArray(data)||!data.length){
+      result.innerHTML='<div class="track-order">এই নম্বরে কোনো অর্ডার পাওয়া যায়নি। অর্ডারের সময় দেওয়া নম্বরটি আবার পরীক্ষা করুন।</div>';
+      return;
+    }
+    result.innerHTML=data.map(order=>{
+      const status=trackingStatusBn[order.status]||order.status||'অবস্থা পাওয়া যায়নি';
+      const date=order.created_at?new Date(order.created_at).toLocaleString('bn-BD'):'তারিখ পাওয়া যায়নি';
+      return '<article class="track-order">'+
+        '<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>অর্ডার: '+esc(order.order_ref||'')+'</b><span class="track-status">'+esc(status)+'</span></div>'+
+        '<div class="track-meta">তারিখ: '+esc(date)+' · এলাকা: '+esc(order.area||'')+'</div>'+
+        '<div style="margin-top:8px">পণ্যের মূল্য: '+money(order.product_total)+'<br>Rider Charge: '+money(order.delivery_charge)+'<br><b>সর্বমোট: '+money(order.grand_total)+'</b></div>'+
+      '</article>';
+    }).join('');
+  }catch(error){
+    console.error('Customer tracking error:',error);
+    result.innerHTML='<div class="track-order">Tracking চালু করা যায়নি। Admin-কে tracking SQL migration Run করতে বলুন।<br><small>'+esc(error.message||'')+'</small></div>';
+  }finally{
+    button.disabled=false;button.textContent='অর্ডার খুঁজুন';
+  }
+});
 
 /* ================================
    AREA-BASED RIDER CHARGE

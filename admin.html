@@ -98,7 +98,7 @@ a{color:#08734f}
   <div class="tabs">
     <button class="tab active" data-tab="orders">📦 অর্ডার</button>
     <button class="tab" data-tab="riders">🛵 Rider</button>
-    <button class="tab" data-tab="deliveryFees">🚚 Delivery Charge</button>
+    <button class="tab" data-tab="deliveryFees">🚚 এলাকার চার্জ সেটিংস</button>
     <button class="tab" data-tab="providerAds">👷 Provider</button>
     <button class="tab" data-tab="archive">🗄️ Delivery আর্কাইভ</button>
     <button class="tab" data-tab="reviews">⭐ Review</button>
@@ -115,10 +115,11 @@ a{color:#08734f}
 
   <section id="deliveryFees" class="card pane hidden">
     <h2>🚚 এলাকা অনুযায়ী Rider Charge</h2>
-    <p class="small">এখানে প্রতিটি এলাকার ডেলিভারি চার্জ নির্ধারণ করুন। Customer Checkout-এ এই চার্জ দেখানো হবে এবং অর্ডারের সঙ্গে সংরক্ষিত হবে।</p>
+    <p class="small">Customer Cart-এর “ডেলিভারি এলাকা” তালিকার প্রতিটি এলাকার নাম এখানে নির্বাচন করে চার্জ সংরক্ষণ করুন। নাম হুবহু মিলতে হবে। চার্জ না থাকলে Customer Checkout-এ অর্ডার করা যাবে না।</p>
+    <div id="commonDeliveryAreaButtons" class="actionrow" style="margin:10px 0"></div>
     <div id="deliveryFeeMsg"></div>
     <form id="deliveryFeeForm" class="formgrid">
-      <div><label>এলাকার নাম</label><input id="feeAreaName" required maxlength="100" placeholder="যেমন: জীবননগর বাজার"></div>
+      <div><label>ডেলিভারি এলাকা (কার্টের এলাকার সঙ্গে মিলিয়ে দিন)</label><input id="feeAreaName" list="knownDeliveryAreas" required maxlength="100" placeholder="এলাকা নির্বাচন বা লিখুন"><datalist id="knownDeliveryAreas"></datalist></div>
       <div><label>Rider Charge (টাকা)</label><input id="feeAmount" type="number" min="0" step="1" required placeholder="যেমন: ৩০"></div>
       <div><label>অবস্থা</label><select id="feeActive"><option value="true">চালু</option><option value="false">বন্ধ</option></select></div>
       <div style="align-self:end"><button type="submit">চার্জ সংরক্ষণ করুন</button></div>
@@ -1137,7 +1138,12 @@ function renderRequests(){
 function renderDeliveryFees(){
   const box=$('deliveryFeeTable');
   if(!box)return;
-  if(!deliveryFees.length){box.innerHTML='এখনো কোনো এলাকার চার্জ যোগ করা হয়নি। উপরের ফর্ম থেকে যোগ করুন।';return;}
+  const known=Array.isArray(C.AREAS)?C.AREAS:[];
+  const list=$('knownDeliveryAreas');
+  if(list)list.innerHTML=known.map(name=>'<option value="'+esc(name)+'"></option>').join('');
+  const quick=$('commonDeliveryAreaButtons');
+  if(quick)quick.innerHTML=known.map(name=>'<button type="button" class="secondary" data-fee-pick="'+esc(name)+'">'+esc(name)+'</button>').join('');
+  if(!deliveryFees.length){box.innerHTML='এখনো কোনো এলাকার চার্জ যোগ করা হয়নি। উপরের এলাকার নাম নির্বাচন করে চার্জ বসান, তারপর “চার্জ সংরক্ষণ করুন” চাপুন।';return;}
   box.innerHTML='<table><thead><tr><th>এলাকা</th><th>চার্জ</th><th>অবস্থা</th><th>কাজ</th></tr></thead><tbody>'+deliveryFees.map(x=>
     '<tr><td>'+esc(x.area_name)+'</td><td>৳'+bn(x.charge)+'</td><td>'+(x.is_active?'চালু':'বন্ধ')+'</td><td><button class="secondary" data-fee-edit="'+esc(x.area_name)+'">Edit</button> <button class="danger" data-fee-del="'+esc(x.area_name)+'">Delete</button></td></tr>'
   ).join('')+'</tbody></table>';
@@ -1152,6 +1158,10 @@ $('deliveryFeeForm').addEventListener('submit',async e=>{
     showMessage('deliveryFeeMsg','এলাকার Rider Charge সংরক্ষণ হয়েছে।','success');
     $('deliveryFeeForm').reset();await loadAll();
   }catch(error){showMessage('deliveryFeeMsg',error.message,'error');}
+});
+$('commonDeliveryAreaButtons').addEventListener('click',e=>{
+  const area=e.target.dataset.feePick;
+  if(area){$('feeAreaName').value=area;$('feeAmount').focus();}
 });
 $('deliveryFeeTable').addEventListener('click',async e=>{
   const edit=e.target.dataset.feeEdit,del=e.target.dataset.feeDel;

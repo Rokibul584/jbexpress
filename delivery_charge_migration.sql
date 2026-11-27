@@ -63,3 +63,53 @@ where grand_total = 0;
 -- Ensure PostgREST sees the table and its policies immediately after migration.
 grant usage on schema public to anon, authenticated;
 notify pgrst, 'reload schema';
+
+
+-- Customer self-service tracking: phone number lookup exposes only order status and totals.
+-- No delivery address, notes, customer name, or rider phone is returned.
+create or replace function public.track_customer_orders_by_phone(p_phone text)
+returns table (
+  order_ref text,
+  status text,
+  created_at timestamptz,
+  area text,
+  product_total numeric,
+  delivery_charge numeric,
+  grand_total numeric
+)
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  v_phone text;
+begin
+  v_phone := regexp_replace(coalesce(p_phone,''), '[^0-9]', '', 'g');
+  if left(v_phone,3) = '880' then
+    v_phone := '0' || substr(v_phone,4);
+  end if;
+  if v_phone !~ '^01[3-9][0-9]{8}$' then
+    raise exception 'সঠিক বাংলাদেশি মোবাইল নম্বর দিন';
+  end if;
+
+  return query
+  select
+    coalesce(o.ref, o.id::text)::text,
+    coalesce(o.status, 'new')::text,
+    o.created_at,
+    coalesce(o.area, '')::text,
+    coalesce(o.total_amount, 0)::numeric,
+    coalesce(o.delivery_charge, 0)::numeric,
+    coalesce(o.grand_total, coalesce(o.total_amount,0) + coalesce(o.delivery_charge,0))::numeric
+  from public.customer_orders o
+  where regexp_replace(coalesce(o.customer_phone,''), '[^0-9]', '', 'g') = v_phone
+     or (left(regexp_replace(coalesce(o.customer_phone,''), '[^0-9]', '', 'g'),3) = '880'
+         and ('0' || substr(regexp_replace(coalesce(o.customer_phone,''), '[^0-9]', '', 'g'),4)) = v_phone)
+  order by o.created_at desc
+  limit 20;
+end;
+$$;
+
+revoke all on function public.track_customer_orders_by_phone(text) from public;
+grant execute on function public.track_customer_orders_by_phone(text) to anon, authenticated;
+notify pgrst, 'reload schema';
