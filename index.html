@@ -1,1158 +1,215 @@
-
 <!DOCTYPE html>
-<html lang="bn">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#08734f">
-<title>UPAZILA EXPRESS | জীবননগর</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-<style>
-:root{
-  --green:#08734f;
-  --dark:#075b3e;
-  --light:#e9f7f0;
-  --orange:#f59e0b;
-  --bg:#f5f7f6;
-  --text:#202923;
-  --muted:#6b7770;
-  --border:#e5ebe7;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:'Hind Siliguri',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-}
-button,input,textarea,select{font-family:inherit}
-button{cursor:pointer}
-a{text-decoration:none;color:inherit}
-header{
-  background:var(--green);
-  color:white;
-  position:sticky;
-  top:0;
-  z-index:100;
-  box-shadow:0 3px 12px #0002;
-}
-.nav{
-  max-width:1200px;
-  margin:auto;
-  padding:12px 18px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-.brand{
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-.logo{
-  width:43px;height:43px;
-  border-radius:12px;
-  background:white;
-  color:var(--green);
-  display:grid;
-  place-items:center;
-  font-size:22px;
-}
-.brand h2{margin:0;font-size:21px;line-height:1.1}
-.brand small{font-size:12px;opacity:.85}
-.nav-actions{display:flex;gap:9px;align-items:center}
-.nav-btn{
-  border:1px solid #ffffff55;
-  background:#ffffff18;
-  color:white;
-  border-radius:9px;
-  padding:8px 12px;
-  font-size:14px;
-}
-.hero{
-  background:linear-gradient(120deg,#075b3e,#0b9865);
-  color:white;
-  padding:38px 18px 48px;
-}
-.hero-inner{max-width:1200px;margin:auto}
-.hero h1{font-size:32px;margin:0 0 8px}
-.hero p{margin:0;opacity:.92;font-size:16px}
-.search-box{
-  margin-top:22px;
-  max-width:600px;
-  display:flex;
-  background:white;
-  border-radius:12px;
-  padding:5px;
-  box-shadow:0 5px 18px #0002;
-}
-.search-box input{
-  border:0;outline:0;flex:1;
-  min-width:0;padding:10px 12px;
-  font-size:15px;color:#222;
-}
-.search-box button{
-  border:0;background:var(--orange);
-  color:#222;padding:0 18px;
-  border-radius:9px;font-weight:700;
-}
-.container{max-width:1200px;margin:auto;padding:22px 18px}
-.section-title{
-  display:flex;justify-content:space-between;
-  align-items:center;gap:10px;
-  margin-bottom:15px;
-}
-.section-title h2{margin:0;font-size:23px}
-.section-title small{color:var(--muted)}
-.categories{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:12px;
-  margin-bottom:28px;
-}
-.cat{
-  border:1px solid var(--border);
-  background:white;
-  border-radius:13px;
-  padding:15px 7px;
-  text-align:center;
-  transition:.2s;
-  color:var(--text);
-}
-.cat .ico{
-  width:46px;height:46px;
-  margin:0 auto 7px;
-  border-radius:13px;
-  display:grid;place-items:center;
-  background:var(--light);
-  color:var(--green);
-  font-size:21px;
-}
-.cat strong{font-size:14px;display:block}
-.cat.active,.cat:hover{
-  border-color:var(--green);
-  background:#f0faf5;
-  transform:translateY(-2px);
-}
-.filters{
-  display:flex;gap:8px;flex-wrap:wrap;
-  margin:0 0 17px;
-}
-.filter{
-  border:1px solid var(--border);
-  background:white;
-  border-radius:20px;
-  padding:7px 15px;
-  font-size:14px;
-}
-.filter.active{background:var(--green);color:white;border-color:var(--green)}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,minmax(0,1fr));
-  gap:17px;
-}
-.card{
-  background:white;border:1px solid var(--border);
-  border-radius:14px;overflow:hidden;
-  box-shadow:0 3px 12px #00000008;
-  display:flex;flex-direction:column;
-}
-.card-img{
-  height:190px;width:100%;
-  object-fit:cover;background:#e9efeb;
-}
-.no-image{
-  height:150px;background:var(--light);
-  display:grid;place-items:center;
-  color:var(--green);font-size:42px;
-}
-.card-body{padding:14px;display:flex;flex-direction:column;flex:1}
-.card h3{font-size:18px;margin:0 0 6px;line-height:1.4}
-.description{
-  color:var(--muted);font-size:14px;
-  line-height:1.6;margin:4px 0 10px;
-  white-space:pre-line;
-}
-.meta{
-  display:flex;flex-wrap:wrap;gap:8px;
-  color:var(--muted);font-size:13px;
-  margin:4px 0 10px;
-}
-.meta span{display:flex;align-items:center;gap:5px}
-.price{font-size:18px;color:var(--green);font-weight:700;margin:4px 0 12px}
-.card-actions{display:flex;gap:8px;margin-top:auto}
-.action-btn{
-  flex:1;border:0;border-radius:9px;
-  padding:9px 8px;font-size:14px;font-weight:600;
-}
-.primary{background:var(--green);color:white}
-.secondary{background:var(--light);color:var(--green)}
-.empty,.loading{
-  background:white;border:1px dashed #cbd8d0;
-  border-radius:13px;padding:35px 15px;
-  text-align:center;color:var(--muted);
-  grid-column:1/-1;
-}
-.empty i{font-size:35px;color:#9bb8a7;margin-bottom:10px}
-footer{
-  background:#123c2d;color:#e5f5ec;
-  padding:28px 18px;margin-top:35px;
-}
-.footer-inner{
-  max-width:1200px;margin:auto;
-  display:flex;justify-content:space-between;
-  gap:20px;flex-wrap:wrap;
-}
-footer p{margin:5px 0;font-size:14px}
-footer a{color:#fff;text-decoration:underline}
-.float-cart{
-  position:fixed;right:20px;bottom:20px;
-  z-index:120;background:var(--orange);
-  color:#222;border:0;border-radius:50px;
-  padding:13px 19px;font-weight:700;
-  box-shadow:0 5px 20px #0003;
-}
-.cart-count{
-  background:#d62828;color:white;
-  padding:2px 7px;border-radius:20px;
-  margin-left:5px;
-}
-.modal{
-  display:none;position:fixed;inset:0;
-  background:#0008;z-index:200;
-  padding:15px;overflow:auto;
-  align-items:center;justify-content:center;
-}
-.modal.show{display:flex}
-.modal-box{
-  background:white;width:100%;max-width:520px;
-  border-radius:16px;padding:20px;
-  max-height:92vh;overflow:auto;
-}
-.modal-head{
-  display:flex;justify-content:space-between;
-  align-items:center;margin-bottom:15px;
-}
-.modal-head h2{margin:0;font-size:21px}
-.close{
-  border:0;background:#f0f2f1;
-  width:34px;height:34px;border-radius:50%;
-  font-size:18px;
-}
-.field{margin-bottom:12px}
-.field label{display:block;font-weight:600;margin-bottom:5px}
-.field input,.field textarea,.field select{
-  width:100%;border:1px solid #dce5df;
-  border-radius:9px;padding:11px;
-  font-size:15px;outline:none;background:white;
-}
-.field input:focus,.field textarea:focus{border-color:var(--green)}
-.field textarea{min-height:85px;resize:vertical}
-.submit{
-  width:100%;border:0;border-radius:10px;
-  padding:12px;background:var(--green);
-  color:white;font-size:16px;font-weight:700;
-}
-.cart-fee{padding:10px 12px;background:#eef7f1;border-radius:9px;margin:8px 0;font-weight:600;color:#075b3e}.cart-grand{font-size:20px;font-weight:800;text-align:right;margin:8px 0 14px;color:#075b3e}.cart-row{
-  display:flex;justify-content:space-between;
-  gap:10px;border-bottom:1px solid var(--border);
-  padding:10px 0;
-}
-.qty{display:flex;align-items:center;gap:8px}
-.qty button{
-  border:0;background:var(--light);
-  color:var(--green);border-radius:6px;
-  width:27px;height:27px;font-weight:bold;
-}
-.total{text-align:right;font-size:19px;font-weight:700;margin:15px 0}
-.notice{
-  padding:10px 12px;border-radius:9px;
-  background:#fff7e6;color:#805400;
-  font-size:13px;margin:10px 0;
-}
-.stores{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:26px}
-.store-card{background:white;border:1px solid var(--border);border-radius:14px;padding:14px;display:flex;gap:12px;align-items:center;transition:.2s;color:var(--text)}
-.store-card:hover{border-color:var(--green);transform:translateY(-2px);box-shadow:0 5px 16px #0001}
-.store-logo{width:58px;height:58px;border-radius:14px;object-fit:cover;background:var(--light);color:var(--green);display:grid;place-items:center;font-size:24px;flex:none}
-.store-card strong{display:block;font-size:16px;line-height:1.3;overflow-wrap:anywhere}
-.store-card small{color:var(--muted);display:block;font-size:12.5px}
-.mini-stars{color:#e6a100;font-size:14px;letter-spacing:1px}
-.stock-tag{font-size:12.5px;font-weight:700;border-radius:20px;display:inline-block;padding:2px 10px;margin:0 0 8px}
-.stock-tag.in{background:#dff5e6;color:#176b3c}
-.stock-tag.low{background:#fff0cf;color:#8a5700}
-.stock-tag.out{background:#fee4e2;color:#b42318}
-.store-link{color:var(--green);font-weight:600;font-size:13px}
-.action-btn:disabled{opacity:.5;cursor:not-allowed}
-@media(max-width:850px){
-  .stores{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .categories{grid-template-columns:repeat(3,1fr)}
-}
-@media(max-width:520px){
-  .stores{grid-template-columns:1fr}
-  .nav{padding:10px}
-  .brand h2{font-size:17px}
-  .nav-btn{padding:7px 9px;font-size:12px}
-  .hero{padding:28px 15px 35px}
-  .hero h1{font-size:25px}
-  .container{padding:18px 12px}
-  .grid{grid-template-columns:1fr}
-  .card-img{height:205px}
-  .section-title h2{font-size:20px}
-  .float-cart{right:12px;bottom:12px}
-}
-
-.tracking-section{max-width:1200px;margin:22px auto;padding:0 18px}
-.tracking-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px;box-shadow:0 3px 12px #00000008}
-.tracking-form{display:flex;gap:9px;max-width:650px;margin-top:12px;flex-wrap:wrap}
-.tracking-form input{flex:1;min-width:210px;padding:12px;border:1px solid var(--border);border-radius:9px;font:inherit}
-.tracking-form button{background:var(--green);color:#fff;border:0;border-radius:9px;padding:11px 18px;font:inherit;font-weight:700}
-.tracking-result{margin-top:14px;display:grid;gap:10px}
-.track-order{border:1px solid var(--border);border-radius:11px;padding:13px;background:#fbfdfb}
-.track-status{display:inline-block;background:var(--light);color:var(--dark);border-radius:20px;padding:3px 10px;font-weight:700;font-size:13px}
-.track-meta{color:var(--muted);font-size:13px;margin-top:6px}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JB Express — Order Panel</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { margin: 0; background: #f4f6f9; color: #1f2937; padding: 20px; }
+    .container { max-width: 640px; margin: 0 auto; background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.06); }
+    h1 { margin-top: 0; font-size: 24px; }
+    .form-group { margin-bottom: 14px; }
+    label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 14px; }
+    input, textarea, select { width: 100%; padding: 10px 12px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; }
+    .pm-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 8px; }
+    .pm-card { display: flex; align-items: center; gap: 8px; border: 1px solid #d1d5db; padding: 10px 12px; border-radius: 8px; cursor: pointer; font-weight: 500; }
+    .pm-card input { width: auto; margin: 0; }
+    .wallet-box { display: none; margin-top: 14px; padding: 14px; background: #fef3c7; border: 1px solid #f59e0b; border-radius: 10px; }
+    .wallet-number { font-size: 18px; font-weight: 700; color: #92400e; user-select: all; }
+    .hint { font-size: 13px; color: #4b5563; margin: 6px 0 12px; }
+    button.submit-btn { width: 100%; padding: 12px; background: #111827; color: #fff; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+    button.submit-btn:hover { background: #374151; }
+    .alert { margin-top: 16px; padding: 14px; border-radius: 8px; display: none; font-size: 14px; line-height: 1.5; }
+    .alert.success { background: #dcfce7; color: #166534; border: 1px solid #86efac; display: block; }
+    .alert.error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; display: block; }
+  </style>
 </head>
-
 <body>
+  <div class="container">
+    <h1>JB Express — Place Order</h1>
 
-<header>
-  <div class="nav">
-    <div class="brand">
-      <div class="logo"><i class="fa-solid fa-truck-fast"></i></div>
-      <div>
-        <h2>UPAZILA EXPRESS</h2>
-        <small>আপনার এলাকার সকল সেবা এক জায়গায়</small>
+    <form id="orderForm">
+      <div class="form-group">
+        <label for="customerName">Customer Name *</label>
+        <input type="text" id="customerName" required placeholder="Apnar nam" />
       </div>
-    </div>
-    <div class="nav-actions">
-      <a class="nav-btn" href="provider.html">
-        <i class="fa-solid fa-user-plus"></i> Provider
-      </a>
-      <button class="nav-btn" onclick="openCart()">
-        <i class="fa-solid fa-cart-shopping"></i> Cart
-      </button>
-    </div>
-  </div>
-</header>
 
-<section class="hero">
-  <div class="hero-inner">
-    <h1>জীবননগরের সেবা এখন হাতের মুঠোয়</h1>
-    <p>দোকান, পণ্য, বাড়ি ভাড়া, শ্রমিক, টেকনিশিয়ান ও ডেলিভারি—সব এক প্ল্যাটফর্মে।</p>
-    <div class="search-box">
-      <input id="searchInput" type="search" placeholder="আপনি কী খুঁজছেন?">
-      <button onclick="applySearch()"><i class="fa-solid fa-search"></i> খুঁজুন</button>
-    </div>
-  </div>
-</section>
-
-<section class="tracking-section" aria-labelledby="trackingTitle">
-  <div class="tracking-card">
-    <h2 id="trackingTitle" style="margin:0 0 5px">📦 আপনার অর্ডার ট্র্যাক করুন</h2>
-    <p style="margin:0;color:var(--muted)">অর্ডার করার সময় যে মোবাইল নম্বর দিয়েছিলেন, সেটি লিখে অর্ডারের বর্তমান অবস্থা দেখুন।</p>
-    <form id="customerTrackingForm" class="tracking-form">
-      <input id="trackingPhone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="01XXXXXXXXX" required maxlength="14" aria-label="অর্ডারের মোবাইল নম্বর">
-      <button id="trackingSubmit" type="submit">অর্ডার খুঁজুন</button>
-    </form>
-    <div id="customerTrackingResult" class="tracking-result" aria-live="polite"></div>
-  </div>
-</section>
-
-<main class="container">
-
-  <div class="section-title">
-    <h2>আমাদের সেবাসমূহ</h2>
-    <small>জীবননগর, চুয়াডাঙ্গা</small>
-  </div>
-
-  <div class="categories" id="categories">
-    <button class="cat active" data-cat="all" onclick="selectCategory('all',this)">
-      <div class="ico"><i class="fa-solid fa-border-all"></i></div>
-      <strong>সব সেবা</strong>
-    </button>
-    <button class="cat" data-cat="shop_product" onclick="selectCategory('shop_product',this)">
-      <div class="ico"><i class="fa-solid fa-store"></i></div>
-      <strong>দোকান ও পণ্য</strong>
-    </button>
-    <button class="cat" data-cat="rent" onclick="selectCategory('rent',this)">
-      <div class="ico"><i class="fa-solid fa-house"></i></div>
-      <strong>বাড়ি ভাড়া</strong>
-    </button>
-    <button class="cat" data-cat="worker" onclick="selectCategory('worker',this)">
-      <div class="ico"><i class="fa-solid fa-people-carry-box"></i></div>
-      <strong>শ্রমিক</strong>
-    </button>
-    <button class="cat" data-cat="technician" onclick="selectCategory('technician',this)">
-      <div class="ico"><i class="fa-solid fa-screwdriver-wrench"></i></div>
-      <strong>টেকনিশিয়ান</strong>
-    </button>
-    <button class="cat" data-cat="pickup" onclick="selectCategory('pickup',this)">
-      <div class="ico"><i class="fa-solid fa-truck"></i></div>
-      <strong>পিকআপ ডেলিভারি</strong>
-    </button>
-  </div>
-
-  <div class="section-title">
-    <h2>🏪 আমাদের দোকানসমূহ</h2>
-    <small id="storeCount"></small>
-  </div>
-  <div class="stores" id="storesGrid">
-    <div class="loading"><i class="fa-solid fa-spinner fa-spin"></i><br>দোকান লোড হচ্ছে...</div>
-  </div>
-
-  <div class="filters">
-    <button class="filter active" onclick="selectCategory('all',this)">সব বিজ্ঞাপন</button>
-    <button class="filter" onclick="selectCategory('support',this)">সাপোর্ট</button>
-  </div>
-
-  <div class="section-title">
-    <h2 id="listTitle">সকল বিজ্ঞাপন</h2>
-    <small id="resultCount">লোড হচ্ছে...</small>
-  </div>
-
-  <div class="grid" id="adsGrid">
-    <div class="loading"><i class="fa-solid fa-spinner fa-spin"></i><br>বিজ্ঞাপন লোড হচ্ছে...</div>
-  </div>
-</main>
-
-<footer>
-  <div class="footer-inner">
-    <div>
-      <h2>UPAZILA EXPRESS</h2>
-      <p>স্থানীয় মানুষের জন্য স্থানীয় সেবা।</p>
-      <p>জীবননগর, চুয়াডাঙ্গা</p>
-    </div>
-    <div>
-      <p><i class="fa-solid fa-handshake"></i> আপনি কি সার্ভিস প্রোভাইডার?</p>
-      <p><a href="provider.html">Provider Account খুলুন</a></p>
-      <p><a href="tel:">যোগাযোগ ও সহায়তা</a></p>
-    </div>
-  </div>
-</footer>
-
-<button class="float-cart" onclick="openCart()">
-  <i class="fa-solid fa-cart-shopping"></i> কার্ট
-  <span class="cart-count" id="cartCount">0</span>
-</button>
-
-<!-- Cart Modal -->
-<div class="modal" id="cartModal">
-  <div class="modal-box">
-    <div class="modal-head">
-      <h2><i class="fa-solid fa-cart-shopping"></i> আপনার কার্ট</h2>
-      <button class="close" onclick="closeModal('cartModal')">×</button>
-    </div>
-    <div id="cartItems"></div>
-    <div class="total" id="cartTotal">পণ্যের মূল্য: ৳০</div>
-    <div class="field" style="margin-top:12px"><label>ডেলিভারি এলাকা *</label><select id="customerArea" required><option value="">এলাকা নির্বাচন করুন</option></select></div>
-    <div class="cart-fee" id="deliveryFeeInfo">এলাকা নির্বাচন করলে Rider Charge দেখা যাবে।</div>
-    <div class="cart-grand" id="cartGrandTotal">সর্বমোট: ৳০</div>
-
-    <form id="checkoutForm">
-      <div class="field">
-        <label>আপনার নাম *</label>
-        <input id="customerName" required placeholder="সম্পূর্ণ নাম">
+      <div class="form-group">
+        <label for="customerPhone">Phone Number *</label>
+        <input type="tel" id="customerPhone" required placeholder="01XXXXXXXXX" />
       </div>
-      <div class="field">
-        <label>মোবাইল নম্বর *</label>
-        <input id="customerPhone" required type="tel" placeholder="01XXXXXXXXX">
+
+      <div class="form-group">
+        <label for="deliveryAddress">Delivery Address *</label>
+        <textarea id="deliveryAddress" rows="2" required placeholder="Thikana likhun"></textarea>
       </div>
-      <div class="field">
-        <label>ডেলিভারি ঠিকানা *</label>
-        <textarea id="deliveryAddress" required placeholder="বাড়ি, রাস্তা, বাজার বা পরিচিত স্থান"></textarea>
+
+      <div class="form-group">
+        <label for="orderItems">Order Details / Items *</label>
+        <textarea id="orderItems" rows="3" required placeholder="Ki order korte chan ebong quantity"></textarea>
       </div>
-      <div class="field">
-        <label>অতিরিক্ত নির্দেশনা</label>
-        <textarea id="customerNote" placeholder="প্রয়োজনীয় তথ্য লিখুন"></textarea>
+
+      <div class="form-group">
+        <label for="totalAmount">Total Amount (BDT) *</label>
+        <input type="number" id="totalAmount" min="1" required placeholder="e.g. 500" />
       </div>
-      <div class="notice">অর্ডার জমা হওয়ার পর Admin অর্ডারটি যাচাই করে Rider নিয়োগ করবেন।</div>
-      <button class="submit" type="submit" id="checkoutBtn">অর্ডার নিশ্চিত করুন</button>
-    </form>
-  </div>
-</div>
 
-<!-- Service Request Modal -->
-<div class="modal" id="serviceModal">
-  <div class="modal-box">
-    <div class="modal-head">
-      <h2 id="serviceModalTitle">সেবার জন্য আবেদন</h2>
-      <button class="close" onclick="closeModal('serviceModal')">×</button>
-    </div>
-    <div id="selectedAdInfo"></div>
-    <form id="serviceForm">
-      <div class="field">
-        <label>আপনার নাম *</label>
-        <input id="serviceName" required>
-      </div>
-      <div class="field">
-        <label>মোবাইল নম্বর *</label>
-        <input id="servicePhone" type="tel" required placeholder="01XXXXXXXXX">
-      </div>
-      <div class="field">
-        <label>আপনার এলাকা *</label>
-        <input id="serviceArea" required placeholder="আপনার এলাকা">
-      </div>
-      <div class="field">
-        <label>বিস্তারিত তথ্য *</label>
-        <textarea id="serviceDetails" required placeholder="আপনার প্রয়োজন ও বিস্তারিত লিখুন"></textarea>
-      </div>
-      <button class="submit" type="submit" id="serviceSubmitBtn">আবেদন জমা দিন</button>
-    </form>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="config.js"></script>
-
-<script>
-/* ================================
-   SUPABASE CONFIGURATION
-================================ */
-const CFG = window.UEX_CONFIG || {};
-if(!CFG.SUPABASE_URL || !CFG.SUPABASE_ANON_KEY){
-  document.getElementById('adsGrid').innerHTML =
-    '<div class="empty">Supabase configuration পাওয়া যায়নি। config.js পরীক্ষা করুন।</div>';
-  throw new Error('Supabase config missing');
-}
-
-const db = window.supabase.createClient(
-  CFG.SUPABASE_URL,
-  CFG.SUPABASE_ANON_KEY
-);
-loadDeliveryCharges();
-
-const CATEGORY_NAMES = {
-  shop_product:'দোকান ও পণ্য',
-  rent:'বাড়ি ভাড়া',
-  worker:'শ্রমিক',
-  technician:'টেকনিশিয়ান',
-  pickup:'পিকআপ ডেলিভারি',
-  support:'সাপোর্ট'
-};
-
-const CATEGORY_ICONS = {
-  shop_product:'fa-store',
-  rent:'fa-house',
-  worker:'fa-people-carry-box',
-  technician:'fa-screwdriver-wrench',
-  pickup:'fa-truck',
-  support:'fa-headset'
-};
-
-let allAds = [];
-let currentCategory = 'all';
-let searchTerm = '';
-let allStores = [];
-let storeById = {};
-const CART_KEY = 'uex_cart_v1';
-let cart = [];
-try{ cart = JSON.parse(localStorage.getItem(CART_KEY) || '[]'); }catch(_){ cart = []; }
-function persistCart(){ try{ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }catch(_){} }
-let selectedServiceAd = null;
-let deliveryCharges = [];
-let currentDeliveryCharge = null;
-
-/* ================================
-   COMMON HELPERS
-================================ */
-function esc(value){
-  return String(value ?? '').replace(/[&<>"']/g, ch => ({
-    '&':'&amp;',
-    '<':'&lt;',
-    '>':'&gt;',
-    '"':'&quot;',
-    "'":'&#039;'
-  })[ch]);
-}
-
-function money(value){
-  const n = Number(value);
-  if(!Number.isFinite(n)) return 'দাম আলোচনা সাপেক্ষে';
-  return '৳' + n.toLocaleString('en-IN');
-}
-
-function showMessage(message){
-  alert(message);
-}
-
-function closeModal(id){
-  document.getElementById(id).classList.remove('show');
-}
-
-function openModal(id){
-  document.getElementById(id).classList.add('show');
-}
-
-/* ================================
-   LOAD APPROVED PROVIDER ADS
-================================ */
-async function loadAds(){
-  const grid = document.getElementById('adsGrid');
-  grid.innerHTML = '<div class="loading"><i class="fa-solid fa-spinner fa-spin"></i><br>বিজ্ঞাপন লোড হচ্ছে...</div>';
-
-  const {data,error} = await db
-    .from('provider_ads')
-    .select('id,provider_id,category,title,description,price,price_unit,phone,area,image_url,status,stock,created_at')
-    .eq('status','approved')
-    .order('created_at',{ascending:false})
-    .limit(500);
-
-  if(error){
-    console.error('Provider ads error:',error);
-    grid.innerHTML = '<div class="empty">বিজ্ঞাপন লোড করা যায়নি। কিছুক্ষণ পর আবার চেষ্টা করুন।<br><small>'+esc(error.message)+'</small></div>';
-    document.getElementById('resultCount').textContent = 'ত্রুটি';
-    return;
-  }
-
-  allAds = data || [];
-  syncCartWithStock();
-  renderAds();
-  loadStores();
-}
-
-/* ================================
-   STORES
-================================ */
-async function loadStores(){
-  const [{data:stores},{data:stats}] = await Promise.all([
-    db.from('stores').select('id,provider_id,name,area,logo_url').limit(300),
-    db.from('store_stats').select('*').limit(300)
-  ]);
-
-  const statMap = {};
-  (stats||[]).forEach(s=>statMap[s.store_id]=s);
-
-  allStores = (stores||[])
-    .map(s=>({...s, ...(statMap[s.id]||{avg_rating:0,review_count:0,ad_count:0})}))
-    .filter(s=>Number(s.ad_count)>0)
-    .sort((a,b)=>Number(b.avg_rating)-Number(a.avg_rating) || Number(b.review_count)-Number(a.review_count));
-
-  storeById = {};
-  (stores||[]).forEach(s=>storeById[s.provider_id]=s);
-
-  renderStores();
-  renderAds();
-}
-
-function stars(n){ n = Math.round(Number(n)||0); return '★★★★★'.slice(0,n)+'☆☆☆☆☆'.slice(0,5-n); }
-
-function renderStores(){
-  const box = document.getElementById('storesGrid');
-  document.getElementById('storeCount').textContent = allStores.length+'টি দোকান';
-
-  if(!allStores.length){
-    box.innerHTML = '<div class="empty">এখনো কোনো দোকান যুক্ত হয়নি।</div>';
-    return;
-  }
-
-  box.innerHTML = allStores.map(s=>`
-    <a class="store-card" href="store.html?id=${encodeURIComponent(s.id)}">
-      ${s.logo_url
-        ? `<img class="store-logo" src="${esc(s.logo_url)}" alt="" loading="lazy" onerror="this.style.display='none'">`
-        : `<div class="store-logo"><i class="fa-solid fa-store"></i></div>`}
-      <div>
-        <strong>${esc(s.name)}</strong>
-        <span class="mini-stars">${stars(s.avg_rating)}</span>
-        <small>${Number(s.review_count)>0 ? esc(s.avg_rating)+' ('+esc(s.review_count)+' Review)' : 'এখনো Review নেই'}</small>
-        <small>${esc(s.area||'')} · ${esc(s.ad_count)}টি পণ্য/সেবা</small>
-      </div>
-    </a>`).join('');
-}
-
-/* স্টক কমে গেলে কার্টের পরিমাণ সীমিত করা */
-function syncCartWithStock(){
-  cart = cart.filter(item=>{
-    const ad = allAds.find(a=>a.id===item.provider_ad_id);
-    if(!ad) return true;
-    item.stock = ad.stock ?? null;
-    if(ad.stock!==null && ad.stock!==undefined){
-      if(ad.stock<=0) return false;
-      if(item.qty>ad.stock) item.qty = ad.stock;
-    }
-    return true;
-  });
-  updateCart();
-}
-
-/* ================================
-   FILTER AND SEARCH
-================================ */
-function selectCategory(category,button){
-  currentCategory = category;
-
-  document.querySelectorAll('.cat,.filter').forEach(el=>{
-    el.classList.remove('active');
-  });
-  if(button) button.classList.add('active');
-
-  document.querySelectorAll('.cat').forEach(el=>{
-    if(el.dataset.cat === category) el.classList.add('active');
-  });
-  document.querySelectorAll('.filter').forEach(el=>{
-    if(category === 'support' && el.textContent.includes('সাপোর্ট')) el.classList.add('active');
-    if(category === 'all' && el.textContent.includes('সব বিজ্ঞাপন')) el.classList.add('active');
-  });
-
-  renderAds();
-}
-
-function applySearch(){
-  searchTerm = document.getElementById('searchInput').value.trim().toLowerCase();
-  renderAds();
-}
-
-document.getElementById('searchInput').addEventListener('keydown',e=>{
-  if(e.key === 'Enter') applySearch();
-});
-
-/* ================================
-   DISPLAY ADS
-================================ */
-function renderAds(){
-  const grid = document.getElementById('adsGrid');
-  let ads = allAds.filter(ad=>{
-    const categoryMatch = currentCategory === 'all' || ad.category === currentCategory;
-    const text = [
-      ad.title,ad.description,ad.area,
-      CATEGORY_NAMES[ad.category]
-    ].join(' ').toLowerCase();
-
-    return categoryMatch && (!searchTerm || text.includes(searchTerm));
-  });
-
-  document.getElementById('resultCount').textContent = ads.length+'টি বিজ্ঞাপন';
-
-  document.getElementById('listTitle').textContent =
-    currentCategory === 'all' ? 'সকল বিজ্ঞাপন' : (CATEGORY_NAMES[currentCategory] || 'বিজ্ঞাপন');
-
-  if(!ads.length){
-    grid.innerHTML = `
-      <div class="empty">
-        <i class="fa-regular fa-folder-open"></i>
-        <h3>কোনো বিজ্ঞাপন পাওয়া যায়নি</h3>
-        <p>এই বিভাগে বর্তমানে অনুমোদিত বিজ্ঞাপন নেই।</p>
-      </div>`;
-    return;
-  }
-
-  grid.innerHTML = ads.map(ad=>{
-    const isProduct = ad.category === 'shop_product';
-    const icon = CATEGORY_ICONS[ad.category] || 'fa-bullhorn';
-    const image = ad.image_url
-      ? `<img class="card-img" src="${esc(ad.image_url)}" alt="${esc(ad.title)}" loading="lazy" onerror="this.style.display='none'">`
-      : `<div class="no-image"><i class="fa-solid ${icon}"></i></div>`;
-
-    const hasStock = isProduct && ad.stock !== null && ad.stock !== undefined;
-    const outOfStock = hasStock && ad.stock <= 0;
-    const stockTag = !hasStock ? '' :
-      outOfStock ? '<div><span class="stock-tag out">স্টক শেষ</span></div>' :
-      ad.stock <= 5 ? `<div><span class="stock-tag low">মাত্র ${ad.stock}টি বাকি</span></div>` :
-      `<div><span class="stock-tag in">স্টকে আছে: ${ad.stock}টি</span></div>`;
-    const st = storeById[ad.provider_id];
-    const storeLine = st
-      ? `<a class="store-link" href="store.html?id=${encodeURIComponent(st.id)}"><i class="fa-solid fa-store"></i> ${esc(st.name)} →</a>`
-      : '';
-
-    const price = ad.price !== null && ad.price !== ''
-      ? money(ad.price) + (ad.price_unit ? ' / '+esc(ad.price_unit) : '')
-      : 'দাম আলোচনা সাপেক্ষে';
-
-    return `
-      <article class="card">
-        ${image}
-        <div class="card-body">
-          <h3>${esc(ad.title)}</h3>
-          <div class="meta">
-            <span><i class="fa-solid ${icon}"></i>${esc(CATEGORY_NAMES[ad.category] || 'সেবা')}</span>
-            <span><i class="fa-solid fa-location-dot"></i>${esc(ad.area || 'জীবননগর')}</span>
-          </div>
-          ${storeLine}
-          <div class="description">${esc(ad.description || 'বিস্তারিত তথ্য দেওয়া হয়নি।')}</div>
-          <div class="price">${price}</div>
-          ${stockTag}
-          <div class="card-actions">
-            ${isProduct
-              ? `<button class="action-btn primary" ${outOfStock?'disabled':''} onclick="addToCart('${ad.id}')"><i class="fa-solid fa-cart-plus"></i> ${outOfStock?'স্টক শেষ':'কার্টে যোগ'}</button>`
-              : `<button class="action-btn primary" onclick="requestService('${ad.id}')"><i class="fa-solid fa-paper-plane"></i> আবেদন করুন</button>`
-            }
-            ${ad.phone
-              ? `<a class="action-btn secondary" href="tel:${esc(ad.phone)}"><i class="fa-solid fa-phone"></i> কল করুন</a>`
-              : ''
-            }
-          </div>
+      <div class="form-group">
+        <label>Select Payment Method *</label>
+        <div class="pm-grid">
+          <label class="pm-card">
+            <input type="radio" name="paymentMethod" value="cod" checked />
+            Cash on Delivery
+          </label>
+          <label class="pm-card">
+            <input type="radio" name="paymentMethod" value="bkash" />
+            bKash
+          </label>
+          <label class="pm-card">
+            <input type="radio" name="paymentMethod" value="nagad" />
+            Nagad
+          </label>
+          <label class="pm-card">
+            <input type="radio" name="paymentMethod" value="rocket" />
+            Rocket
+          </label>
         </div>
-      </article>`;
-  }).join('');
-}
+      </div>
 
-/* ================================
-   CART FUNCTIONS
-================================ */
-function addToCart(adId){
-  const ad = allAds.find(x=>x.id === adId);
-  if(!ad) return;
+      <div id="walletPaymentBox" class="wallet-box">
+        <div>Payment / Send Money Number: <span class="wallet-number">01409300070</span></div>
+        <p class="hint">
+          Uporer <strong>01409300070</strong> number-e selected wallet diye payment kore nicher box-e <strong>Transaction ID</strong> din.
+          Payment korar por request admin panel-e jabe; admin check kore order confirm korben.
+        </p>
 
-  const price = Number(ad.price);
-  if(!Number.isFinite(price) || price < 0){
-    showMessage('এই পণ্যের নির্দিষ্ট মূল্য পাওয়া যায়নি। অর্ডার করার আগে Provider-এর সঙ্গে যোগাযোগ করুন।');
-    return;
-  }
+        <div class="form-group">
+          <label for="senderNumber">Apnar Payment Number (Optional)</label>
+          <input type="text" id="senderNumber" placeholder="Je number theke payment korechen" />
+        </div>
 
-  const existing = cart.find(x=>x.provider_ad_id === ad.id);
-  const have = existing ? existing.qty : 0;
-  if(ad.stock !== null && ad.stock !== undefined && have + 1 > ad.stock){
-    showMessage(ad.stock <= 0 ? 'দুঃখিত, পণ্যটির স্টক শেষ।' : 'স্টকে মাত্র '+ad.stock+'টি আছে।');
-    return;
-  }
-  if(existing){
-    existing.qty++;
-  }else{
-    cart.push({
-      provider_ad_id:ad.id,
-      name:ad.title,
-      price:price,
-      qty:1,
-      stock:ad.stock ?? null
+        <div class="form-group" style="margin-bottom:0;">
+          <label for="txnId">Transaction ID (TxnID) *</label>
+          <input type="text" id="txnId" placeholder="e.g. 8N7K2P9L1M" />
+        </div>
+      </div>
+
+      <button type="submit" id="submitBtn" class="submit-btn">Submit Order</button>
+    </form>
+
+    <div id="statusBox" class="alert"></div>
+  </div>
+
+  <!-- Jodi apnar zip-e config.js thake, tahole nicher 2 line use korte paren -->
+  <!-- <script src="config.js"></script> -->
+  <script>
+    const SUPABASE_URL = window.SUPABASE_URL || "YOUR_SUPABASE_URL";
+    const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY || "YOUR_SUPABASE_ANON_KEY";
+    const PAY_NUMBER = "01409300070";
+
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    const orderForm = document.getElementById("orderForm");
+    const walletBox = document.getElementById("walletPaymentBox");
+    const txnIdInput = document.getElementById("txnId");
+    const senderNumberInput = document.getElementById("senderNumber");
+    const submitBtn = document.getElementById("submitBtn");
+    const statusBox = document.getElementById("statusBox");
+
+    function getSelectedPaymentMethod() {
+      return document.querySelector('input[name="paymentMethod"]:checked').value;
+    }
+
+    function togglePaymentFields() {
+      const method = getSelectedPaymentMethod();
+      const isWallet = method !== "cod";
+      walletBox.style.display = isWallet ? "block" : "none";
+      txnIdInput.required = isWallet;
+      if (!isWallet) {
+        txnIdInput.value = "";
+        senderNumberInput.value = "";
+      }
+    }
+
+    document.querySelectorAll('input[name="paymentMethod"]').forEach((radio) => {
+      radio.addEventListener("change", togglePaymentFields);
     });
-  }
 
-  updateCart();
-  showMessage('পণ্যটি কার্টে যোগ হয়েছে।');
-}
-
-function updateCart(){
-  persistCart();
-  document.getElementById('cartCount').textContent =
-    cart.reduce((sum,item)=>sum+item.qty,0);
-
-  const box = document.getElementById('cartItems');
-  if(!cart.length){
-    box.innerHTML = '<div class="empty">আপনার কার্ট খালি।</div>';
-    const charge=selectedAreaCharge();
-    document.getElementById('cartTotal').textContent = 'পণ্যের মূল্য: ৳০';
-    document.getElementById('deliveryFeeInfo').textContent =
-      charge===null ? 'এলাকা নির্বাচন করলে Rider Charge দেখা যাবে।' : 'Rider Charge: '+money(charge);
-    document.getElementById('cartGrandTotal').textContent =
-      'সর্বমোট: '+money(charge===null?0:charge);
-    return;
-  }
-
-  box.innerHTML = cart.map((item,index)=>`
-    <div class="cart-row">
-      <div>
-        <strong>${esc(item.name)}</strong>
-        <div class="description">${money(item.price)} × ${item.qty}</div>
-      </div>
-      <div class="qty">
-        <button onclick="changeQty(${index},-1)">−</button>
-        <strong>${item.qty}</strong>
-        <button onclick="changeQty(${index},1)">+</button>
-        <button onclick="removeCart(${index})" title="মুছুন" style="color:#c62828">×</button>
-      </div>
-    </div>
-  `).join('');
-
-  const total = cart.reduce((sum,item)=>sum+item.price*item.qty,0);
-  const charge=selectedAreaCharge();
-  document.getElementById('cartTotal').textContent = 'পণ্যের মূল্য: '+money(total);
-  document.getElementById('deliveryFeeInfo').textContent = charge===null ? 'এলাকা নির্বাচন করুন অথবা Admin-এর কাছে চার্জ সেট করতে বলুন।' : 'Rider Charge: '+money(charge);
-  document.getElementById('cartGrandTotal').textContent = 'সর্বমোট: '+money(total+(charge===null?0:charge));
-}
-
-function changeQty(index,change){
-  if(!cart[index]) return;
-  const limit = cart[index].stock;
-  if(change>0 && limit!==null && limit!==undefined && cart[index].qty+change>limit){
-    showMessage('স্টকে মাত্র '+limit+'টি আছে।');
-    return;
-  }
-  cart[index].qty += change;
-  if(cart[index].qty <= 0) cart.splice(index,1);
-  updateCart();
-}
-
-function removeCart(index){
-  cart.splice(index,1);
-  updateCart();
-}
-
-function openCart(){
-  updateCart();
-  openModal('cartModal');
-}
-
-/* ================================
-   CUSTOMER ORDER TRACKING
-================================ */
-const trackingStatusBn={
-  new:'অর্ডার গ্রহণ করা হয়েছে',
-  confirmed:'অর্ডার নিশ্চিত হয়েছে',
-  assigned:'Rider Assign হয়েছে',
-  picked_up:'পণ্য সংগ্রহ করা হয়েছে',
-  on_the_way:'পথে রয়েছে',
-  delivered:'ডেলিভারি সম্পন্ন হয়েছে',
-  cancelled:'অর্ডার বাতিল হয়েছে'
-};
-document.getElementById('customerTrackingForm').addEventListener('submit',async e=>{
-  e.preventDefault();
-  const phone=document.getElementById('trackingPhone').value.trim();
-  const digits=phone.replace(/\D/g,'');
-  const normalized=digits.startsWith('880')?'0'+digits.slice(3):digits;
-  const result=document.getElementById('customerTrackingResult');
-  const button=document.getElementById('trackingSubmit');
-  if(!/^01[3-9]\d{8}$/.test(normalized)){
-    result.innerHTML='<div class="track-order">সঠিক ১১ সংখ্যার বাংলাদেশি মোবাইল নম্বর দিন।</div>';
-    return;
-  }
-  button.disabled=true;button.textContent='খোঁজা হচ্ছে...';
-  result.innerHTML='';
-  try{
-    const {data,error}=await db.rpc('track_customer_orders_by_phone',{p_phone:normalized});
-    if(error)throw error;
-    if(!Array.isArray(data)||!data.length){
-      result.innerHTML='<div class="track-order">এই নম্বরে কোনো অর্ডার পাওয়া যায়নি। অর্ডারের সময় দেওয়া নম্বরটি আবার পরীক্ষা করুন।</div>';
-      return;
-    }
-    result.innerHTML=data.map(order=>{
-      const status=trackingStatusBn[order.status]||order.status||'অবস্থা পাওয়া যায়নি';
-      const date=order.created_at?new Date(order.created_at).toLocaleString('bn-BD'):'তারিখ পাওয়া যায়নি';
-      return '<article class="track-order">'+
-        '<div style="display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap"><b>অর্ডার: '+esc(order.order_ref||'')+'</b><span class="track-status">'+esc(status)+'</span></div>'+
-        '<div class="track-meta">তারিখ: '+esc(date)+' · এলাকা: '+esc(order.area||'')+'</div>'+
-        '<div style="margin-top:8px">পণ্যের মূল্য: '+money(order.product_total)+'<br>Rider Charge: '+money(order.delivery_charge)+'<br><b>সর্বমোট: '+money(order.grand_total)+'</b></div>'+
-      '</article>';
-    }).join('');
-  }catch(error){
-    console.error('Customer tracking error:',error);
-    result.innerHTML='<div class="track-order">Tracking চালু করা যায়নি। Admin-কে tracking SQL migration Run করতে বলুন।<br><small>'+esc(error.message||'')+'</small></div>';
-  }finally{
-    button.disabled=false;button.textContent='অর্ডার খুঁজুন';
-  }
-});
-
-/* ================================
-   AREA-BASED RIDER CHARGE
-================================ */
-function normalizeAreaName(value){
-  return String(value||'').trim().replace(/\s+/g,' ').toLocaleLowerCase();
-}
-async function loadDeliveryCharges(){
-  const select=document.getElementById('customerArea');
-  const info=document.getElementById('deliveryFeeInfo');
-  if(!select)return;
-
-  // Keep the configured local areas visible even when the fee table is empty
-  // or temporarily unavailable. The actual fee is always read from Supabase.
-  const configuredAreas=Array.isArray(CFG.AREAS)?CFG.AREAS:[];
-  let rows=[];
-  let loadError=null;
-  try{
-    const {data,error}=await db.from('area_delivery_charges')
-      .select('area_name,charge,is_active')
-      .eq('is_active',true)
-      .order('area_name');
-    if(error)throw error;
-    rows=Array.isArray(data)?data:[];
-  }catch(error){
-    loadError=error;
-    console.error('Delivery charge load:',error);
-  }
-
-  deliveryCharges=rows;
-  const areaNames=[...new Set([
-    ...configuredAreas,
-    ...rows.map(x=>x.area_name).filter(Boolean)
-  ])];
-
-  const previous=select.value;
-  select.innerHTML='<option value="">এলাকা নির্বাচন করুন</option>'+
-    areaNames.map(name=>'<option value="'+esc(name)+'">'+esc(name)+'</option>').join('');
-
-  // Restore a previously selected area where possible.
-  if(previous && areaNames.some(x=>normalizeAreaName(x)===normalizeAreaName(previous))){
-    const match=areaNames.find(x=>normalizeAreaName(x)===normalizeAreaName(previous));
-    select.value=match;
-  }
-  select.onchange=updateCart;
-
-  if(loadError){
-    info.textContent='এলাকার নাম দেখানো হচ্ছে, কিন্তু Rider Charge লোড হয়নি। Admin-এর Delivery Charge সেটিংস ও Supabase RLS পরীক্ষা করুন।';
-  }else if(!rows.length){
-    info.textContent='এলাকার তালিকা প্রস্তুত। Admin Panel → Delivery Charge থেকে প্রতিটি এলাকার চার্জ যোগ করতে হবে।';
-  }else{
-    info.textContent='এলাকা নির্বাচন করলে নির্ধারিত Rider Charge যোগ হবে।';
-  }
-  updateCart();
-}
-function selectedAreaCharge(){
-  const area=document.getElementById('customerArea')?.value||'';
-  const key=normalizeAreaName(area);
-  const row=deliveryCharges.find(x=>normalizeAreaName(x.area_name)===key);
-  currentDeliveryCharge=row?Number(row.charge):null;
-  return currentDeliveryCharge;
-}
-
-/* ================================
-   SUBMIT CUSTOMER ORDER
-   Uses create_customer_order RPC
-================================ */
-document.getElementById('checkoutForm').addEventListener('submit',async e=>{
-  e.preventDefault();
-
-  if(!cart.length){
-    showMessage('আপনার কার্টে কোনো পণ্য নেই।');
-    return;
-  }
-
-  const area=document.getElementById('customerArea').value;
-  const charge=selectedAreaCharge();
-  if(!area){showMessage('ডেলিভারি এলাকা নির্বাচন করুন।');return;}
-  if(charge===null||!Number.isFinite(charge)){showMessage('এই এলাকার Rider Charge নির্ধারণ করা হয়নি। Admin Panel → Delivery Charge থেকে "'+area+'" এলাকার চার্জ যোগ করুন।');return;}
-
-  const btn = document.getElementById('checkoutBtn');
-  btn.disabled = true;
-  btn.textContent = 'অর্ডার জমা হচ্ছে...';
-
-  const items = cart.map(item=>({
-    provider_ad_id:item.provider_ad_id,
-    product_name:item.name,
-    quantity:item.qty
-  }));
-
-  const payload = {
-    p_customer_name:document.getElementById('customerName').value.trim(),
-    p_customer_phone:document.getElementById('customerPhone').value.trim(),
-    p_delivery_address:document.getElementById('deliveryAddress').value.trim(),
-    p_area:document.getElementById('customerArea').value,
-    p_customer_note:[document.getElementById('customerNote').value.trim(),'[RIDER_CHARGE='+charge+']'].filter(Boolean).join(' '),
-    p_items:items
-  };
-
-  try{
-    const {data,error} = await db.rpc('create_customer_order',payload);
-
-    if(error) throw error;
-
-    if(data && data.success === false){
-      throw new Error(data.message || 'অর্ডার জমা হয়নি।');
+    function showMessage(type, html) {
+      statusBox.className = `alert ${type}`;
+      statusBox.innerHTML = html;
     }
 
-    const orderRef = data?.ref || data?.order_id || '';
+    orderForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      statusBox.className = "alert";
+      statusBox.innerHTML = "";
 
-    cart = [];
-    updateCart();
-    document.getElementById('checkoutForm').reset();
-    closeModal('cartModal');
+      const customerName = document.getElementById("customerName").value.trim();
+      const customerPhone = document.getElementById("customerPhone").value.trim();
+      const deliveryAddress = document.getElementById("deliveryAddress").value.trim();
+      const orderItems = document.getElementById("orderItems").value.trim();
+      const totalAmount = Number(document.getElementById("totalAmount").value);
+      const method = getSelectedPaymentMethod();
+      const isCod = method === "cod";
+      const txnId = txnIdInput.value.trim();
+      const senderNumber = senderNumberInput.value.trim();
 
-    showMessage(
-      'আপনার অর্ডার সফলভাবে জমা হয়েছে।\n'+
-      (orderRef ? 'অর্ডার নম্বর: '+orderRef+'\n' : '')+
-      'Admin অর্ডারটি যাচাই করে পরবর্তী ব্যবস্থা নেবেন।'
-    );
+      if (!isCod && !txnId) {
+        showMessage("error", `${method.toUpperCase()} payment-er jonno Transaction ID obosshoi dite hobe.`);
+        txnIdInput.focus();
+        return;
+      }
 
-  }catch(error){
-    console.error('Order submit error:',error);
-    showMessage('অর্ডার জমা হয়নি: '+(error.message || 'অজানা সমস্যা'));
-  }finally{
-    btn.disabled = false;
-    btn.textContent = 'অর্ডার নিশ্চিত করুন';
-  }
-});
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Submitting...";
 
-/* ================================
-   SERVICE REQUEST
-================================ */
-function requestService(adId){
-  selectedServiceAd = allAds.find(x=>x.id === adId);
-  if(!selectedServiceAd) return;
+      const payload = {
+        customer_name: customerName,
+        customer_phone: customerPhone,
+        delivery_address: deliveryAddress,
+        order_items: orderItems,
+        total_amount: totalAmount,
+        payment_method: method,
+        payment_number: isCod ? null : (senderNumber || PAY_NUMBER),
+        txn_id: isCod ? null : txnId,
+        payment_status: isCod ? "cod_pending" : "pending_verification",
+        status: isCod ? "confirmed" : "pending_verification"
+      };
 
-  document.getElementById('serviceModalTitle').textContent =
-    (CATEGORY_NAMES[selectedServiceAd.category] || 'সেবা')+' আবেদন';
+      const { data, error } = await db
+        .from("orders")
+        .insert([payload])
+        .select()
+        .single();
 
-  document.getElementById('selectedAdInfo').innerHTML = `
-    <div class="notice">
-      <strong>${esc(selectedServiceAd.title)}</strong><br>
-      ${esc(selectedServiceAd.area || '')}<br>
-      ${esc(selectedServiceAd.description || '')}
-    </div>`;
+      submitBtn.disabled = false;
+      submitBtn.textContent = "Submit Order";
 
-  document.getElementById('serviceDetails').value =
-    'আমি এই সেবাটি নিতে আগ্রহী। বিজ্ঞাপন: '+selectedServiceAd.title;
+      if (error) {
+        showMessage("error", `Order submit korte somossa hoyeche: ${error.message}`);
+        return;
+      }
 
-  openModal('serviceModal');
-}
+      if (isCod) {
+        showMessage(
+          "success",
+          `<strong>Order Auto-Confirmed!</strong><br>Order ID: <code>${data.id}</code><br>Payment Method: Cash on Delivery (Delivery-r somoy payment diben).`
+        );
+      } else {
+        showMessage(
+          "success",
+          `<strong>Payment Request Sent to Admin!</strong><br>Order ID: <code>${data.id}</code><br>Method: <strong>${method.toUpperCase()}</strong> | TxnID: <code>${txnId}</code><br>Admin payment check kore order confirm korben.`
+        );
+      }
 
-document.getElementById('serviceForm').addEventListener('submit',async e=>{
-  e.preventDefault();
+      orderForm.reset();
+      togglePaymentFields();
+    });
 
-  if(!selectedServiceAd){
-    showMessage('সার্ভিস নির্বাচন করা হয়নি।');
-    return;
-  }
-
-  const btn = document.getElementById('serviceSubmitBtn');
-  btn.disabled = true;
-  btn.textContent = 'আবেদন জমা হচ্ছে...';
-
-  const serviceData = {
-    upazila_slug:CFG.UPAZILA_SLUG || 'jibannagar',
-    service:selectedServiceAd.category,
-    name:document.getElementById('serviceName').value.trim(),
-    phone:document.getElementById('servicePhone').value.trim(),
-    area:document.getElementById('serviceArea').value.trim(),
-    details:document.getElementById('serviceDetails').value.trim(),
-    extra:{
-      provider_ad_id:selectedServiceAd.id,
-      provider_id:selectedServiceAd.provider_id,
-      advertisement_title:selectedServiceAd.title
-    },
-    status:'pending'
-  };
-
-  try{
-    const {error} = await db
-      .from('service_requests')
-      .insert(serviceData);
-
-    if(error) throw error;
-
-    document.getElementById('serviceForm').reset();
-    closeModal('serviceModal');
-    selectedServiceAd = null;
-
-    showMessage('আপনার আবেদন সফলভাবে জমা হয়েছে। Admin আবেদনটি যাচাই করে যোগাযোগ করবেন।');
-
-  }catch(error){
-    console.error('Service request error:',error);
-    showMessage('আবেদন জমা হয়নি: '+(error.message || 'অজানা সমস্যা'));
-  }finally{
-    btn.disabled = false;
-    btn.textContent = 'আবেদন জমা দিন';
-  }
-});
-
-/* ================================
-   CLOSE MODALS ON BACKGROUND CLICK
-================================ */
-document.querySelectorAll('.modal').forEach(modal=>{
-  modal.addEventListener('click',e=>{
-    if(e.target === modal) modal.classList.remove('show');
-  });
-});
-
-/* ================================
-   INITIAL LOAD + AUTO REFRESH
-================================ */
-updateCart();
-loadAds();
-setInterval(loadAds,30000);
-if(location.hash === '#cart') openCart();
-</script>
-
+    togglePaymentFields();
+  </script>
 </body>
 </html>
